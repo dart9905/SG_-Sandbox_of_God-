@@ -18,19 +18,40 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/OpenGL.hpp>
 #include <GLUT/GLUT.h>
-
-#pragma comment (lib, "opengl32.lib")
-#pragma comment (lib, "glu32.lib") // +++++
-#pragma comment (lib, "glut32.lib") 
+#include <iostream>
 
 
 // Here is a small helper for you! Have a look.
 #include "ResourcePath.hpp"
 
+#include "helpFile.hpp"
+
+
+float angleX, angleY;
+float speed = 1.0;
+
+
 int main(int, char const**)
 {
+    /*
+    sf::Window window1(sf::VideoMode(800, 600), "OpenGL");
+    sf::ContextSettings settings1 = window1.getSettings();
+    
+    std::cout << "depth bits:" << settings1.depthBits << std::endl;
+    std::cout << "stencil bits:" << settings1.stencilBits << std::endl;
+    std::cout << "antialiasing level:" << settings1.antialiasingLevel << std::endl;
+    std::cout << "version:" << settings1.majorVersion << "." << settings1.minorVersion << std::endl;
+     */
     // Create the main window
-    sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
+    sf::ContextSettings settings;
+    settings.depthBits = 24;
+    settings.stencilBits = 8;
+    settings.antialiasingLevel = 4;
+    settings.majorVersion = 2;
+    settings.minorVersion = 1;
+    sf::RenderWindow window(sf::VideoMode(800, 600), "SFML OpenGL", sf::Style::Default, settings);
+    window.setVerticalSyncEnabled(true);
+    //sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
 
     // Set the Icon
     sf::Image icon;
@@ -46,25 +67,20 @@ int main(int, char const**)
     }
     sf::Sprite sprite_background(texture_background);
     
-    GLuint texture = 0;
-    {
-        sf::Image image;
-        image.loadFromFile(resourcePath() + "icon.png");
-        
-        glGenTextures(1, &texture);
-        glBindTexture(GL_TEXTURE_2D, texture);
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
-                     image.getSize().x,
-                     image.getSize().y,
-                     0, GL_RGBA, GL_UNSIGNED_BYTE,
-                     image.getPixelsPtr());
-        //gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, image.getSize().x, image.getSize().y, GL_RGBA, GL_UNSIGNED_BYTE, image.getPixelsPtr());
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    GLuint box [7];
+    
+    for (int i = 0; i < 6; i ++) {
+        box [i] = LoadTexture(resourcePath() + "resources/grassBox/bottom.jpg");
     }
     
-    
+    /*
+    box[0] = LoadTexture(resourcePath() + "resources/box_test/1.jpg");
+    box[1] = LoadTexture(resourcePath() + "resources/box_test/2.jpg");
+    box[2] = LoadTexture(resourcePath() + "resources/box_test/3.jpg");
+    box[3] = LoadTexture(resourcePath() + "resources/box_test/4.jpg");
+    box[4] = LoadTexture(resourcePath() + "resources/box_test/5.jpg");
+    box[5] = LoadTexture(resourcePath() + "resources/box_test/6.jpg");
+    */
     glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_TRUE);
     glClearDepth(1.f);
@@ -72,37 +88,18 @@ int main(int, char const**)
     glLoadIdentity();
     gluPerspective(90.f, 1.f, 1.f, 500.f);
     glEnable(GL_TEXTURE_2D);
-    /*
-    //
-    //              ТЕКСТ
-    //
-    // Create a graphical text to display
-    sf::Font font;
-    if (!font.loadFromFile(resourcePath() + "sansation.ttf")) {
-        return EXIT_FAILURE;
-    }
-    sf::Text text("Hello SFML", font, 50);
-    text.setFillColor(sf::Color::Black);
-    */
     
-    
-    //
-    //              МУЗЫКА
-    //
-    /*
-    // Load a music to play
-    sf::Music music;
-    if (!music.openFromFile(resourcePath() + "nice_music.ogg")) {
-        return EXIT_FAILURE;
-    }
-
-    // Play the music
-    music.play();
-    */
 
     // Start the game loop
+    
+    sf::Clock clock;
+    
     while (window.isOpen())
     {
+        
+        // Clear the depth buffer
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
         // Process events
         sf::Event event;
         while (window.pollEvent(event))
@@ -117,19 +114,48 @@ int main(int, char const**)
                 window.close();
             }
         }
+        
+        
+        ////----------------------
+        
+        ////----------------------
+        
+        
+        float time = clock.getElapsedTime().asSeconds() * 100 * 0.3;
+        float size = 20.f;
 
-        // Clear screen
-        window.clear();
-
+        
         // Draw the sprite
+        window.pushGLStates();
         window.draw(sprite_background);
-
+        window.popGLStates();
+        
+        
         // Draw the string
         //window.draw(text);
+        
+        
+        
+        
+        // Apply some transformations
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        glTranslatef(0, 0, -100);
+        glRotatef(time, 1, 0, 0);
+        
+        
+        for (int x = 0; x < 1; x++) {
+            for (int y = 0; y < 1; y++) {
+                glTranslatef( x * size * 2,  y * size * 2, 0);
+                createBox(box, size);
+                glTranslatef(-x * size * 2, -y * size * 2, 0);
+            }
+        }
 
         // Update the window
         window.display();
     }
-
+    
+    //glDeleteTextures(1, &texture);
     return EXIT_SUCCESS;
 }
