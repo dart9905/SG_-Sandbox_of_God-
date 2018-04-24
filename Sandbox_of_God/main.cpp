@@ -181,7 +181,7 @@ int main(int, char const**)
         gluLookAt(God.x, God.y + God.h / 2, God.z, God.x - sin (angleX / 180 * PI),  God.y + God.h / 2 + tan (angleY / 180 * PI),  God.z - cos (angleX / 180 * PI), 0, 1, 0);
         
         
-        int R = 30;
+        int R = 20;
         int Xmin = God.x / size - R;
         int Zmin = God.z / size - R;
         int Xmax = God.x / size + R;

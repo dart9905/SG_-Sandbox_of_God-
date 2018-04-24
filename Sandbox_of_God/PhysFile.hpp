@@ -63,14 +63,14 @@ public:
             dx = -sin (angleX / 180 * PI) * speed;
             dz = -cos (angleX / 180 * PI) * speed;
             x += dx;
-            y += dy;
+            //y += dy;
             z += dz;
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
             dx =  sin (angleX / 180 * PI) * speed;
             dz =  cos (angleX / 180 * PI) * speed;
             x += dx;
-            y += dy;
+            //y += dy;
             z += dz;
         }
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
@@ -112,9 +112,12 @@ public:
 
 bool check(int x, int y, int z)
 {
-    if ((x<0) || (x>=1000) ||
-        (y<0) || (y>=1000) ||
-        (z<0) || (z>=1000)) return false;
+    if ((x < 0) || (x >= map_x) ||
+        (y < 0) || (y >= map_y) ||
+        (z < 0) || (z >= map_z)) return false;
     
-    return map[x][y][z];
+    return map [x] [y] [z];
 }
+
+
+
