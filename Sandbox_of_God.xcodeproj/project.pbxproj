@@ -19,6 +19,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FA411DB8208FE09C00DA1777 /* PhysFile.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PhysFile.hpp; sourceTree = "<group>"; };
+		FA411DB9208FE2C600DA1777 /* Mouse.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Mouse.hpp; sourceTree = "<group>"; };
+		FA411DBA208FE41B00DA1777 /* GameEngine.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameEngine.hpp; sourceTree = "<group>"; };
 		FAD6D8A02089F2BB000EA830 /* Sandbox_of_God.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sandbox_of_God.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAD6D8A42089F2BB000EA830 /* Sandbox_of_God-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Sandbox_of_God-Info.plist"; sourceTree = "<group>"; };
 		FAD6D8A52089F2BB000EA830 /* ResourcePath.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ResourcePath.mm; sourceTree = "<group>"; };
@@ -30,7 +33,7 @@
 		FAD6D8B12089F2BB000EA830 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		FAD6D8B92089F2E5000EA830 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
 		FAD6D8BB2089F323000EA830 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
-		FAD6D8BD2089F345000EA830 /* helpFile.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = helpFile.hpp; sourceTree = "<group>"; };
+		FAD6D8BD2089F345000EA830 /* GraphFile.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GraphFile.hpp; sourceTree = "<group>"; };
 		FAD6D8BE2089F35B000EA830 /* resources */ = {isa = PBXFileReference; lastKnownFileType = folder; path = resources; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -68,8 +71,11 @@
 			isa = PBXGroup;
 			children = (
 				FAD6D8A52089F2BB000EA830 /* ResourcePath.mm */,
-				FAD6D8BD2089F345000EA830 /* helpFile.hpp */,
+				FAD6D8BD2089F345000EA830 /* GraphFile.hpp */,
+				FA411DB8208FE09C00DA1777 /* PhysFile.hpp */,
+				FA411DBA208FE41B00DA1777 /* GameEngine.hpp */,
 				FAD6D8A72089F2BB000EA830 /* ResourcePath.hpp */,
+				FA411DB9208FE2C600DA1777 /* Mouse.hpp */,
 				FAD6D8A82089F2BB000EA830 /* main.cpp */,
 				FAD6D8AA2089F2BB000EA830 /* Resources */,
 				FAD6D8A32089F2BB000EA830 /* Supporting Files */,
@@ -141,7 +147,7 @@
 					};
 				};
 			};
-			buildConfigurationList = FAD6D89A2089F2BB000EA830 /* Build configuration list for PBXProject "Sandbox_of_God — копия" */;
+			buildConfigurationList = FAD6D89A2089F2BB000EA830 /* Build configuration list for PBXProject "Sandbox_of_God" */;
 			compatibilityVersion = "Xcode 9.3";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -313,7 +319,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		FAD6D89A2089F2BB000EA830 /* Build configuration list for PBXProject "Sandbox_of_God — копия" */ = {
+		FAD6D89A2089F2BB000EA830 /* Build configuration list for PBXProject "Sandbox_of_God" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				FAD6D8B32089F2BB000EA830 /* Debug */,

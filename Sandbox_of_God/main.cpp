@@ -23,28 +23,48 @@
 #include <math.h>
 #include <time.h>
 
+#define GL_CLAMP_TO_EDGE 0x812F
+
 
 // Here is a small helper for you! Have a look.
 #include "ResourcePath.hpp"
 
+const int map_x = 1000;
+const int map_y = 1000;
+const int map_z = 1000;
+int map [map_x] [map_y] [map_z];
 
-int map [1000] [1000] [1000];
 float angleX, angleY;
-#include "helpFile.hpp"
+
+const int window_width = 1500;
+const int window_height = 1200;
+
+#include "GameEngine.hpp"
+
+#include "Mouse.hpp"
+
+
+
+//      =============================================
+//      ==                                         ==
+//      ==   ==       ==   =====   ==   ==    ==   ==
+//      ==   ===     ===   ==  =   ==   ===   ==   ==
+//      ==   == == == ==   =====   ==   == == ==   ==
+//      ==   ==  ===  ==   ==  =   ==   ==   ===   ==
+//      ==                                         ==
+//      =============================================
 
 
 int main(int, char const**)
 {
+    float dx = 0, dy = 0, dz = 0;
+    
     for (int x = 0; x < 1000; x++)
-        for (int y = 0; y < 20; y++)
+        for (int y = 0; y < 50; y++)
             for (int z = 0; z < 1000; z++)
             {
-                if (y == 0)
+                if (y < 1)
                     map [x] [y] [z] = 1;
-                /*
-                if ((y == 0) || rand() % 100 == 1)
-                    map [x] [y] [z] = 1;
-                 //*/
             }
     
     // Create the main window
@@ -54,9 +74,8 @@ int main(int, char const**)
     settings.antialiasingLevel = 4;
     settings.majorVersion = 2;
     settings.minorVersion = 1;
-    sf::RenderWindow window(sf::VideoMode(800, 600), "SFML OpenGL", sf::Style::Default, settings);
+    sf::RenderWindow window(sf::VideoMode(window_width, window_height), "Sandbox of God", sf::Style::Default, settings);
     window.setVerticalSyncEnabled(true);
-    //sf::RenderWindow window(sf::VideoMode(800, 600), "SFML window");
 
     // Set the Icon
     sf::Image icon;
@@ -64,64 +83,18 @@ int main(int, char const**)
         return EXIT_FAILURE;
     }
     window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
-
-    // Load a sprite to display
-    sf::Texture texture_background;
-    if (!texture_background.loadFromFile(resourcePath() + "cute_image.jpg")) {
-        return EXIT_FAILURE;
-    }
-    sf::Sprite sprite_background(texture_background);
+    
     
     GLuint box [6];
-    box [0] = LoadTexture(resourcePath() + "resources/grassBox/top.jpg");
-    for (int i = 1; i < 5; i ++) {
-        box [i] = LoadTexture(resourcePath() + "resources/grassBox/side.jpg");
-    }
-    box [5] = LoadTexture(resourcePath() + "resources/grassBox/bottom.jpg");
-    
     GLuint skybox [6];
-    skybox [0] = LoadTexture(resourcePath() + "resources/skybox/skybox_top.bmp");
-    skybox [1] = LoadTexture(resourcePath() + "resources/skybox/skybox_front.bmp");
-    skybox [2] = LoadTexture(resourcePath() + "resources/skybox/skybox_back.bmp");
-    skybox [3] = LoadTexture(resourcePath() + "resources/skybox/skybox_left.bmp");
-    skybox [4] = LoadTexture(resourcePath() + "resources/skybox/skybox_right.bmp");
-    skybox [5] = LoadTexture(resourcePath() + "resources/skybox/skybox_bottom.bmp");
-    
-    glEnable(GL_DEPTH_TEST);
-    glDepthMask(GL_TRUE);
-    glClearDepth(1.f);
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluPerspective(90.f, 1.f, 1.f, 2000.f);
-    glEnable(GL_TEXTURE_2D);
-    
-
-    float dx = 0, dy = 0, dz = 0;
-    
+    MakeTextures (box, skybox);
     
     
     sf::Clock clock;
     
-    Playr God(10000, 200, 10000);
+    Playr God(10000, 500, 10000);
     
-    // -- Mouse --
-    sf::Vector2i pixelPos;
-    sf::Vector2f Pos;
-    
-    int xt = 0;
-    int yt = 0;
-    
-    bool mLeft = false;
-    bool mRight = false;
-    // -----------
-    
-    
-    xt = window.getPosition().x + 400;
-    yt = window.getPosition().y + 300;
-    
-    pixelPos.x = xt;
-    pixelPos.y = yt;
-    sf::Mouse::setPosition(pixelPos);
+    mouse_t Mouse (0, 0, false, false, &window);
     
     // Start the game loop
     while (window.isOpen())
@@ -152,9 +125,9 @@ int main(int, char const**)
             }
             if (event.type == sf::Event::MouseButtonPressed) {
                 if (event.key.code == sf::Mouse::Right)
-                    mRight = true;
+                    Mouse._Right = true;
                 if (event.key.code == sf::Mouse::Left)
-                    mLeft = true;
+                    Mouse._Left = true;
             }
         }
         
@@ -194,77 +167,8 @@ int main(int, char const**)
         */
         
         
-        ////----------------------
         
-        xt = window.getPosition().x + 400;
-        yt = window.getPosition().y + 300;
-        
-        pixelPos = sf::Mouse::getPosition(window);
-        //Pos = window.mapPixelToCoords(pixelPos);
-        
-        
-        
-        angleX += (xt - pixelPos.x - window.getPosition().x) / 4;
-        angleY += (yt - pixelPos.y - window.getPosition().y) / 4;
-        
-        if (angleY < -89.0)
-            angleY = -89.0;
-        
-        if (angleY > 89.0)
-            angleY = 89.0;
-        
-        pixelPos.x = xt;
-        pixelPos.y = yt;
-        sf::Mouse::setPosition(pixelPos);
-        
-        if (mLeft || mRight) {
-            float x = God.x;
-            float y = God.y + God.h / 2;
-            float z = God.z;
-            
-            int X,Y,Z,oldX,oldY,oldZ;
-            int dist = 0;
-            
-            while (dist < 120) {
-                dist++;
-                
-                
-                x += -sin (angleX / 180 * PI);
-                X = x / size;
-                y +=  tan (angleY / 180 * PI);
-                Y = y / size;
-                z += -cos (angleX / 180 * PI);
-                Z = z / size;
-                
-                if (check(X, Y, Z)) {
-                    if (mLeft) {
-                        map [X] [Y] [Z] = 0;
-                        break;
-                    } else {
-                        map [oldX] [oldY] [oldZ] = 1;
-                        break;
-                    }
-                }
-                oldX = X;
-                oldY = Y;
-                oldZ = Z;
-                
-            }
-        }
-        mLeft = false;
-        mRight = false;
-        
-        ////----------------------
-
-        
-        // Draw the sprite
-        window.pushGLStates();
-        window.draw(sprite_background);
-        window.popGLStates();
-        
-        
-        // Draw the string
-        //window.draw(text);
+        Mouse.update(&angleX, &angleY, God);
         
         
         
@@ -278,19 +182,29 @@ int main(int, char const**)
         
         
         int R = 30;
-        int X = God.x / size;
-        int Z = God.z / size;
+        int Xmin = God.x / size - R;
+        int Zmin = God.z / size - R;
+        int Xmax = God.x / size + R;
+        int Zmax = God.z / size + R;
         
+        if (Xmin < 0)
+            Xmin = 0;
+        if (Zmin < 0)
+            Zmin = 0;
+        if (Xmax > map_x - 1)
+            Xmax = map_x - 1;
+        if (Zmax > map_z - 1)
+            Zmax = map_z - 1;
         
-        for (int x = X - R; x < X + R; x++)
+        for (int x = Xmin; x < Xmax; x++)
             for (int y = 0; y <20; y++)
-                for (int z = Z - R; z < Z + R; z++)
+                for (int z = Zmin; z < Zmax; z++)
                     if (map [x] [y] [z] == 1) {
                         glTranslatef( x * size + size / 2,  y * size + size / 2,  z * size + size / 2);
                         createBox(box, size / 2);
                         glTranslatef(-x * size - size / 2, -y * size - size / 2, -z * size - size / 2);
                     }
-         //*/
+        //*/
         /*
         for (int x = 0; x < 60; x++)
             for (int y = 0; y <20; y++)
