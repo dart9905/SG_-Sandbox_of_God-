@@ -13,7 +13,7 @@ int MakeTextures (GLuint box [], GLuint skybox []) {
         box [i] = LoadTexture(resourcePath() + "resources/grassBox/side.jpg");
     }
     box [5] = LoadTexture(resourcePath() + "resources/grassBox/bottom.jpg");
-    /*
+    
     skybox [0] = LoadTexture(resourcePath() + "resources/skybox/skybox_top.bmp");
     skybox [1] = LoadTexture(resourcePath() + "resources/skybox/skybox_front.bmp");
     skybox [2] = LoadTexture(resourcePath() + "resources/skybox/skybox_back.bmp");
@@ -21,7 +21,7 @@ int MakeTextures (GLuint box [], GLuint skybox []) {
     skybox [4] = LoadTexture(resourcePath() + "resources/skybox/skybox_right.bmp");
     skybox [5] = LoadTexture(resourcePath() + "resources/skybox/skybox_bottom.bmp");
     //*/
-    
+    /*
     skybox [0] = LoadTexture(resourcePath() + "resources/skybox4/skybox_front.bmp");
     skybox [1] = LoadTexture(resourcePath() + "resources/skybox4/skybox_top.jpg");
     skybox [2] = LoadTexture(resourcePath() + "resources/skybox4/skybox_bottom.jpg");

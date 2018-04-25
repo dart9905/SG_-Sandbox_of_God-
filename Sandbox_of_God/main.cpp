@@ -29,10 +29,7 @@
 // Here is a small helper for you! Have a look.
 #include "ResourcePath.hpp"
 
-const int map_x = 1000;
-const int map_y = 1000;
-const int map_z = 1000;
-int map [map_x] [map_y] [map_z];
+
 
 float angleX, angleY;
 
@@ -55,19 +52,32 @@ const int window_height = 1200;
 //      =============================================
 
 
+int map_array_GLOBAL_VARIABLE [1024] [612] [1024] = {0};
+
+
 int main(int, char const**)
 {
     float dx = 0, dy = 0, dz = 0;
     
-    for (int x = 0; x < 1000; x++)
-        for (int y = 0; y < 50; y++)
-            for (int z = 0; z < 1000; z++)
+    //
+    //              LOAD MAP
+    //
+    
+    map_t map (1024, 612, 1024, &(map_array_GLOBAL_VARIABLE [0] [0] [0]));
+    
+    for (int x = 0; x < 1024; x++)
+        for (int y = 0; y < 612; y++)
+            for (int z = 0; z < 1024; z++)
             {
+                
                 if (y < 1)
                     map [x] [y] [z] = 1;
             }
     
-    // Create the main window
+    
+    //
+    //              Create the main window
+    //
     sf::ContextSettings settings;
     settings.depthBits = 24;
     settings.stencilBits = 8;
@@ -76,8 +86,11 @@ int main(int, char const**)
     settings.minorVersion = 1;
     sf::RenderWindow window(sf::VideoMode(window_width, window_height), "Sandbox of God", sf::Style::Default, settings);
     window.setVerticalSyncEnabled(true);
-
-    // Set the Icon
+    
+    
+    //
+    //              Set the Icon
+    //
     sf::Image icon;
     if (!icon.loadFromFile(resourcePath() + "icon.png")) {
         return EXIT_FAILURE;
@@ -92,11 +105,18 @@ int main(int, char const**)
     
     sf::Clock clock;
     
-    Playr God(10000, 500, 10000);
+    Playr God(map._x * 10, 500, map._z * 10);
     
     mouse_t Mouse (0, 0, false, false, &window);
     
-    // Start the game loop
+    
+    int R = 20;
+    int Xmin_place = 0, Zmin_place = 0, Xmax_place = 0, Zmax_place = 0;
+    
+    
+    //
+    //              Start the game loop
+    //
     while (window.isOpen())
     {
         
@@ -110,7 +130,10 @@ int main(int, char const**)
         if (time  > 3)
             time = 3;
         
-        // Process events
+        
+        //
+        //                  Process events
+        //
         sf::Event event;
         while (window.pollEvent(event))
         {
@@ -131,44 +154,14 @@ int main(int, char const**)
             }
         }
         
+        
+        
         God.keyboard();
-        God.update(time);
-        
-        /*
-         
-         if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-         dx = -sin (angleX / 180 * PI) * speed;
-         dy =  tan (angleY / 180 * PI) * speed;
-         dz = -cos (angleX / 180 * PI) * speed;
-         x += dx;
-         y += dy;
-         z += dz;
-         }
-         if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-         dx =  sin (angleX / 180 * PI) * speed;
-         dy = -tan (angleY / 180 * PI) * speed;
-         dz =  cos (angleX / 180 * PI) * speed;
-         x += dx;
-         y += dy;
-         z += dz;
-         }
-         if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-         dx =  sin ((angleX + 90) / 180 * PI) * speed;
-         dz =  cos ((angleX + 90) / 180 * PI) * speed;
-         x += dx;
-         z += dz;
-         }
-         if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-         dx =  sin ((angleX - 90) / 180 * PI) * speed;
-         dz =  cos ((angleX - 90) / 180 * PI) * speed;
-         x += dx;
-         z += dz;
-         }
-        */
+        God.update(time, map);
         
         
         
-        Mouse.update(&angleX, &angleY, God);
+        Mouse.update(&angleX, &angleY, God, map);
         
         
         
@@ -181,40 +174,29 @@ int main(int, char const**)
         gluLookAt(God.x, God.y + God.h / 2, God.z, God.x - sin (angleX / 180 * PI),  God.y + God.h / 2 + tan (angleY / 180 * PI),  God.z - cos (angleX / 180 * PI), 0, 1, 0);
         
         
-        int R = 20;
-        int Xmin = God.x / size - R;
-        int Zmin = God.z / size - R;
-        int Xmax = God.x / size + R;
-        int Zmax = God.z / size + R;
+        R = 20;
+        Xmin_place = God.x / size - R;
+        Zmin_place = God.z / size - R;
+        Xmax_place = God.x / size + R;
+        Zmax_place = God.z / size + R;
         
-        if (Xmin < 0)
-            Xmin = 0;
-        if (Zmin < 0)
-            Zmin = 0;
-        if (Xmax > map_x - 1)
-            Xmax = map_x - 1;
-        if (Zmax > map_z - 1)
-            Zmax = map_z - 1;
+        if (Xmin_place < 0)
+            Xmin_place = 0;
+        if (Zmin_place < 0)
+            Zmin_place = 0;
+        if (Xmax_place > map._x - 1)
+            Xmax_place = map._x - 1;
+        if (Zmax_place > map._z - 1)
+            Zmax_place = map._z - 1;
         
-        for (int x = Xmin; x < Xmax; x++)
-            for (int y = 0; y <20; y++)
-                for (int z = Zmin; z < Zmax; z++)
+        for (int x = Xmin_place; x < Xmax_place; x++)
+            for (int y = 0; y <map._y; y++)
+                for (int z = Zmin_place; z < Zmax_place; z++)
                     if (map [x] [y] [z] == 1) {
                         glTranslatef( x * size + size / 2,  y * size + size / 2,  z * size + size / 2);
                         createBox(box, size / 2);
                         glTranslatef(-x * size - size / 2, -y * size - size / 2, -z * size - size / 2);
                     }
-        //*/
-        /*
-        for (int x = 0; x < 60; x++)
-            for (int y = 0; y <20; y++)
-                for (int z = 0; z < 60; z++)
-                    if (map [x] [y] [z] == 1) {
-                        glTranslatef( x * size + size / 2,  y * size + size / 2,  z * size + size / 2);
-                        createBox(box, size / 2);
-                        glTranslatef(-x * size - size / 2, -y * size - size / 2, -z * size - size / 2);
-                    }
-        //*/
         
         glTranslatef( God.x,  God.y,  God.z);
         createBox(skybox, 1000);

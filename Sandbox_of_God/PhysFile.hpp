@@ -1,5 +1,5 @@
 
-bool check(int x, int y, int z);
+bool check(int x, int y, int z, map_t& map);
 
 class Playr {
 public:
@@ -28,11 +28,11 @@ public:
     
     
     
-    void collision (float Dx, float Dy, float Dz) {
+    void collision (float Dx, float Dy, float Dz, map_t& map) {
         for (int X = (x - w) / size; X < (x + w)/ size; X++)
             for (int Y = (y - h) / size; Y < (y + h)/ size; Y++)
                 for (int Z = (z - d) / size; Z < (z + d)/ size; Z++)
-                    if (check(X, Y, Z)) {
+                    if (check(X, Y, Z, map)) {
                         if (Dx > 0)
                             x = X * size - w;
                         if (Dx < 0)
@@ -90,19 +90,19 @@ public:
     
     
     
-    void update (float time) {
+    void update (float time, map_t& map) {
         if (!onGround)
             dy -= 1.5 * time;
         onGround = false;
         
         x += dx * time;
-        collision(dx, 0, 0);
+        collision(dx, 0, 0, map);
         
         y += dy * time;
-        collision(0, dy, 0);
+        collision(0, dy, 0, map);
         
         z += dz * time;
-        collision(0, 0, dz);
+        collision(0, 0, dz, map);
         
         dz = 0;
         dx = 0;
@@ -110,11 +110,11 @@ public:
 };
 
 
-bool check(int x, int y, int z)
+bool check(int x, int y, int z, map_t& map)
 {
-    if ((x < 0) || (x >= map_x) ||
-        (y < 0) || (y >= map_y) ||
-        (z < 0) || (z >= map_z)) return false;
+    if ((x < 0) || (x >= map._x) ||
+        (y < 0) || (y >= map._y) ||
+        (z < 0) || (z >= map._z)) return false;
     
     return map [x] [y] [z];
 }

@@ -19,6 +19,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		FA387DA3209083A600D1DCC5 /* Map.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Map.hpp; sourceTree = "<group>"; };
 		FA411DB8208FE09C00DA1777 /* PhysFile.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PhysFile.hpp; sourceTree = "<group>"; };
 		FA411DB9208FE2C600DA1777 /* Mouse.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Mouse.hpp; sourceTree = "<group>"; };
 		FA411DBA208FE41B00DA1777 /* GameEngine.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameEngine.hpp; sourceTree = "<group>"; };
@@ -73,6 +74,7 @@
 				FAD6D8A52089F2BB000EA830 /* ResourcePath.mm */,
 				FAD6D8BD2089F345000EA830 /* GraphFile.hpp */,
 				FA411DB8208FE09C00DA1777 /* PhysFile.hpp */,
+				FA387DA3209083A600D1DCC5 /* Map.hpp */,
 				FA411DBA208FE41B00DA1777 /* GameEngine.hpp */,
 				FAD6D8A72089F2BB000EA830 /* ResourcePath.hpp */,
 				FA411DB9208FE2C600DA1777 /* Mouse.hpp */,
@@ -300,6 +302,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				GCC_OPTIMIZATION_LEVEL = fast;
 				INFOPLIST_FILE = "Sandbox_of_God/Sandbox_of_God-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -310,6 +313,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
+				GCC_OPTIMIZATION_LEVEL = fast;
 				INFOPLIST_FILE = "Sandbox_of_God/Sandbox_of_God-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";

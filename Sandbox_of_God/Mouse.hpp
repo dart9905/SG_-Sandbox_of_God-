@@ -17,9 +17,9 @@ public:
     
     ~mouse_t () {}
     
-    int update (float* angleX, float* angleY, const Playr& God) {
+    int update (float* angleX, float* angleY, const Playr& God, map_t& map) {
         angle (angleX, angleY);
-        tap (angleX, angleY, God);
+        tap (angleX, angleY, God, map);
         return 0;
     }
     
@@ -44,11 +44,11 @@ public:
         return 0;
     }
     
-    int tap (float* angleX, float* angleY, const Playr& God) {
+    int tap (float* angleX, float* angleY, const Playr& God, map_t& map) {
         if (_Left || _Right) {
-            float x = God.x;
-            float y = God.y + God.h / 2;
-            float z = God.z;
+            float Godx = God.x;
+            float Gody = God.y + God.h / 2;
+            float Godz = God.z;
             
             int X = 0, Y = 0, Z = 0;
             int oldX = 0, oldY = 0, oldZ = 0;
@@ -58,14 +58,14 @@ public:
                 dist++;
                 
                 
-                x += -sin (*angleX / 180 * PI);
-                X = x / size;
-                y +=  tan (*angleY / 180 * PI);
-                Y = y / size;
-                z += -cos (*angleX / 180 * PI);
-                Z = z / size;
+                Godx += -sin (*angleX / 180 * PI);
+                X = Godx / size;
+                Gody +=  tan (*angleY / 180 * PI);
+                Y = Gody / size;
+                Godz += -cos (*angleX / 180 * PI);
+                Z = Godz / size;
                 
-                if (check(X, Y, Z)) {
+                if (check(X, Y, Z, map)) {
                     if (_Left) {
                         map [X] [Y] [Z] = 0;
                         break;
