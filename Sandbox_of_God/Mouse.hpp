@@ -1,3 +1,5 @@
+
+
 class mouse_t {
 public:
     
@@ -65,12 +67,17 @@ public:
                 Godz += -cos (*angleX / 180 * PI);
                 Z = Godz / size;
                 
+                
+                
                 if (check(X, Y, Z, map)) {
+                    
                     if (_Left) {
                         map [X] [Y] [Z] = 0;
+                        PathVisBox (X, Y, Z, map, true);
                         break;
                     } else {
                         map [oldX] [oldY] [oldZ] = 1;
+                        PathVisBox (oldX, oldY, oldZ, map, false);
                         break;
                     }
                 }
@@ -83,6 +90,9 @@ public:
         _Left = false;
         _Right = false;
     }
+    
+    
+    
     
     sf::Vector2u _windowsize;
     
@@ -97,3 +107,6 @@ public:
     bool _Right;
     
 };
+
+
+

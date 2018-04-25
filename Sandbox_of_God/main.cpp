@@ -38,7 +38,7 @@ const int window_height = 1200;
 
 #include "GameEngine.hpp"
 
-#include "Mouse.hpp"
+
 
 
 
@@ -69,8 +69,9 @@ int main(int, char const**)
         for (int y = 0; y < 612; y++)
             for (int z = 0; z < 1024; z++)
             {
-                
-                if (y < 1)
+                if (y < 5)
+                    map [x] [y] [z] = 2;
+                if (y == 5)
                     map [x] [y] [z] = 1;
             }
     
@@ -105,7 +106,7 @@ int main(int, char const**)
     
     sf::Clock clock;
     
-    Playr God(map._x * 10, 500, map._z * 10);
+    Playr God(map._x_size * 10, 500, map._z_size * 10);
     
     mouse_t Mouse (0, 0, false, false, &window);
     
@@ -184,15 +185,15 @@ int main(int, char const**)
             Xmin_place = 0;
         if (Zmin_place < 0)
             Zmin_place = 0;
-        if (Xmax_place > map._x - 1)
-            Xmax_place = map._x - 1;
-        if (Zmax_place > map._z - 1)
-            Zmax_place = map._z - 1;
+        if (Xmax_place > map._x_size - 1)
+            Xmax_place = map._x_size - 1;
+        if (Zmax_place > map._z_size - 1)
+            Zmax_place = map._z_size - 1;
         
         for (int x = Xmin_place; x < Xmax_place; x++)
-            for (int y = 0; y <map._y; y++)
+            for (int y = 0; y <map._y_size; y++)
                 for (int z = Zmin_place; z < Zmax_place; z++)
-                    if (map [x] [y] [z] == 1) {
+                    if (map [x] [y] [z] % 2 != 0) {
                         glTranslatef( x * size + size / 2,  y * size + size / 2,  z * size + size / 2);
                         createBox(box, size / 2);
                         glTranslatef(-x * size - size / 2, -y * size - size / 2, -z * size - size / 2);

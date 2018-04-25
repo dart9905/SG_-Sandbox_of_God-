@@ -20,15 +20,7 @@ int MakeTextures (GLuint box [], GLuint skybox []) {
     skybox [3] = LoadTexture(resourcePath() + "resources/skybox/skybox_left.bmp");
     skybox [4] = LoadTexture(resourcePath() + "resources/skybox/skybox_right.bmp");
     skybox [5] = LoadTexture(resourcePath() + "resources/skybox/skybox_bottom.bmp");
-    //*/
-    /*
-    skybox [0] = LoadTexture(resourcePath() + "resources/skybox4/skybox_front.bmp");
-    skybox [1] = LoadTexture(resourcePath() + "resources/skybox4/skybox_top.jpg");
-    skybox [2] = LoadTexture(resourcePath() + "resources/skybox4/skybox_bottom.jpg");
-    skybox [3] = LoadTexture(resourcePath() + "resources/skybox4/skybox_right.jpg");
-    skybox [4] = LoadTexture(resourcePath() + "resources/skybox4/skybox_left.jpg");
-    skybox [5] = LoadTexture(resourcePath() + "resources/skybox4/skybox_back.jpg");
-    //*/
+    
     glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_TRUE);
     glClearDepth(1.f);
@@ -122,10 +114,6 @@ void createBox(GLuint box[],float size)
         glEnd();
         
 }
-
-
-
-
 
 
 

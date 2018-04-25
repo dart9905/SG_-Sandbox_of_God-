@@ -7,3 +7,5 @@ const float size = 20.f;
 #include "GraphFile.hpp"
 
 #include "PhysFile.hpp"
+
+#include "Mouse.hpp"
