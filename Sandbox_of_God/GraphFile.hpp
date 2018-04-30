@@ -7,20 +7,32 @@ GLuint LoadTexture(sf::String name);
 
 
 
-int MakeTextures (GLuint box [], GLuint skybox []) {
+int MakeTextures (GLuint box_terra [], GLuint box [], GLuint skybox []) {
     box [0] = LoadTexture(resourcePath() + "resources/grassBox/top.jpg");
     for (int i = 1; i < 5; i ++) {
         box [i] = LoadTexture(resourcePath() + "resources/grassBox/side.jpg");
     }
     box [5] = LoadTexture(resourcePath() + "resources/grassBox/bottom.jpg");
     
+    for (int i = 0; i < 6; i ++) {
+        box_terra [i] = LoadTexture(resourcePath() + "resources/grassBox/bottom.jpg");
+    }
+    
+    
+    /*
     skybox [0] = LoadTexture(resourcePath() + "resources/skybox/skybox_top.bmp");
     skybox [1] = LoadTexture(resourcePath() + "resources/skybox/skybox_front.bmp");
     skybox [2] = LoadTexture(resourcePath() + "resources/skybox/skybox_back.bmp");
     skybox [3] = LoadTexture(resourcePath() + "resources/skybox/skybox_left.bmp");
     skybox [4] = LoadTexture(resourcePath() + "resources/skybox/skybox_right.bmp");
     skybox [5] = LoadTexture(resourcePath() + "resources/skybox/skybox_bottom.bmp");
-    
+    */
+    skybox [0] = LoadTexture(resourcePath() + "resources/skybox4/skybox_front.bmp");
+    skybox [1] = LoadTexture(resourcePath() + "resources/skybox4/skybox_top.jpg");
+    skybox [2] = LoadTexture(resourcePath() + "resources/skybox4/skybox_bottom.jpg");
+    skybox [3] = LoadTexture(resourcePath() + "resources/skybox4/skybox_right.jpg");
+    skybox [4] = LoadTexture(resourcePath() + "resources/skybox4/skybox_left.jpg");
+    skybox [5] = LoadTexture(resourcePath() + "resources/skybox4/skybox_back.jpg");
     glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_TRUE);
     glClearDepth(1.f);

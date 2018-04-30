@@ -1,4 +1,3 @@
-
 //
 // Disclaimer:
 // ----------
@@ -69,9 +68,9 @@ int main(int, char const**)
         for (int y = 0; y < 612; y++)
             for (int z = 0; z < 1024; z++)
             {
-                if (y < 5)
+                if (y < 306)
                     map [x] [y] [z] = 2;
-                if (y == 5)
+                if (y == 306)
                     map [x] [y] [z] = 1;
             }
     
@@ -100,8 +99,9 @@ int main(int, char const**)
     
     
     GLuint box [6];
+    GLuint box_terra [6];
     GLuint skybox [6];
-    MakeTextures (box, skybox);
+    MakeTextures (box_terra, box, skybox);
     
     
     sf::Clock clock;
@@ -195,6 +195,7 @@ int main(int, char const**)
                 for (int z = Zmin_place; z < Zmax_place; z++)
                     if (map [x] [y] [z] % 2 != 0) {
                         glTranslatef( x * size + size / 2,  y * size + size / 2,  z * size + size / 2);
+                        createBox(box, size / 2);
                         createBox(box, size / 2);
                         glTranslatef(-x * size - size / 2, -y * size - size / 2, -z * size - size / 2);
                     }
