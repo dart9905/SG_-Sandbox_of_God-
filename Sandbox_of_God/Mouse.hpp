@@ -72,11 +72,13 @@ public:
                 if (check(X, Y, Z, map)) {
                     
                     if (_Left) {
-                        map [X] [Y] [Z] = 0;
+                        map [X] [Y] [Z]._structure = SKY;
+                        map [X] [Y] [Z]._visibility = NOTVISIBLE;
                         PathVisBox (X, Y, Z, map, true);
                         break;
                     } else {
-                        map [oldX] [oldY] [oldZ] = 1;
+                        map [oldX] [oldY] [oldZ]._structure = EARTH;
+                        map [oldX] [oldY] [oldZ]._visibility = VISIBLE;
                         PathVisBox (oldX, oldY, oldZ, map, false);
                         break;
                     }

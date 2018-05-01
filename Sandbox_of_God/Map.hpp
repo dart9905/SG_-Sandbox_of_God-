@@ -26,19 +26,19 @@ class map_t {
         }
         
         
-        int set (int* map_array = nullptr) {
+        int set (box_t* map_array = nullptr) {
             _data = map_array;
             return 0;
         }
         
         
-        int& operator [] (int i) {
+        box_t& operator [] (int i) {
             _data += i;
             return *_data;
         }
         //int& operator [] (int i);
         
-        int* _data;
+        box_t* _data;
     };
     // =============================================================================
     // =============================================================================
@@ -54,7 +54,7 @@ class map_t {
             _data = nullptr;
         }
         
-        int set (int* map_array = nullptr) {
+        int set (box_t* map_array = nullptr) {
             _data = map_array;
             return 0;
         }
@@ -72,7 +72,7 @@ class map_t {
         
         //map_t_z& operator [] (int i);
         
-        int* _data;
+        box_t* _data;
         map_t_z _map_z;
         int _z_size;
         
@@ -84,7 +84,7 @@ class map_t {
     map_t_yz _map_yz;
     
 public:
-    map_t (int map_x = 10, int map_y = 10, int map_z = 10, int* map_array = nullptr):
+    map_t (int map_x = 10, int map_y = 10, int map_z = 10,  box_t* map_array = nullptr):
     _x_size (map_x),
     _y_size (map_y),
     _z_size (map_z),
@@ -102,7 +102,7 @@ public:
         return _map_yz;
     }
     
-    int* _data;
+    box_t* _data;
     int _x_size;
     int _y_size;
     int _z_size;

@@ -23,6 +23,7 @@
 		FA411DB8208FE09C00DA1777 /* PhysFile.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = PhysFile.hpp; sourceTree = "<group>"; };
 		FA411DB9208FE2C600DA1777 /* Mouse.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Mouse.hpp; sourceTree = "<group>"; };
 		FA411DBA208FE41B00DA1777 /* GameEngine.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = GameEngine.hpp; sourceTree = "<group>"; };
+		FA7D5C7920985C5C0014E216 /* Class.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Class.hpp; sourceTree = "<group>"; };
 		FAD6D8A02089F2BB000EA830 /* Sandbox_of_God.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sandbox_of_God.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAD6D8A42089F2BB000EA830 /* Sandbox_of_God-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Sandbox_of_God-Info.plist"; sourceTree = "<group>"; };
 		FAD6D8A52089F2BB000EA830 /* ResourcePath.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ResourcePath.mm; sourceTree = "<group>"; };
@@ -72,13 +73,14 @@
 			isa = PBXGroup;
 			children = (
 				FAD6D8A52089F2BB000EA830 /* ResourcePath.mm */,
+				FAD6D8A82089F2BB000EA830 /* main.cpp */,
+				FA411DBA208FE41B00DA1777 /* GameEngine.hpp */,
+				FA7D5C7920985C5C0014E216 /* Class.hpp */,
+				FA387DA3209083A600D1DCC5 /* Map.hpp */,
 				FAD6D8BD2089F345000EA830 /* GraphFile.hpp */,
 				FA411DB8208FE09C00DA1777 /* PhysFile.hpp */,
-				FA387DA3209083A600D1DCC5 /* Map.hpp */,
-				FA411DBA208FE41B00DA1777 /* GameEngine.hpp */,
-				FAD6D8A72089F2BB000EA830 /* ResourcePath.hpp */,
 				FA411DB9208FE2C600DA1777 /* Mouse.hpp */,
-				FAD6D8A82089F2BB000EA830 /* main.cpp */,
+				FAD6D8A72089F2BB000EA830 /* ResourcePath.hpp */,
 				FAD6D8AA2089F2BB000EA830 /* Resources */,
 				FAD6D8A32089F2BB000EA830 /* Supporting Files */,
 			);

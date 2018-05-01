@@ -51,8 +51,7 @@ const int window_height = 1200;
 //      =============================================
 
 
-int map_array_GLOBAL_VARIABLE [1024] [612] [1024] = {0};
-
+box_t map_array_GLOBAL_VARIABLE [1024] [612] [1024] = {0, 0};
 
 int main(int, char const**)
 {
@@ -62,16 +61,24 @@ int main(int, char const**)
     //              LOAD MAP
     //
     
-    map_t map (1024, 612, 1024, &(map_array_GLOBAL_VARIABLE [0] [0] [0]));
+    map_t map (612, 306, 612, &(map_array_GLOBAL_VARIABLE [0] [0] [0]));
     
-    for (int x = 0; x < 1024; x++)
-        for (int y = 0; y < 612; y++)
-            for (int z = 0; z < 1024; z++)
+    for (int x = 0; x < map._x_size; x++)
+        for (int y = 0; y < map._y_size; y++)
+            for (int z = 0; z < map._z_size; z++)
             {
-                if (y < 306)
-                    map [x] [y] [z] = 2;
-                if (y == 306)
-                    map [x] [y] [z] = 1;
+                if (y < map._y_size / 2 - map._y_size / 10) {
+                    map [x] [y] [z]._visibility = NOTVISIBLE;
+                    map [x] [y] [z]._structure = STONE;
+                }
+                if ((y >= map._y_size / 2 - map._y_size / 10) && (y < map._y_size / 2)) {
+                    map [x] [y] [z]._visibility = NOTVISIBLE;
+                    map [x] [y] [z]._structure = EARTH;
+                }
+                if (y == map._y_size / 2) {
+                    map [x] [y] [z]._visibility = VISIBLE;
+                    map [x] [y] [z]._structure = GRASS;
+                }
             }
     
     
@@ -98,11 +105,12 @@ int main(int, char const**)
     window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
     
     
-    GLuint box [6];
-    GLuint box_terra [6];
-    GLuint skybox [6];
-    MakeTextures (box_terra, box, skybox);
-    
+    GLuint box_GRASS [6];
+    GLuint box_EARTH [6];
+    GLuint box_STONE [6];
+    GLuint skybox  [6];
+    MakeTextures (box_STONE, box_EARTH, box_GRASS, skybox);
+
     
     sf::Clock clock;
     
@@ -193,10 +201,27 @@ int main(int, char const**)
         for (int x = Xmin_place; x < Xmax_place; x++)
             for (int y = 0; y <map._y_size; y++)
                 for (int z = Zmin_place; z < Zmax_place; z++)
-                    if (map [x] [y] [z] % 2 != 0) {
+                    if (map [x] [y] [z]._visibility == VISIBLE) {
                         glTranslatef( x * size + size / 2,  y * size + size / 2,  z * size + size / 2);
-                        createBox(box, size / 2);
-                        createBox(box, size / 2);
+                        switch (map [x] [y] [z]._structure) {
+                            case SKY:
+                                break;
+                                
+                            case GRASS:
+                                createBox(box_GRASS, size / 2);
+                                break;
+                                
+                            case EARTH:
+                                createBox(box_EARTH, size / 2);
+                                break;
+                                
+                            case STONE:
+                                createBox(box_STONE, size / 2);
+                                break;
+                                
+                            default:
+                                break;
+                        }
                         glTranslatef(-x * size - size / 2, -y * size - size / 2, -z * size - size / 2);
                     }
         

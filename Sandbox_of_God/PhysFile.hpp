@@ -116,7 +116,7 @@ bool check(int x, int y, int z, map_t& map)
         (y < 0) || (y >= map._y_size) ||
         (z < 0) || (z >= map._z_size)) return false;
     
-    return map [x] [y] [z];
+    return map [x] [y] [z]._structure;
 }
 
 
@@ -132,8 +132,8 @@ bool check(int x, int y, int z, map_t& map)
 
 
 
-bool CheckVis (int arg, bool visibility) {
-    return ((((arg % 2 == 0) && visibility) || ((arg % 2 == 1) && !visibility)) && (arg != 0));
+bool CheckVis (const box_t& arg, bool visibility) {
+    return ((((arg._visibility == NOTVISIBLE) && visibility) || ((arg._visibility == VISIBLE) && !visibility)) && (arg._structure != SKY));
 }
 
 
@@ -150,17 +150,17 @@ bool BesideVisBox (int x0, int y0, int z0, map_t& map) {
     if (Zmax_place > map._z_size - 1)
         Zmax_place = map._z_size - 1;
     
-    if (map [Xmin_place] [y0] [z0] == 0)
+    if (map [Xmin_place] [y0] [z0]._structure == SKY)
         return false;
-    if (map [Xmax_place] [y0] [z0] == 0)
+    if (map [Xmax_place] [y0] [z0]._structure == SKY)
         return false;
-    if (map [x0] [Ymin_place] [z0] == 0)
+    if (map [x0] [Ymin_place] [z0]._structure == SKY)
         return false;
-    if (map [x0] [Ymax_place] [z0] == 0)
+    if (map [x0] [Ymax_place] [z0]._structure == SKY)
         return false;
-    if (map [x0] [y0] [Zmin_place] == 0)
+    if (map [x0] [y0] [Zmin_place]._structure == SKY)
         return false;
-    if (map [x0] [y0] [Zmax_place] == 0)
+    if (map [x0] [y0] [Zmax_place]._structure == SKY)
         return false;
     return true;
     
@@ -175,18 +175,18 @@ bool PathVisBox(int x0, int y0, int z0, map_t& map, bool visibility)
     x--;
     if ((x >= 0) && CheckVis (map [x] [y] [z], visibility)) {
         if (visibility)
-            map [x] [y] [z] -= 1;
+            map [x] [y] [z]._visibility = VISIBLE;
         else
             if (BesideVisBox(x, y, z, map))
-                map [x] [y] [z] += 1;
+                map [x] [y] [z]._visibility = NOTVISIBLE;
     }
     x += 2;
     if ((x < map._x_size) && CheckVis (map [x] [y] [z], visibility)) {
         if (visibility)
-            map [x] [y] [z] -= 1;
+            map [x] [y] [z]._visibility = VISIBLE;
         else
             if (BesideVisBox(x, y, z, map))
-                map [x] [y] [z] += 1;
+                map [x] [y] [z]._visibility = NOTVISIBLE;
     }
     x--;
     //========================
@@ -194,18 +194,18 @@ bool PathVisBox(int x0, int y0, int z0, map_t& map, bool visibility)
     y--;
     if ((y >= 0) && CheckVis (map [x] [y] [z], visibility)) {
         if (visibility)
-            map [x] [y] [z] -= 1;
+            map [x] [y] [z]._visibility = VISIBLE;
         else
             if (BesideVisBox(x, y, z, map))
-                map [x] [y] [z] += 1;
+                map [x] [y] [z]._visibility = NOTVISIBLE;
     }
     y += 2;
     if ((y < map._y_size) && CheckVis (map [x] [y] [z], visibility)) {
         if (visibility)
-            map [x] [y] [z] -= 1;
+            map [x] [y] [z]._visibility = VISIBLE;
         else
             if (BesideVisBox(x, y, z, map))
-                map [x] [y] [z] += 1;
+                map [x] [y] [z]._visibility = NOTVISIBLE;
     }
     y--;
     //========================
@@ -213,18 +213,18 @@ bool PathVisBox(int x0, int y0, int z0, map_t& map, bool visibility)
     z--;
     if ((z >= 0) && CheckVis (map [x] [y] [z], visibility)) {
         if (visibility)
-            map [x] [y] [z] += 1;
+            map [x] [y] [z]._visibility = VISIBLE;
         else
             if (BesideVisBox(x, y, z, map))
-                map [x] [y] [z] -= 1;
+                map [x] [y] [z]._visibility = NOTVISIBLE;
     }
     z += 2;
     if ((z < map._z_size) && CheckVis (map [x] [y] [z], visibility)) {
         if (visibility)
-            map [x] [y] [z] += 1;
+            map [x] [y] [z]._visibility = VISIBLE;
         else
             if (BesideVisBox(x, y, z, map))
-                map [x] [y] [z] -= 1;
+                map [x] [y] [z]._visibility = NOTVISIBLE;
     }
     //========================
     
