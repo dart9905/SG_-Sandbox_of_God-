@@ -62,7 +62,7 @@ public:
         w = 5;
         h = 20;
         d = 5;
-        speed = 2;
+        speed = 5;
         onGround = false;
     }
     

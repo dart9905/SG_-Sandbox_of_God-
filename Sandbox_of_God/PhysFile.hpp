@@ -60,26 +60,18 @@ int Playr:: keyboard () {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
         dx = -sin (angleX / 180 * PI) * speed;
         dz = -cos (angleX / 180 * PI) * speed;
-        x += dx;
-        z += dz;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
         dx =  sin (angleX / 180 * PI) * speed;
         dz =  cos (angleX / 180 * PI) * speed;
-        x += dx;
-        z += dz;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
         dx =  sin ((angleX + 90) / 180 * PI) * speed;
         dz =  cos ((angleX + 90) / 180 * PI) * speed;
-        x += dx;
-        z += dz;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
         dx =  sin ((angleX - 90) / 180 * PI) * speed;
         dz =  cos ((angleX - 90) / 180 * PI) * speed;
-        x += dx;
-        z += dz;
     }
     
     return 0;
