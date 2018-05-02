@@ -4,8 +4,6 @@ const float size = 20.f;
 
 #include "Class.hpp"
 
-#include "Map.hpp"
-
 #include "GraphFile.hpp"
 
 #include "PhysFile.hpp"
