@@ -236,12 +236,13 @@ int GameOBJ::draw () {
 
 
 int Avatar::draw () {
-    
+    //*
     glTranslatef( _x,  _y,  _z);
-    
-    createRectangle (_skin, _w, _h, _d);
-    
+    glRotatef(angleX, 0, 1, 0);
+    createRectangle (_skin, _w, _h - 8, _d);
+    glRotatef(-angleX, 0, 1, 0);
     glTranslatef( -_x,  -_y,  -_z);
+    //*/
     return 0;
 }
 

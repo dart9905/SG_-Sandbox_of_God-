@@ -171,7 +171,7 @@ int main(int, char const**)
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         
-        gluLookAt(God._x , God._y + God._h, God._z - God._d, God._x - sin (angleX / 180 * PI),  God._y + God._h + tan (angleY / 180 * PI),  God._z - cos (angleX / 180 * PI) - God._d, 0, 1, 0);
+        gluLookAt(God._x - God._d * 1.1 * sin (angleX / 180 * PI), God._y + God._h - 5, God._z - God._d * 1.1 * cos (angleX / 180 * PI), God._x - sin (angleX / 180 * PI) * (1 + God._d * 1.1),  God._y + God._h - 5 + tan (angleY / 180 * PI),  God._z - cos (angleX / 180 * PI) * (1 + God._d * 1.1), 0, 1, 0);
         
         DrawMAP(God, map, arrayBox);
         
