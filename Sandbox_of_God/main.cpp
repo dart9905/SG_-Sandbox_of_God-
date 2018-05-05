@@ -99,7 +99,8 @@ int main(int, char const**)
     GLuint box_GRASS [6];
     GLuint box_EARTH [6];
     GLuint box_STONE [6];
-    GLuint* arrayBox [4] = {skybox, box_GRASS, box_EARTH, box_STONE};
+    GLuint box_skin [6];
+    GLuint* arrayBox [5] = {skybox, box_GRASS, box_EARTH, box_STONE, box_skin};
     
     MakeTextures (arrayBox);
 
@@ -108,8 +109,8 @@ int main(int, char const**)
     
     Manager_Delete_t Manager_Delete (2);
     Manager_Lord_t Manager (2, &Manager_Delete);
-    Avatar God(map._x_size * size / 2, map._y_size, map._z_size * size / 2, box_STONE);
-    Mob Dayn(map._x_size * size / 2, map._y_size / 2, map._z_size * size / 2, box_STONE);
+    Avatar God(map._x_size * size / 2, map._y_size, map._z_size * size / 2, box_skin);
+    Mob Dayn(map._x_size * size / 2, map._y_size, map._z_size * size / 2, box_skin);
     
     Manager.Add(&God);
     Manager.Add(&Dayn);
@@ -171,17 +172,17 @@ int main(int, char const**)
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         
-        gluLookAt(God._x - God._d * 1.1 * sin (angleX / 180 * PI), God._y + God._h - 5, God._z - God._d * 1.1 * cos (angleX / 180 * PI), God._x - sin (angleX / 180 * PI) * (1 + God._d * 1.1),  God._y + God._h - 5 + tan (angleY / 180 * PI),  God._z - cos (angleX / 180 * PI) * (1 + God._d * 1.1), 0, 1, 0);
+        gluLookAt(God._x - God._d * 1.5 * sin (angleX / 180 * PI), God._y + God._h - 5, God._z - God._d * 1.5 * cos (angleX / 180 * PI), God._x - sin (angleX / 180 * PI) * (1 + God._d * 1.5),  God._y + God._h - 5 + tan (angleY / 180 * PI),  God._z - cos (angleX / 180 * PI) * (1 + God._d * 1.5), 0, 1, 0);
         
         DrawMAP(God, map, arrayBox);
-        
-        Manager.updata(time, map);
-        Manager_Delete.updata();
+        // Update the window
         
         glTranslatef( God._x,  God._y,  God._z);
         createBox(skybox, 1000);
         glTranslatef(-God._x, -God._y, -God._z);
-        // Update the window
+        
+        Manager.updata(time, map);
+        Manager_Delete.updata();
         window.pushGLStates();
         window.draw(cursor);
         window.popGLStates();

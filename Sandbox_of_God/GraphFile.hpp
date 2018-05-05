@@ -44,6 +44,9 @@ int MakeTextures (GLuint** arrayBox) {
     for (int i = 0; i < 6; i ++) {
         arrayBox [STONE] [i] = LoadTexture(resourcePath() + "resources/textures/blocks/enchanting_table_bottom.png");//"resources/grassBox/Stone_Block.png");
     }
+    for (int i = 0; i < 6; i ++) {
+        arrayBox [4] [i] = LoadTexture(resourcePath() + "resources/textures/blocks/quartz_block_chiseled.png");//"resources/grassBox/Stone_Block.png");
+    }
     
     
     /*
@@ -54,7 +57,7 @@ int MakeTextures (GLuint** arrayBox) {
     skybox [4] = LoadTexture(resourcePath() + "resources/skybox/skybox_right.bmp");
     skybox [5] = LoadTexture(resourcePath() + "resources/skybox/skybox_bottom.bmp");
     //*/
-    
+    /*
      arrayBox [SKY] [0] = LoadTexture(resourcePath() + "resources/skybox4/skybox_front.bmp");
      arrayBox [SKY] [1] = LoadTexture(resourcePath() + "resources/skybox4/skybox_top.jpg");
      arrayBox [SKY] [2] = LoadTexture(resourcePath() + "resources/skybox4/skybox_bottom.jpg");
@@ -62,13 +65,13 @@ int MakeTextures (GLuint** arrayBox) {
      arrayBox [SKY] [4] = LoadTexture(resourcePath() + "resources/skybox4/skybox_left.jpg");
      arrayBox [SKY] [5] = LoadTexture(resourcePath() + "resources/skybox4/skybox_back.jpg");
      //*/
-    /*
-    skybox [0] = LoadTexture(resourcePath() + "resources/skybox6/skybox_top.png");
-    skybox [1] = LoadTexture(resourcePath() + "resources/skybox6/skybox_left.png");
-    skybox [2] = LoadTexture(resourcePath() + "resources/skybox6/skybox_right.png");
-    skybox [3] = LoadTexture(resourcePath() + "resources/skybox6/skybox_front.png");
-    skybox [4] = LoadTexture(resourcePath() + "resources/skybox6/skybox_back.png");
-    skybox [5] = LoadTexture(resourcePath() + "resources/skybox6/skybox_bottom.png");
+    //*
+    arrayBox [SKY]  [0] = LoadTexture(resourcePath() + "resources/skybox2/skybox_top.png");
+    arrayBox [SKY]  [1] = LoadTexture(resourcePath() + "resources/skybox2/skybox_right.png");
+    arrayBox [SKY]  [2] = LoadTexture(resourcePath() + "resources/skybox2/skybox_back.png");
+    arrayBox [SKY]  [3] = LoadTexture(resourcePath() + "resources/skybox2/skybox_left.png");
+    arrayBox [SKY]  [4] = LoadTexture(resourcePath() + "resources/skybox2/skybox_front.png");
+    arrayBox [SKY]  [5] = LoadTexture(resourcePath() + "resources/skybox2/skybox_bottom.png");
     //*/
     glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_TRUE);
@@ -94,7 +97,6 @@ GLuint LoadTexture(sf::String name)
         glGenTextures(1, &texture);
         glBindTexture(GL_TEXTURE_2D, texture);
     
-    
         gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, image.getSize().x, image.getSize().y, GL_RGBA, GL_UNSIGNED_BYTE, image.getPixelsPtr());
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);  
@@ -112,7 +114,9 @@ GLuint LoadTexture(sf::String name)
 
 void createRectangle(GLuint box[],float x_size, float y_size, float z_size)
 {
-    
+    x_size = x_size / 2;
+    y_size = y_size / 2;
+    z_size = z_size / 2;
     
     glBindTexture(GL_TEXTURE_2D, box[0]);
     glBegin(GL_QUADS);
@@ -171,9 +175,9 @@ void createRectangle(GLuint box[],float x_size, float y_size, float z_size)
 
 
 
-void createBox(GLuint box[],float size)
+void createBox(GLuint box[],float _size)
 {
-    createRectangle(box, size, size, size);
+    createRectangle(box, _size, _size, _size);
 }
 
 
@@ -205,15 +209,15 @@ int DrawMAP (Avatar& God, map_t& map, GLuint** arrayBox) {
                             break;
                             
                         case GRASS:
-                            createRectangle (arrayBox [GRASS], size / 2, size / 2, size / 2);
+                            createBox (arrayBox [GRASS], size);
                             break;
                             
                         case EARTH:
-                            createBox(arrayBox [EARTH], size / 2);
+                            createBox(arrayBox [EARTH], size);
                             break;
                             
                         case STONE:
-                            createBox(arrayBox [STONE], size / 2);
+                            createBox(arrayBox [STONE], size);
                             break;
                             
                         default:
@@ -226,23 +230,67 @@ int DrawMAP (Avatar& God, map_t& map, GLuint** arrayBox) {
 
 int GameOBJ::draw () {
     
-    glTranslatef( _x,  _y,  _z);
-    
-    createRectangle (_skin, _w, _h, _d);
-    
-    glTranslatef( -_x,  -_y,  -_z);
+    //head
+    glTranslatef( _x,  _y + 24,  _z);
+    createBox (_skin, 16);
+    glTranslatef( -_x,  -_y - 24,  -_z);
+    //body
+    glTranslatef( _x,  _y + 4,  _z);
+    createRectangle (_skin, _w, 24, _d * 2);
+    glTranslatef( -_x,  -_y - 4,  -_z);
+    //legs right
+    glTranslatef( _x - 4,  _y - 20,  _z);
+    createRectangle (_skin, _w / 2 , 24, _d * 2);
+    glTranslatef( -_x + 4,  -_y + 20,  -_z);
+    //legs left
+    glTranslatef( _x + 4,  _y - 20,  _z);
+    createRectangle (_skin, _w / 2 , 24, _d * 2);
+    glTranslatef( -_x - 4,  -_y + 20,  -_z);
+    //arm right
+    glTranslatef( _x - 12,  _y + 4,  _z);
+    createRectangle (_skin, _w / 2 , 24, _d * 2);
+    glTranslatef( -_x + 12,  -_y - 4,  -_z);
+    //arm left
+    glTranslatef( _x + 12,  _y + 4,  _z);
+    createRectangle (_skin, _w / 2 , 24, _d * 2);
+    glTranslatef( -_x - 12,  -_y - 4,  -_z);
     return 0;
 }
 
 
 int Avatar::draw () {
-    //*
-    glTranslatef( _x,  _y,  _z);
+    
+    
+    //body
+    glTranslatef( _x,  _y + 4,  _z);
     glRotatef(angleX, 0, 1, 0);
-    createRectangle (_skin, _w, _h - 8, _d);
+    createRectangle (_skin, _w, 24, _d * 2);
     glRotatef(-angleX, 0, 1, 0);
-    glTranslatef( -_x,  -_y,  -_z);
-    //*/
+    glTranslatef( -_x,  -_y - 4,  -_z);
+    //legs right
+    glTranslatef( _x - 4,  _y - 20,  _z);
+    glRotatef(angleX, 0, 1, 0);
+    createRectangle (_skin, _w / 2 , 24, _d * 2);
+    glRotatef(-angleX, 0, 1, 0);
+    glTranslatef( -_x + 4,  -_y + 20,  -_z);
+    //legs left
+    glTranslatef( _x + 4,  _y - 20,  _z);
+    glRotatef(angleX, 0, 1, 0);
+    createRectangle (_skin, _w / 2 , 24, _d * 2);
+    glRotatef(-angleX, 0, 1, 0);
+    glTranslatef( -_x - 4,  -_y + 20,  -_z);
+    //arm right
+    glTranslatef( _x - 12,  _y + 4,  _z);
+    glRotatef(angleX, 0, 1, 0);
+    createRectangle (_skin, _w / 2 , 24, _d * 2);
+    glRotatef(-angleX, 0, 1, 0);
+    glTranslatef( -_x + 12,  -_y - 4,  -_z);
+    //arm left
+    glTranslatef( _x + 12,  _y + 4,  _z);
+    glRotatef(angleX, 0, 1, 0);
+    createRectangle (_skin, _w / 2 , 24, _d * 2);
+    glRotatef(-angleX, 0, 1, 0);
+    glTranslatef( -_x - 12,  -_y - 4,  -_z);
     return 0;
 }
 
