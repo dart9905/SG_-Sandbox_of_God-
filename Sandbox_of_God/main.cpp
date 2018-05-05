@@ -195,14 +195,7 @@ int main(int, char const**)
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         
-        if (God.onGround == false && God.onGround_two == false) {
-            God.angleY += God.speed_angle;
-            
-            gluLookAt(God.x, God.y + God.h / 2, God.z, God.x - sin (angleX / 180 * PI),  God.y + God.h / 2 + tan (angleY / 180 * PI),  God.z - cos (angleX / 180 * PI), 0, 1, 0);
-            //gluLookAt(God.x, God.y + God.h / 2, God.z, God.x + tan (angleX / 180 * PI),  God.y + God.h / 2 - sin (angleY / 180 * PI),  God.z - cos (angleY / 180 * PI), 1, 0, 0);
-            
-        } else
-            gluLookAt(God.x, God.y + God.h / 2, God.z, God.x - sin (angleX / 180 * PI),  God.y + God.h / 2 + tan (angleY / 180 * PI),  God.z - cos (angleX / 180 * PI), 0, 1, 0);
+        gluLookAt(God.x, God.y + God.h / 2, God.z, God.x - sin (angleX / 180 * PI),  God.y + God.h / 2 + tan (angleY / 180 * PI),  God.z - cos (angleX / 180 * PI), 0, 1, 0);
         
         
         Xmin_place = God.x / size - R;
