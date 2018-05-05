@@ -1,10 +1,9 @@
 
-int mouse_t:: update (float* angleX, float* angleY, const Playr& God, map_t& map) {
+int mouse_t:: update (float* angleX, float* angleY, Playr& God, map_t& map) {
     angle (angleX, angleY);
     tap (angleX, angleY, God, map);
     return 0;
 }
-
 
 int mouse_t:: angle (float* angleX, float* angleY) {
     _xwindow = _window->getPosition().x + _windowsize.x / 2;
@@ -20,7 +19,6 @@ int mouse_t:: angle (float* angleX, float* angleY) {
     
     if (*angleY > 89.0)
         *angleY = 89.0;
-    
     _pos.x = _xwindow;
     _pos.y = _ywindow;
     sf::Mouse::setPosition(_pos);

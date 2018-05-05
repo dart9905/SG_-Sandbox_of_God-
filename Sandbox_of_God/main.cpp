@@ -30,7 +30,7 @@
 
 
 
-float angleX, angleY;
+float angleX = 0, angleY = 0;
 
 const int window_width = 1500;
 const int window_height = 1200;
@@ -51,7 +51,7 @@ const int window_height = 1200;
 //      =============================================
 
 
-box_t map_array_GLOBAL_VARIABLE [1024] [612] [1024] = {0, 0};
+box_t map_array_GLOBAL_VARIABLE [512] [512] [512] = {0, 0};
 
 int main(int, char const**)
 {
@@ -61,23 +61,33 @@ int main(int, char const**)
     //              LOAD MAP
     //
     
-    map_t map (612, 306, 612, &(map_array_GLOBAL_VARIABLE [0] [0] [0]));
+    map_t map (512, 512, 512, &(map_array_GLOBAL_VARIABLE [0] [0] [0]));
     
     for (int x = 0; x < map._x_size; x++)
         for (int y = 0; y < map._y_size; y++)
             for (int z = 0; z < map._z_size; z++)
             {
-                if (y < map._y_size / 2 - map._y_size / 10) {
+                if (y < map._y_size / 2 - map._y_size / 100 * 5) {
                     map [x] [y] [z]._visibility = NOTVISIBLE;
-                    map [x] [y] [z]._structure = STONE;
+                    if (rand() % 100 <= 10) {
+                        map [x] [y] [z]._structure = EARTH;
+                    } else
+                        map [x] [y] [z]._structure = STONE;
                 }
-                if ((y >= map._y_size / 2 - map._y_size / 10) && (y < map._y_size / 2)) {
+                if ((y >= map._y_size / 2 - map._y_size / 100 * 5) && (y < map._y_size / 2)) {
                     map [x] [y] [z]._visibility = NOTVISIBLE;
-                    map [x] [y] [z]._structure = EARTH;
+                    
+                    if (rand() % 100 <= 10) {
+                        map [x] [y] [z]._structure = STONE;
+                    } else
+                        map [x] [y] [z]._structure = EARTH;
                 }
                 if (y == map._y_size / 2) {
                     map [x] [y] [z]._visibility = VISIBLE;
-                    map [x] [y] [z]._structure = GRASS;
+                    if (rand() % 100 <= 10) {
+                        map [x] [y] [z]._structure = STONE;
+                    } else
+                        map [x] [y] [z]._structure = GRASS;
                 }
             }
     
@@ -93,6 +103,13 @@ int main(int, char const**)
     settings.minorVersion = 1;
     sf::RenderWindow window(sf::VideoMode(window_width, window_height), "Sandbox of God", sf::Style::Default, settings);
     window.setVerticalSyncEnabled(true);
+    
+    sf::Texture cursor_texture;
+    cursor_texture.loadFromFile(resourcePath() + "resources/cursor.png");
+    sf::Sprite cursor (cursor_texture);
+    cursor.setOrigin(8.0, 8.0);
+    cursor.setPosition(window_width / 2, window_height / 2);
+    cursor.setScale(3, 3);
     
     
     //
@@ -114,7 +131,7 @@ int main(int, char const**)
     
     sf::Clock clock;
     
-    Playr God(map._x_size * 10, 500, map._z_size * 10);
+    Playr God(map._x_size * size / 2, map._y_size, map._z_size * size / 2);
     
     mouse_t Mouse (0, 0, false, false, &window);
     
@@ -144,6 +161,7 @@ int main(int, char const**)
         //                  Process events
         //
         sf::Event event;
+        window.setMouseCursorVisible(false);
         while (window.pollEvent(event))
         {
             // Close window: exit
@@ -168,8 +186,6 @@ int main(int, char const**)
         God.keyboard();
         God.update(time, map);
         
-        
-        
         Mouse.update(&angleX, &angleY, God, map);
         
         
@@ -179,11 +195,16 @@ int main(int, char const**)
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         
+        if (God.onGround == false && God.onGround_two == false) {
+            God.angleY += God.speed_angle;
+            
+            gluLookAt(God.x, God.y + God.h / 2, God.z, God.x - sin (angleX / 180 * PI),  God.y + God.h / 2 + tan (angleY / 180 * PI),  God.z - cos (angleX / 180 * PI), 0, 1, 0);
+            //gluLookAt(God.x, God.y + God.h / 2, God.z, God.x + tan (angleX / 180 * PI),  God.y + God.h / 2 - sin (angleY / 180 * PI),  God.z - cos (angleY / 180 * PI), 1, 0, 0);
+            
+        } else
+            gluLookAt(God.x, God.y + God.h / 2, God.z, God.x - sin (angleX / 180 * PI),  God.y + God.h / 2 + tan (angleY / 180 * PI),  God.z - cos (angleX / 180 * PI), 0, 1, 0);
         
-        gluLookAt(God.x, God.y + God.h / 2, God.z, God.x - sin (angleX / 180 * PI),  God.y + God.h / 2 + tan (angleY / 180 * PI),  God.z - cos (angleX / 180 * PI), 0, 1, 0);
         
-        
-        R = 20;
         Xmin_place = God.x / size - R;
         Zmin_place = God.z / size - R;
         Xmax_place = God.x / size + R;
@@ -193,10 +214,10 @@ int main(int, char const**)
             Xmin_place = 0;
         if (Zmin_place < 0)
             Zmin_place = 0;
-        if (Xmax_place > map._x_size - 1)
-            Xmax_place = map._x_size - 1;
-        if (Zmax_place > map._z_size - 1)
-            Zmax_place = map._z_size - 1;
+        if (Xmax_place > map._x_size)
+            Xmax_place = map._x_size;
+        if (Zmax_place > map._z_size)
+            Zmax_place = map._z_size;
         
         for (int x = Xmin_place; x < Xmax_place; x++)
             for (int y = 0; y <map._y_size; y++)
@@ -229,7 +250,11 @@ int main(int, char const**)
         createBox(skybox, 1000);
         glTranslatef(-God.x, -God.y, -God.z);
         // Update the window
+        window.pushGLStates();
+        window.draw(cursor);
+        window.popGLStates();
         window.display();
+        
     }
     return EXIT_SUCCESS;
 }

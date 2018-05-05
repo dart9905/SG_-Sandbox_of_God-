@@ -46,7 +46,64 @@ public:
 // ==================================================================================
 // ==================================================================================
 // ==================================================================================
+class Avatar {
+public:
+    Avatar (float x0, float y0, float z0):
+    x (x0),
+    y (y0),
+    z (z0)
+    {
+        dx = 0;
+        dy = 0;
+        dz = 0;
+        w = 5;
+        h = 20;
+        d = 5;
+        speed = 7;
+        onGround = false;
+    }
+    
+    float x, y, z;
+    float dx, dy, dz;
+    float w, h, d;
+    bool onGround;
+    float speed;
+    
+    virtual int collision (float Dx, float Dy, float Dz, map_t& map);
+    
+    virtual int update ();
+};
 
+
+
+class mob {
+public:
+    mob (float x0, float y0, float z0):
+    x (x0),
+    y (y0),
+    z (z0)
+    {
+        dx = 0;
+        dy = 0;
+        dz = 0;
+        w = 10;
+        h = 40;
+        d = 10;
+        speed = 7;
+        onGround = false;
+    }
+    
+    float x, y, z;
+    float dx, dy, dz;
+    float w, h, d;
+    bool onGround;
+    float speed;
+    
+    int collision (float Dx, float Dy, float Dz, map_t& map);
+    
+    int update (float time, map_t& map);
+    int draw (float time, map_t& map);
+};
 
 
 class Playr {
@@ -62,14 +119,22 @@ public:
         w = 5;
         h = 20;
         d = 5;
-        speed = 5;
-        onGround = false;
+        angleY = 0;
+        speed = 16;
+        speed_angle = -2;
+        onGround = true;
+        onGround_two = false;
+        onGround_two_can = false;
     }
     
     float x, y, z;
     float dx, dy, dz;
+    float speed_angle;
     float w, h, d;
+    float angleY;
     bool onGround;
+    bool onGround_two;
+    bool onGround_two_can;
     float speed;
     
     int collision (float Dx, float Dy, float Dz, map_t& map);
@@ -96,11 +161,12 @@ public:
         _pos.x = _xwindow;
         _pos.y = _ywindow;
         sf::Mouse::setPosition(_pos);
+        w->setMouseCursorVisible(false);
     }
     
     ~mouse_t () {}
     
-    int update (float* angleX, float* angleY, const Playr& God, map_t& map);
+    int update (float* angleX, float* angleY, Playr& God, map_t& map);
     
     int angle (float* angleX, float* angleY);
     
