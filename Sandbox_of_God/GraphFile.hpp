@@ -230,67 +230,79 @@ int DrawMAP (Avatar& God, map_t& map, GLuint** arrayBox) {
 
 int GameOBJ::draw () {
     
-    //head
-    glTranslatef( _x,  _y + 24,  _z);
-    createBox (_skin, 16);
-    glTranslatef( -_x,  -_y - 24,  -_z);
+    
     //body
     glTranslatef( _x,  _y + 4,  _z);
     createRectangle (_skin, _w, 24, _d * 2);
+    {
+        //head
+        glTranslatef( 0, 20, 0);
+        createBox (_skin, 16);
+        glTranslatef( 0, -20, 0);
+    }
+    {
+        //legs right
+        glTranslatef( -4,  -24, 0);
+        createRectangle (_skin, _w / 2 , 24, _d * 2);
+        glTranslatef( +4, +24, 0);
+    }
+    {
+        //legs left
+        glTranslatef( +4,  -24, 0);
+        createRectangle (_skin, _w / 2 , 24, _d * 2);
+        glTranslatef( -4, +24, 0);
+    }
+    {
+        //arm right
+        glTranslatef( -12, 0, 0);
+        createRectangle (_skin, _w / 2 , 24, _d * 2);
+        glTranslatef( +12, 0, 0);
+    }
+    {
+        //arm left
+        glTranslatef( +12, 0, 0);
+        createRectangle (_skin, _w / 2 , 24, _d * 2);
+        glTranslatef( -12, 0, 0);
+    }
     glTranslatef( -_x,  -_y - 4,  -_z);
-    //legs right
-    glTranslatef( _x - 4,  _y - 20,  _z);
-    createRectangle (_skin, _w / 2 , 24, _d * 2);
-    glTranslatef( -_x + 4,  -_y + 20,  -_z);
-    //legs left
-    glTranslatef( _x + 4,  _y - 20,  _z);
-    createRectangle (_skin, _w / 2 , 24, _d * 2);
-    glTranslatef( -_x - 4,  -_y + 20,  -_z);
-    //arm right
-    glTranslatef( _x - 12,  _y + 4,  _z);
-    createRectangle (_skin, _w / 2 , 24, _d * 2);
-    glTranslatef( -_x + 12,  -_y - 4,  -_z);
-    //arm left
-    glTranslatef( _x + 12,  _y + 4,  _z);
-    createRectangle (_skin, _w / 2 , 24, _d * 2);
-    glTranslatef( -_x - 12,  -_y - 4,  -_z);
     return 0;
 }
 
 
 int Avatar::draw () {
     
-    
     //body
     glTranslatef( _x,  _y + 4,  _z);
-    glRotatef(angleX, 0, 1, 0);
+    glRotatef(+angleX, 0, 1, 0);
     createRectangle (_skin, _w, 24, _d * 2);
+    {
+        //legs right
+        glTranslatef( -4,  -24, 0);
+        createRectangle (_skin, _w / 2 , 24, _d * 2);
+        glTranslatef( +4, +24, 0);
+    }
+    {
+        //legs left
+        glTranslatef( +4,  -24, 0);
+        createRectangle (_skin, _w / 2 , 24, _d * 2);
+        glTranslatef( -4, +24, 0);
+    }
+    {
+        //arm right
+        glTranslatef( -12, 0, 0);
+        createRectangle (_skin, _w / 2 , 24, _d * 2);
+        glTranslatef( +12, 0, 0);
+    }
+    {
+        //arm left
+        glTranslatef( +12, 0, 0);
+        createRectangle (_skin, _w / 2 , 24, _d * 2);
+        glTranslatef( -12, 0, 0);
+    }
     glRotatef(-angleX, 0, 1, 0);
     glTranslatef( -_x,  -_y - 4,  -_z);
-    //legs right
-    glTranslatef( _x - 4,  _y - 20,  _z);
-    glRotatef(angleX, 0, 1, 0);
-    createRectangle (_skin, _w / 2 , 24, _d * 2);
-    glRotatef(-angleX, 0, 1, 0);
-    glTranslatef( -_x + 4,  -_y + 20,  -_z);
-    //legs left
-    glTranslatef( _x + 4,  _y - 20,  _z);
-    glRotatef(angleX, 0, 1, 0);
-    createRectangle (_skin, _w / 2 , 24, _d * 2);
-    glRotatef(-angleX, 0, 1, 0);
-    glTranslatef( -_x - 4,  -_y + 20,  -_z);
-    //arm right
-    glTranslatef( _x - 12,  _y + 4,  _z);
-    glRotatef(angleX, 0, 1, 0);
-    createRectangle (_skin, _w / 2 , 24, _d * 2);
-    glRotatef(-angleX, 0, 1, 0);
-    glTranslatef( -_x + 12,  -_y - 4,  -_z);
-    //arm left
-    glTranslatef( _x + 12,  _y + 4,  _z);
-    glRotatef(angleX, 0, 1, 0);
-    createRectangle (_skin, _w / 2 , 24, _d * 2);
-    glRotatef(-angleX, 0, 1, 0);
-    glTranslatef( -_x - 12,  -_y - 4,  -_z);
+    
+    
     return 0;
 }
 
