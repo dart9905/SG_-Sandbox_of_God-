@@ -1,134 +1,147 @@
-
+// ==================================================================================
+// ==================================================================================
+// ==================================================================================
+//
+//                                     Phys
+//
+// ==================================================================================
+// ==================================================================================
+// ==================================================================================
 bool check(int x, int y, int z, map_t& map);
 
 
-
-int Playr:: collision (float Dx, float Dy, float Dz, map_t& map) {
-    for (int X = (x - w) / size; X < (x + w)/ size; X++)
-        for (int Y = (y - h) / size; Y < (y + h)/ size; Y++)
-            for (int Z = (z - d) / size; Z < (z + d)/ size; Z++)
+int GameOBJ:: collision (float Dx, float Dy, float Dz, map_t& map) {
+    for (int X = (_x - _w) / size; X < (_x + _w)/ size; X++)
+        for (int Y = (_y - _h) / size; Y < (_y + _h)/ size; Y++)
+            for (int Z = (_z - _d) / size; Z < (_z + _d)/ size; Z++)
                 if (check(X, Y, Z, map)) {
                     if (Dx > 0)
-                        x = X * size - w;
+                        _x = X * size - _w;
                     if (Dx < 0)
-                        x = X * size + size + w;
+                        _x = X * size + size + _w;
                     if (Dy > 0)
-                        y = Y * size - h;
+                        _y = Y * size - _h;
                     if (Dy < 0) {
-                        y = Y * size + size + h;
-                        onGround = true;
-                        onGround_two = false;
-                        dy = 0;
+                        _y = Y * size + size + _h;
+                        _onGround = true;
+                        _dy = 0;
                     }
                     if (Dz > 0)
-                        z = Z * size - d;
+                        _z = Z * size - _d;
                     if (Dz < 0)
-                        z = Z * size + size + d;
+                        _z = Z * size + size + _d;
                 }
     return 0;
 }
 
 
-int mob:: collision (float Dx, float Dy, float Dz, map_t& map) {
-    for (int X = (x - w) / size; X < (x + w)/ size; X++)
-        for (int Y = (y - h) / size; Y < (y + h)/ size; Y++)
-            for (int Z = (z - d) / size; Z < (z + d)/ size; Z++)
+int GameOBJ:: update (float time, map_t& map) {
+    if (!_onGround)
+        _dy -= 1.5 * time;
+    _onGround = false;
+    
+    _x += _dx * time;
+    collision(_dx, 0, 0, map);
+    
+    _y += _dy * time;
+    collision(0, _dy, 0, map);
+    
+    _z += _dz * time;
+    collision(0, 0, _dz, map);
+    
+    
+    _dz = 0;
+    _dx = 0;
+    return 0;
+}
+
+
+
+int GameOBJ:: move () {
+    return 0;
+}
+
+
+
+int Avatar:: collision (float Dx, float Dy, float Dz, map_t& map) {
+    for (int X = (_x - _w) / size; X < (_x + _w)/ size; X++)
+        for (int Y = (_y - _h) / size; Y < (_y + _h)/ size; Y++)
+            for (int Z = (_z - _d) / size; Z < (_z + _d)/ size; Z++)
                 if (check(X, Y, Z, map)) {
                     if (Dx > 0)
-                        x = X * size - w;
+                        _x = X * size - _w;
                     if (Dx < 0)
-                        x = X * size + size + w;
+                        _x = X * size + size + _w;
                     if (Dy > 0)
-                        y = Y * size - h;
+                        _y = Y * size - _h;
                     if (Dy < 0) {
-                        y = Y * size + size + h;
-                        onGround = true;
-                        dy = 0;
+                        _y = Y * size + size + _h;
+                        _onGround = true;
+                        _onGround_two = false;
+                        _dy = 0;
                     }
                     if (Dz > 0)
-                        z = Z * size - d;
+                        _z = Z * size - _d;
                     if (Dz < 0)
-                        z = Z * size + size + d;
+                        _z = Z * size + size + _d;
                 }
     return 0;
 }
 
 
 
-int Playr:: update (float time, map_t& map) {
-    if (!onGround)
-        dy -= 1.5 * time;
-    onGround = false;
+int Avatar:: update (float time, map_t& map) {
+    if (!_onGround)
+        _dy -= 1.5 * time;
+    _onGround = false;
     
-    x += dx * time;
-    collision(dx, 0, 0, map);
+    _x += _dx * time;
+    collision(_dx, 0, 0, map);
     
-    y += dy * time;
-    collision(0, dy, 0, map);
+    _y += _dy * time;
+    collision(0, _dy, 0, map);
     
-    z += dz * time;
-    collision(0, 0, dz, map);
-    
-    
-    dz = 0;
-    dx = 0;
-    return 0;
-}
-
-
-int mob:: update (float time, map_t& map) {
-    if (!onGround)
-        dy -= 1.5 * time;
-    onGround = false;
-    
-    x += dx * time;
-    collision(dx, 0, 0, map);
-    
-    y += dy * time;
-    collision(0, dy, 0, map);
-    
-    z += dz * time;
-    collision(0, 0, dz, map);
+    _z += _dz * time;
+    collision(0, 0, _dz, map);
     
     
-    dz = 0;
-    dx = 0;
+    _dz = 0;
+    _dx = 0;
     return 0;
 }
 
 
 
-int Playr:: keyboard () {
+int Avatar:: move () {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
-        if ((onGround_two) && (!onGround) && (onGround_two_can)) {
-            onGround_two = false;
-            dy = 25;
+        if ((_onGround_two) && (!_onGround) && (_onGround_two_can)) {
+            _onGround_two = false;
+            _dy = 25;
         }
-        if ((!onGround_two) && (onGround)) {
-            onGround = false;
-            onGround_two_can = false;
-            onGround_two = true;
-            dy = 16;
-            speed_angle = -2;
+        if ((!_onGround_two) && (_onGround)) {
+            _onGround = false;
+            _onGround_two_can = false;
+            _onGround_two = true;
+            _dy = 16;
         }
     } else
-        onGround_two_can = true;
+        _onGround_two_can = true;
     
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-        dx = -sin (angleX / 180 * PI) * speed;
-        dz = -cos (angleX / 180 * PI) * speed;
+        _dx = -sin (angleX / 180 * PI) * _speed;
+        _dz = -cos (angleX / 180 * PI) * _speed;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-        dx =  sin (angleX / 180 * PI) * speed;
-        dz =  cos (angleX / 180 * PI) * speed;
+        _dx =  sin (angleX / 180 * PI) * _speed;
+        _dz =  cos (angleX / 180 * PI) * _speed;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-        dx =  sin ((angleX + 90) / 180 * PI) * speed;
-        dz =  cos ((angleX + 90) / 180 * PI) * speed;
+        _dx =  sin ((angleX + 90) / 180 * PI) * _speed;
+        _dz =  cos ((angleX + 90) / 180 * PI) * _speed;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-        dx =  sin ((angleX - 90) / 180 * PI) * speed;
-        dz =  cos ((angleX - 90) / 180 * PI) * speed;
+        _dx =  sin ((angleX - 90) / 180 * PI) * _speed;
+        _dz =  cos ((angleX - 90) / 180 * PI) * _speed;
     }
     
     return 0;

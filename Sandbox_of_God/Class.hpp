@@ -46,105 +46,175 @@ public:
 // ==================================================================================
 // ==================================================================================
 // ==================================================================================
-class Avatar {
+// ==================================================================================
+//
+//                                     GameOBJ
+//
+// ==================================================================================
+
+
+class GameOBJ {
 public:
-    Avatar (float x0, float y0, float z0):
-    x (x0),
-    y (y0),
-    z (z0)
+    GameOBJ (float x0, float y0, float z0, GLuint* skin0):
+    _x (x0),
+    _y (y0),
+    _z (z0),
+    _skin(skin0)
     {
-        dx = 0;
-        dy = 0;
-        dz = 0;
-        w = 5;
-        h = 20;
-        d = 5;
-        speed = 7;
-        onGround = false;
+        
+        _dx = 0;
+        _dy = 0;
+        _dz = 0;
+        _w = 16;
+        _h = 32;
+        _d = 4;
+        _speed = 17;
+        _onGround = false;
     }
-    
-    float x, y, z;
-    float dx, dy, dz;
-    float w, h, d;
-    bool onGround;
-    float speed;
+    virtual ~GameOBJ () {}
+    float _x, _y, _z;
+    float _dx, _dy, _dz;
+    float _w, _h, _d;
+    bool _onGround;
+    float _speed;
     
     virtual int collision (float Dx, float Dy, float Dz, map_t& map);
     
-    virtual int update ();
+    virtual int update (float time, map_t& map);
+    virtual int draw ();
+    virtual int move ();
+    
+    GLuint* _skin;
+    
+    
 };
 
 
-
-class mob {
+class Mob: public GameOBJ {
 public:
-    mob (float x0, float y0, float z0):
-    x (x0),
-    y (y0),
-    z (z0)
-    {
-        dx = 0;
-        dy = 0;
-        dz = 0;
-        w = 10;
-        h = 40;
-        d = 10;
-        speed = 7;
-        onGround = false;
+    Mob (float x0, float y0, float z0, GLuint* skin0): GameOBJ (x0, y0, z0, skin0) {}
+    virtual ~Mob () {}
+};
+
+
+class Avatar: public GameOBJ {
+public:
+    Avatar (float x0, float y0, float z0, GLuint* skin0): GameOBJ (x0, y0, z0, skin0) {
+        _onGround_two = false;
+        _onGround_two_can = false;
     }
+    ~Avatar () {}
     
-    float x, y, z;
-    float dx, dy, dz;
-    float w, h, d;
-    bool onGround;
-    float speed;
-    
-    int collision (float Dx, float Dy, float Dz, map_t& map);
+    bool _onGround_two;
+    bool _onGround_two_can;
     
     int update (float time, map_t& map);
-    int draw (float time, map_t& map);
+    int collision (float Dx, float Dy, float Dz, map_t& map);
+    int move ();
+    int draw ();
 };
 
+// ==================================================================================
+// ==================================================================================
+// ==================================================================================
+// ==================================================================================
+//
+//                                     Manager
+//
+// ==================================================================================
+// ==================================================================================
+// ==================================================================================
+// ==================================================================================
 
-class Playr {
+
+class Manager_t {
 public:
-    Playr (float x0, float y0, float z0):
-    x (x0),
-    y (y0),
-    z (z0)
+    Manager_t (int size_):
+    _size(size_),
+    _capasity(0)
     {
-        dx = 0;
-        dy = 0;
-        dz = 0;
-        w = 5;
-        h = 20;
-        d = 5;
-        angleY = 0;
-        speed = 16;
-        speed_angle = -2;
-        onGround = true;
-        onGround_two = false;
-        onGround_two_can = false;
+        _data = new GameOBJ* [_size];
     }
     
-    float x, y, z;
-    float dx, dy, dz;
-    float speed_angle;
-    float w, h, d;
-    float angleY;
-    bool onGround;
-    bool onGround_two;
-    bool onGround_two_can;
-    float speed;
+    ~Manager_t () {
+        delete [] _data;
+    }
+    int _resize (size_t new_sz) {
+        
+        GameOBJ** newdata = new GameOBJ* [_size];
+        std::copy(&(_data [0]), &(_data[_size]), newdata);
+        
+        _capasity = new_sz;
+        delete _data;
+        
+        _data = newdata;
+        return 0;
+    }
     
-    int collision (float Dx, float Dy, float Dz, map_t& map);
+    int Add (GameOBJ* NewGameOBJ) {
+        if (_capasity == _size) {
+            _resize (_capasity * 2);
+        }
+        _data [_capasity] = NewGameOBJ;
+        _capasity++;
+        
+    }
     
-    int keyboard ();
     
-    int update (float time, map_t& map);
+    
+    GameOBJ** _data;
+    int _size;
+    
+    int _capasity;
 };
 
 
+
+class Manager_Delete_t: public Manager_t {
+public:
+    Manager_Delete_t(int size_): Manager_t(size_) {}
+    
+    int updata () {
+        
+        for (; _capasity >= 0; _capasity--) {
+            delete _data [_capasity];
+        }
+    }
+};
+
+
+
+class Manager_Lord_t: public Manager_t  {
+public:
+    Manager_Lord_t (int size_, Manager_Delete_t* MDeletre): Manager_t(size_), _Manager_Delete(MDeletre) {}
+    
+    
+    int updata (float time, map_t& map) {
+        for (int i = 0; i < _size; i++) {
+            _data [i]->draw();
+            _data [i]->move();
+            if (_data [i]->update(time, map)) {
+                _Manager_Delete->Add(_data [i]);
+                _data [i] = _data [_capasity];
+                i--;
+            }
+            
+        }
+    }
+    
+    Manager_Delete_t* _Manager_Delete;
+};
+
+
+
+// ==================================================================================
+// ==================================================================================
+// ==================================================================================
+// ==================================================================================
+//
+//                                     mouse_t
+//
+// ==================================================================================
 
 class mouse_t {
 public:
@@ -166,11 +236,11 @@ public:
     
     ~mouse_t () {}
     
-    int update (float* angleX, float* angleY, Playr& God, map_t& map);
+    int update (float* angleX, float* angleY, Avatar& God, map_t& map);
     
     int angle (float* angleX, float* angleY);
     
-    int tap (float* angleX, float* angleY, const Playr& God, map_t& map);
+    int tap (float* angleX, float* angleY, const Avatar& God, map_t& map);
     
     
     

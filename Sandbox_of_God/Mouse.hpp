@@ -1,5 +1,13 @@
-
-int mouse_t:: update (float* angleX, float* angleY, Playr& God, map_t& map) {
+// ==================================================================================
+// ==================================================================================
+// ==================================================================================
+//
+//                                     Mouse
+//
+// ==================================================================================
+// ==================================================================================
+// ==================================================================================
+int mouse_t:: update (float* angleX, float* angleY, Avatar& God, map_t& map) {
     angle (angleX, angleY);
     tap (angleX, angleY, God, map);
     return 0;
@@ -26,11 +34,11 @@ int mouse_t:: angle (float* angleX, float* angleY) {
 }
 
 
-int mouse_t:: tap (float* angleX, float* angleY, const Playr& God, map_t& map) {
+int mouse_t:: tap (float* angleX, float* angleY, const Avatar& God, map_t& map) {
     if (_Left || _Right) {
-        float Godx = God.x;
-        float Gody = God.y + God.h / 2;
-        float Godz = God.z;
+        float Godx = God._x;
+        float Gody = God._y + God._h / 2;
+        float Godz = God._z;
         
         int X = 0, Y = 0, Z = 0;
         int oldX = 0, oldY = 0, oldZ = 0;

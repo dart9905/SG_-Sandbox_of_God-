@@ -1,6 +1,6 @@
 
 const float PI = 3.141592653;
-const float size = 20.f;
+const float size = 32.f;
 
 #include "Class.hpp"
 

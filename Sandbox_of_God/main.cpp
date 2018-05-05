@@ -62,34 +62,7 @@ int main(int, char const**)
     //
     
     map_t map (512, 512, 512, &(map_array_GLOBAL_VARIABLE [0] [0] [0]));
-    
-    for (int x = 0; x < map._x_size; x++)
-        for (int y = 0; y < map._y_size; y++)
-            for (int z = 0; z < map._z_size; z++)
-            {
-                if (y < map._y_size / 2 - map._y_size / 100 * 5) {
-                    map [x] [y] [z]._visibility = NOTVISIBLE;
-                    if (rand() % 100 <= 10) {
-                        map [x] [y] [z]._structure = EARTH;
-                    } else
-                        map [x] [y] [z]._structure = STONE;
-                }
-                if ((y >= map._y_size / 2 - map._y_size / 100 * 5) && (y < map._y_size / 2)) {
-                    map [x] [y] [z]._visibility = NOTVISIBLE;
-                    
-                    if (rand() % 100 <= 10) {
-                        map [x] [y] [z]._structure = STONE;
-                    } else
-                        map [x] [y] [z]._structure = EARTH;
-                }
-                if (y == map._y_size / 2) {
-                    map [x] [y] [z]._visibility = VISIBLE;
-                    if (rand() % 100 <= 10) {
-                        map [x] [y] [z]._structure = STONE;
-                    } else
-                        map [x] [y] [z]._structure = GRASS;
-                }
-            }
+    map.Load();
     
     
     //
@@ -122,22 +95,28 @@ int main(int, char const**)
     window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
     
     
+    GLuint skybox  [6];
     GLuint box_GRASS [6];
     GLuint box_EARTH [6];
     GLuint box_STONE [6];
-    GLuint skybox  [6];
-    MakeTextures (box_STONE, box_EARTH, box_GRASS, skybox);
+    GLuint* arrayBox [4] = {skybox, box_GRASS, box_EARTH, box_STONE};
+    
+    MakeTextures (arrayBox);
 
     
     sf::Clock clock;
     
-    Playr God(map._x_size * size / 2, map._y_size, map._z_size * size / 2);
+    Manager_Delete_t Manager_Delete (2);
+    Manager_Lord_t Manager (2, &Manager_Delete);
+    Avatar God(map._x_size * size / 2, map._y_size, map._z_size * size / 2, box_STONE);
+    Mob Dayn(map._x_size * size / 2, map._y_size / 2, map._z_size * size / 2, box_STONE);
+    
+    Manager.Add(&God);
+    Manager.Add(&Dayn);
     
     mouse_t Mouse (0, 0, false, false, &window);
     
     
-    int R = 20;
-    int Xmin_place = 0, Zmin_place = 0, Xmax_place = 0, Zmax_place = 0;
     
     
     //
@@ -181,67 +160,27 @@ int main(int, char const**)
             }
         }
         
-        
-        
-        God.keyboard();
-        God.update(time, map);
+    
         
         Mouse.update(&angleX, &angleY, God, map);
         
         
         
-        
+
         // Apply some transformations
         glMatrixMode(GL_MODELVIEW);
         glLoadIdentity();
         
-        gluLookAt(God.x, God.y + God.h / 2, God.z, God.x - sin (angleX / 180 * PI),  God.y + God.h / 2 + tan (angleY / 180 * PI),  God.z - cos (angleX / 180 * PI), 0, 1, 0);
+        gluLookAt(God._x , God._y + God._h, God._z - God._d, God._x - sin (angleX / 180 * PI),  God._y + God._h + tan (angleY / 180 * PI),  God._z - cos (angleX / 180 * PI) - God._d, 0, 1, 0);
         
+        DrawMAP(God, map, arrayBox);
         
-        Xmin_place = God.x / size - R;
-        Zmin_place = God.z / size - R;
-        Xmax_place = God.x / size + R;
-        Zmax_place = God.z / size + R;
+        Manager.updata(time, map);
+        Manager_Delete.updata();
         
-        if (Xmin_place < 0)
-            Xmin_place = 0;
-        if (Zmin_place < 0)
-            Zmin_place = 0;
-        if (Xmax_place > map._x_size)
-            Xmax_place = map._x_size;
-        if (Zmax_place > map._z_size)
-            Zmax_place = map._z_size;
-        
-        for (int x = Xmin_place; x < Xmax_place; x++)
-            for (int y = 0; y <map._y_size; y++)
-                for (int z = Zmin_place; z < Zmax_place; z++)
-                    if (map [x] [y] [z]._visibility == VISIBLE) {
-                        glTranslatef( x * size + size / 2,  y * size + size / 2,  z * size + size / 2);
-                        switch (map [x] [y] [z]._structure) {
-                            case SKY:
-                                break;
-                                
-                            case GRASS:
-                                createBox(box_GRASS, size / 2);
-                                break;
-                                
-                            case EARTH:
-                                createBox(box_EARTH, size / 2);
-                                break;
-                                
-                            case STONE:
-                                createBox(box_STONE, size / 2);
-                                break;
-                                
-                            default:
-                                break;
-                        }
-                        glTranslatef(-x * size - size / 2, -y * size - size / 2, -z * size - size / 2);
-                    }
-        
-        glTranslatef( God.x,  God.y,  God.z);
+        glTranslatef( God._x,  God._y,  God._z);
         createBox(skybox, 1000);
-        glTranslatef(-God.x, -God.y, -God.z);
+        glTranslatef(-God._x, -God._y, -God._z);
         // Update the window
         window.pushGLStates();
         window.draw(cursor);

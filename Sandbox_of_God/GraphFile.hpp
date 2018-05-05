@@ -1,3 +1,15 @@
+// ==================================================================================
+// ==================================================================================
+// ==================================================================================
+//
+//                                     Graph
+//
+// ==================================================================================
+// ==================================================================================
+// ==================================================================================
+
+
+
 #ifndef HELPFILE_H
 #define HELPFILE_H
 
@@ -11,7 +23,7 @@ GLuint LoadTexture(sf::String name);
 
 
 
-int MakeTextures (GLuint box_STONE [], GLuint box_EARTH [], GLuint box_GRASS [], GLuint skybox []) {
+int MakeTextures (GLuint** arrayBox) {
     /*
     box_GRASS [0] = LoadTexture(resourcePath() + "resources/textures/blocks/mycelium_top.png");//"resources/grassBox/top.jpg");
     for (int i = 1; i < 5; i ++) {
@@ -20,35 +32,35 @@ int MakeTextures (GLuint box_STONE [], GLuint box_EARTH [], GLuint box_GRASS [],
     box_GRASS [5] = LoadTexture(resourcePath() + "resources/grassBox/bottom.jpg");
     */
     for (int i = 0; i < 6; i ++) {
-        box_GRASS [i] = LoadTexture(resourcePath() + "resources/textures/blocks/end_stone.png");
+        arrayBox [GRASS] [i] = LoadTexture(resourcePath() + "resources/textures/blocks/end_stone.png");
     }
     
     for (int i = 0; i < 6; i ++) {
-        box_EARTH [i] = LoadTexture(resourcePath() + "resources/textures/blocks/end_stone.png");//"resources/grassBox/bottom.jpg");
+        arrayBox [EARTH] [i] = LoadTexture(resourcePath() + "resources/textures/blocks/end_stone.png");//"resources/grassBox/bottom.jpg");
     }
     
     
     
     for (int i = 0; i < 6; i ++) {
-        box_STONE [i] = LoadTexture(resourcePath() + "resources/textures/blocks/enchanting_table_bottom.png");//"resources/grassBox/Stone_Block.png");
+        arrayBox [STONE] [i] = LoadTexture(resourcePath() + "resources/textures/blocks/enchanting_table_bottom.png");//"resources/grassBox/Stone_Block.png");
     }
     
     
     /*
-    skybox [0] = LoadTexture(resourcePath() + "resources/skybox/skybox_top.bmp");
-    skybox [1] = LoadTexture(resourcePath() + "resources/skybox/skybox_front.bmp");
+    arrayBox [SKY] [0] = LoadTexture(resourcePath() + "resources/skybox/skybox_top.bmp");
+    arrayBox [SKY] [1] = LoadTexture(resourcePath() + "resources/skybox/skybox_front.bmp");
     skybox [2] = LoadTexture(resourcePath() + "resources/skybox/skybox_back.bmp");
     skybox [3] = LoadTexture(resourcePath() + "resources/skybox/skybox_left.bmp");
     skybox [4] = LoadTexture(resourcePath() + "resources/skybox/skybox_right.bmp");
     skybox [5] = LoadTexture(resourcePath() + "resources/skybox/skybox_bottom.bmp");
     //*/
     
-     skybox [0] = LoadTexture(resourcePath() + "resources/skybox4/skybox_front.bmp");
-     skybox [1] = LoadTexture(resourcePath() + "resources/skybox4/skybox_top.jpg");
-     skybox [2] = LoadTexture(resourcePath() + "resources/skybox4/skybox_bottom.jpg");
-     skybox [3] = LoadTexture(resourcePath() + "resources/skybox4/skybox_right.jpg");
-     skybox [4] = LoadTexture(resourcePath() + "resources/skybox4/skybox_left.jpg");
-     skybox [5] = LoadTexture(resourcePath() + "resources/skybox4/skybox_back.jpg");
+     arrayBox [SKY] [0] = LoadTexture(resourcePath() + "resources/skybox4/skybox_front.bmp");
+     arrayBox [SKY] [1] = LoadTexture(resourcePath() + "resources/skybox4/skybox_top.jpg");
+     arrayBox [SKY] [2] = LoadTexture(resourcePath() + "resources/skybox4/skybox_bottom.jpg");
+     arrayBox [SKY] [3] = LoadTexture(resourcePath() + "resources/skybox4/skybox_right.jpg");
+     arrayBox [SKY] [4] = LoadTexture(resourcePath() + "resources/skybox4/skybox_left.jpg");
+     arrayBox [SKY] [5] = LoadTexture(resourcePath() + "resources/skybox4/skybox_back.jpg");
      //*/
     /*
     skybox [0] = LoadTexture(resourcePath() + "resources/skybox6/skybox_top.png");
@@ -90,74 +102,146 @@ GLuint LoadTexture(sf::String name)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         
 		return texture;
 }
 
 
-void createBox(GLuint box[],float size)
+
+void createRectangle(GLuint box[],float x_size, float y_size, float z_size)
 {
     
     
-        glBindTexture(GL_TEXTURE_2D, box[0]);
-        glBegin(GL_QUADS);
-            //top
-            glTexCoord2f(0, 0);     glVertex3f(-size, size, -size);
-            glTexCoord2f(1, 0);     glVertex3f( size, size, -size);
-            glTexCoord2f(1, 1);     glVertex3f( size, size,  size);
-            glTexCoord2f(0, 1);     glVertex3f(-size, size,  size);
-        glEnd();
-	    glBindTexture(GL_TEXTURE_2D, box[1]);
-	    glBegin(GL_QUADS);
-		    //front
-            glTexCoord2f(0, 0);     glVertex3f(-size, -size, -size);
-            glTexCoord2f(1, 0);     glVertex3f( size, -size, -size);
-            glTexCoord2f(1, 1);     glVertex3f( size,  size, -size);
-            glTexCoord2f(0, 1);     glVertex3f(-size,  size, -size);
-        glEnd();
-		
-	    glBindTexture(GL_TEXTURE_2D, box[2]);
-	    glBegin(GL_QUADS);
-			//back
-            glTexCoord2f(0, 0);     glVertex3f( size, -size, size);
-            glTexCoord2f(1, 0);     glVertex3f(-size, -size, size);
-            glTexCoord2f(1, 1);     glVertex3f(-size,  size, size);
-            glTexCoord2f(0, 1);     glVertex3f( size,  size, size);
-        glEnd();
+    glBindTexture(GL_TEXTURE_2D, box[0]);
+    glBegin(GL_QUADS);
+    //top
+    glTexCoord2f(0, 0);     glVertex3f(-x_size, y_size, -z_size);
+    glTexCoord2f(1, 0);     glVertex3f( x_size, y_size, -z_size);
+    glTexCoord2f(1, 1);     glVertex3f( x_size, y_size,  z_size);
+    glTexCoord2f(0, 1);     glVertex3f(-x_size, y_size,  z_size);
+    glEnd();
+    glBindTexture(GL_TEXTURE_2D, box[1]);
+    glBegin(GL_QUADS);
+    //front
+    glTexCoord2f(0, 0);     glVertex3f(-x_size, -y_size, -z_size);
+    glTexCoord2f(1, 0);     glVertex3f( x_size, -y_size, -z_size);
+    glTexCoord2f(1, 1);     glVertex3f( x_size,  y_size, -z_size);
+    glTexCoord2f(0, 1);     glVertex3f(-x_size,  y_size, -z_size);
+    glEnd();
     
-		glBindTexture(GL_TEXTURE_2D, box[3]);
-	    glBegin(GL_QUADS);
-			//left
-            glTexCoord2f(0, 0);     glVertex3f(-size, -size,  size);
-            glTexCoord2f(1, 0);     glVertex3f(-size, -size, -size);
-            glTexCoord2f(1, 1);     glVertex3f(-size,  size, -size);
-            glTexCoord2f(0, 1);     glVertex3f(-size,  size,  size);
-        glEnd();
+    glBindTexture(GL_TEXTURE_2D, box[2]);
+    glBegin(GL_QUADS);
+    //back
+    glTexCoord2f(0, 0);     glVertex3f( x_size, -y_size, z_size);
+    glTexCoord2f(1, 0);     glVertex3f(-x_size, -y_size, z_size);
+    glTexCoord2f(1, 1);     glVertex3f(-x_size,  y_size, z_size);
+    glTexCoord2f(0, 1);     glVertex3f( x_size,  y_size, z_size);
+    glEnd();
     
-		glBindTexture(GL_TEXTURE_2D, box[4]);
-	    glBegin(GL_QUADS);
-			//right
-            glTexCoord2f(0, 0);     glVertex3f( size, -size, -size);
-            glTexCoord2f(1, 0);     glVertex3f( size, -size,  size);
-            glTexCoord2f(1, 1);     glVertex3f( size,  size,  size);
-            glTexCoord2f(0, 1);     glVertex3f( size,  size, -size);
-        glEnd();
-
-		glBindTexture(GL_TEXTURE_2D, box[5]);
-	    glBegin(GL_QUADS);
-			//bottom
-            glTexCoord2f(0, 0);     glVertex3f(-size, -size,  size);
-            glTexCoord2f(1, 0);     glVertex3f( size, -size,  size);
-            glTexCoord2f(1, 1);     glVertex3f( size, -size, -size);
-            glTexCoord2f(0, 1);     glVertex3f(-size, -size, -size);
-        glEnd();
-        
+    glBindTexture(GL_TEXTURE_2D, box[3]);
+    glBegin(GL_QUADS);
+    //left
+    glTexCoord2f(0, 0);     glVertex3f(-x_size, -y_size,  z_size);
+    glTexCoord2f(1, 0);     glVertex3f(-x_size, -y_size, -z_size);
+    glTexCoord2f(1, 1);     glVertex3f(-x_size,  y_size, -z_size);
+    glTexCoord2f(0, 1);     glVertex3f(-x_size,  y_size,  z_size);
+    glEnd();
+    
+    glBindTexture(GL_TEXTURE_2D, box[4]);
+    glBegin(GL_QUADS);
+    //right
+    glTexCoord2f(0, 0);     glVertex3f( x_size, -y_size, -z_size);
+    glTexCoord2f(1, 0);     glVertex3f( x_size, -y_size,  z_size);
+    glTexCoord2f(1, 1);     glVertex3f( x_size,  y_size,  z_size);
+    glTexCoord2f(0, 1);     glVertex3f( x_size,  y_size, -z_size);
+    glEnd();
+    
+    glBindTexture(GL_TEXTURE_2D, box[5]);
+    glBegin(GL_QUADS);
+    //bottom
+    glTexCoord2f(0, 0);     glVertex3f(-x_size, -y_size,  z_size);
+    glTexCoord2f(1, 0);     glVertex3f( x_size, -y_size,  z_size);
+    glTexCoord2f(1, 1);     glVertex3f( x_size, -y_size, -z_size);
+    glTexCoord2f(0, 1);     glVertex3f(-x_size, -y_size, -z_size);
+    glEnd();
+    
 }
 
-int mob::draw (float time, map_t& map) {
+
+
+void createBox(GLuint box[],float size)
+{
+    createRectangle(box, size, size, size);
+}
+
+
+
+int DrawMAP (Avatar& God, map_t& map, GLuint** arrayBox) {
+    int R = 20;
     
+    int Xmin_place = God._x / size - R;
+    int Zmin_place = God._z / size - R;
+    int Xmax_place = God._x / size + R;
+    int Zmax_place = God._z / size + R;
+    
+    if (Xmin_place < 0)
+        Xmin_place = 0;
+    if (Zmin_place < 0)
+        Zmin_place = 0;
+    if (Xmax_place > map._x_size)
+        Xmax_place = map._x_size;
+    if (Zmax_place > map._z_size)
+        Zmax_place = map._z_size;
+    
+    for (int x = Xmin_place; x < Xmax_place; x++)
+        for (int y = 0; y <map._y_size; y++)
+            for (int z = Zmin_place; z < Zmax_place; z++)
+                if (map [x] [y] [z]._visibility == VISIBLE) {
+                    glTranslatef( x * size + size / 2,  y * size + size / 2,  z * size + size / 2);
+                    switch (map [x] [y] [z]._structure) {
+                        case SKY:
+                            break;
+                            
+                        case GRASS:
+                            createRectangle (arrayBox [GRASS], size / 2, size / 2, size / 2);
+                            break;
+                            
+                        case EARTH:
+                            createBox(arrayBox [EARTH], size / 2);
+                            break;
+                            
+                        case STONE:
+                            createBox(arrayBox [STONE], size / 2);
+                            break;
+                            
+                        default:
+                            break;
+                    }
+                    glTranslatef(-x * size - size / 2, -y * size - size / 2, -z * size - size / 2);
+                }
+    return 0;
+}
+
+int GameOBJ::draw () {
+    
+    glTranslatef( _x,  _y,  _z);
+    
+    createRectangle (_skin, _w, _h, _d);
+    
+    glTranslatef( -_x,  -_y,  -_z);
+    return 0;
+}
+
+
+int Avatar::draw () {
+    
+    glTranslatef( _x,  _y,  _z);
+    
+    createRectangle (_skin, _w, _h, _d);
+    
+    glTranslatef( -_x,  -_y,  -_z);
     return 0;
 }
 

@@ -102,12 +102,49 @@ public:
         return _map_yz;
     }
     
+    int Load ();
+    
     box_t* _data;
     int _x_size;
     int _y_size;
     int _z_size;
 };
 
+
+int map_t::Load () {
+    
+    
+    for (int x = 0; x < _x_size; x++)
+        for (int y = 0; y < _y_size; y++)
+            for (int z = 0; z < _z_size; z++)
+            {
+                if (y < _y_size / 2 - _y_size / 100 * 5) {
+                    (*this) [x] [y] [z]._visibility = NOTVISIBLE;
+                    if (rand() % 100 <= 10) {
+                        (*this)  [x] [y] [z]._structure = EARTH;
+                    } else
+                        (*this)  [x] [y] [z]._structure = STONE;
+                }
+                
+                if ((y >= _y_size / 2 - _y_size / 100 * 5) && (y < _y_size / 2)) {
+                    (*this)  [x] [y] [z]._visibility = NOTVISIBLE;
+                    
+                    if (rand() % 100 <= 10) {
+                        (*this)  [x] [y] [z]._structure = STONE;
+                    } else
+                        (*this)  [x] [y] [z]._structure = EARTH;
+                }
+                
+                if (y == _y_size / 2) {
+                    (*this)  [x] [y] [z]._visibility = VISIBLE;
+                    if (rand() % 100 <= 10) {
+                        (*this)  [x] [y] [z]._structure = STONE;
+                    } else
+                        (*this)  [x] [y] [z]._structure = GRASS;
+                }
+            }
+    return 0;
+}
 
 // =================================================================================
 // =================================================================================
