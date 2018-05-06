@@ -26,20 +26,20 @@ GLuint LoadTextureSKYBOX(sf::String name, int i);
 
 int MakeTextures (GLuint** arrayBox) {
     for (int i = 0; i < 6; i ++) {
-        arrayBox [GRASS] [i] = LoadTexture(resourcePath() + "resources/textures/blocks/end_stone.png");
+        arrayBox [GRASS] [i] = LoadTexture(resourcePath() + "resources/minecraft/textures/blocks/end_stone.png");
     }
     
     for (int i = 0; i < 6; i ++) {
-        arrayBox [EARTH] [i] = LoadTexture(resourcePath() + "resources/textures/blocks/end_stone.png");
+        arrayBox [EARTH] [i] = LoadTexture(resourcePath() + "resources/minecraft/textures/blocks/end_stone.png");
     }
     
     
     
     for (int i = 0; i < 6; i ++) {
-        arrayBox [STONE] [i] = LoadTexture(resourcePath() + "resources/textures/blocks/enchanting_table_bottom.png");
+        arrayBox [STONE] [i] = LoadTexture(resourcePath() + "resources/minecraft/textures/blocks/enchanting_table_bottom.png");
     }
     for (int i = 0; i < 6; i ++) {
-        arrayBox [4] [i] = LoadTexture(resourcePath() + "resources/textures/blocks/quartz_block_chiseled.png");
+        arrayBox [4] [i] = LoadTexture(resourcePath() + "resources/minecraft/textures/blocks/quartz_block_chiseled.png");
     }
     
     
