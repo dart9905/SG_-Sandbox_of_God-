@@ -104,12 +104,15 @@ int main(int, char const**)
     sf::Clock clock;
     
     Manager_Delete_t Manager_Delete (2);
-    Manager_Lord_t Manager (2, &Manager_Delete);
+    Manager_Lord_t Manager (1, &Manager_Delete);
     Avatar God(map._x_size * size / 2, map._y_size, map._z_size * size / 2, box_skin);
     Mob Dayn(map._x_size * size / 2, map._y_size, map._z_size * size / 2, box_skin);
     
     Manager.Add(&God);
     Manager.Add(&Dayn);
+    
+    for (int i = 0; i < 1; i++)
+        Manager.Add(new Mob (map._x_size * size / 2 + i * size * 2, map._y_size, map._z_size * size / 2, box_skin));
     
     mouse_t Mouse (0, 0, false, false, &window);
     
@@ -174,7 +177,7 @@ int main(int, char const**)
         // Update the window
         
         glTranslatef( God._x,  God._y,  God._z);
-        createBox(skybox, 1000);
+        createBox(skybox, 1500);
         glTranslatef(-God._x, -God._y, -God._z);
         
         Manager.updata(time, map);

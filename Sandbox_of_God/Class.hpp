@@ -65,15 +65,18 @@ public:
         _dx = 0;
         _dy = 0;
         _dz = 0;
-        _w = 16;//80
-        _h = 32;//160
-        _d = 4;//20
+        _w = 80;//80 16
+        _h = 160;//160 32
+        _d = 20;//20 4
         _angleX = 0;
         _angleY = 0;
         _speed = 17;
         _onGround = false;
         _move_time = 0;
         _move_time_check = 10;
+        
+        
+        _health = 50;
     }
     virtual ~GameOBJ () {}
     float _x, _y, _z;                   //coordinates
@@ -84,6 +87,8 @@ public:
     int _move_time_check;
     float _onGround;
     float _speed;
+    
+    int _health;
     
     virtual int collision (float Dx, float Dy, float Dz, map_t& map);
     
@@ -152,10 +157,10 @@ public:
     }
     int _resize (size_t new_sz) {
         
-        GameOBJ** newdata = new GameOBJ* [_size];
+        GameOBJ** newdata = new GameOBJ* [new_sz] {nullptr};
         std::copy(&(_data [0]), &(_data[_size]), newdata);
         
-        _capasity = new_sz;
+        _size = new_sz;
         delete _data;
         
         _data = newdata;
@@ -164,7 +169,7 @@ public:
     
     int Add (GameOBJ* NewGameOBJ) {
         if (_capasity == _size) {
-            _resize (_capasity * 2);
+            _resize (_size * 2);
         }
         _data [_capasity] = NewGameOBJ;
         _capasity++;
@@ -201,7 +206,7 @@ public:
     
     
     int updata (float time, map_t& map) {
-        for (int i = 0; i < _size; i++) {
+        for (int i = 0; i < _capasity; i++) {
             _data [i]->draw();
             _data [i]->move(time, map);
             if (_data [i]->update(time, map)) {

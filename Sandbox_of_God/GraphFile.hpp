@@ -46,24 +46,15 @@ int MakeTextures (GLuint** arrayBox) {
     /*
     arrayBox [SKY] [0] = LoadTexture(resourcePath() + "resources/skybox/skybox_top.bmp");
     arrayBox [SKY] [1] = LoadTexture(resourcePath() + "resources/skybox/skybox_front.bmp");
-    skybox [2] = LoadTexture(resourcePath() + "resources/skybox/skybox_back.bmp");
-    skybox [3] = LoadTexture(resourcePath() + "resources/skybox/skybox_left.bmp");
-    skybox [4] = LoadTexture(resourcePath() + "resources/skybox/skybox_right.bmp");
-    skybox [5] = LoadTexture(resourcePath() + "resources/skybox/skybox_bottom.bmp");
+    arrayBox [SKY]  [2] = LoadTexture(resourcePath() + "resources/skybox/skybox_back.bmp");
+    arrayBox [SKY]  [3] = LoadTexture(resourcePath() + "resources/skybox/skybox_left.bmp");
+    arrayBox [SKY]  [4] = LoadTexture(resourcePath() + "resources/skybox/skybox_right.bmp");
+    arrayBox [SKY]  [5] = LoadTexture(resourcePath() + "resources/skybox/skybox_bottom.bmp");
     //*/
-    /*
+    //*
     for (int i = 0; i < 6; i++) {
         arrayBox [SKY]  [i] = LoadTextureSKYBOX(resourcePath() + "resources/skybox2/map.jpg", i);
     }
-    //*/
-    //*
-    arrayBox [SKY]  [0] = LoadTexture(resourcePath() + "resources/skybox2/skybox_top.png");
-    arrayBox [SKY]  [1] = LoadTexture(resourcePath() + "resources/skybox2/skybox_right.png");
-    arrayBox [SKY]  [2] = LoadTexture(resourcePath() + "resources/skybox2/skybox_back.png");
-    arrayBox [SKY]  [3] = LoadTexture(resourcePath() + "resources/skybox2/skybox_left.png");
-    arrayBox [SKY]  [4] = LoadTexture(resourcePath() + "resources/skybox2/skybox_front.png");
-    arrayBox [SKY]  [5] = LoadTexture(resourcePath() + "resources/skybox2/skybox_bottom.png");
-    //*/
     glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_TRUE);
     glClearDepth(1.f);
@@ -102,6 +93,7 @@ GLuint LoadTextureSKYBOX(sf::String name, int i)
     sf::Rect<int> rect_end (x1, y1, x2, y2);
     //*/
     sf::Image image_end;
+    image_end.create(image.getSize().x / 4, image.getSize().x / 4);//, sf::Color (0, 0, 0, 255));
     image_end.copy(image, 0, 0, rect_end, true);
     
     image_end.flipVertically();
@@ -166,7 +158,7 @@ void createRectangle(GLuint box[],float x_size, float y_size, float z_size)
     glTexCoord2f(1, 1);     glVertex3f( x_size, y_size,  z_size);
     glTexCoord2f(0, 1);     glVertex3f(-x_size, y_size,  z_size);
     glEnd();
-    glBindTexture(GL_TEXTURE_2D, box[1]);
+    glBindTexture(GL_TEXTURE_2D, box[2]);
     glBegin(GL_QUADS);
     //front
     glTexCoord2f(0, 0);     glVertex3f(-x_size, -y_size, -z_size);
@@ -175,7 +167,7 @@ void createRectangle(GLuint box[],float x_size, float y_size, float z_size)
     glTexCoord2f(0, 1);     glVertex3f(-x_size,  y_size, -z_size);
     glEnd();
     
-    glBindTexture(GL_TEXTURE_2D, box[2]);
+    glBindTexture(GL_TEXTURE_2D, box[4]);
     glBegin(GL_QUADS);
     //back
     glTexCoord2f(0, 0);     glVertex3f( x_size, -y_size, z_size);
@@ -184,7 +176,7 @@ void createRectangle(GLuint box[],float x_size, float y_size, float z_size)
     glTexCoord2f(0, 1);     glVertex3f( x_size,  y_size, z_size);
     glEnd();
     
-    glBindTexture(GL_TEXTURE_2D, box[3]);
+    glBindTexture(GL_TEXTURE_2D, box[1]);
     glBegin(GL_QUADS);
     //left
     glTexCoord2f(0, 0);     glVertex3f(-x_size, -y_size,  z_size);
@@ -193,7 +185,7 @@ void createRectangle(GLuint box[],float x_size, float y_size, float z_size)
     glTexCoord2f(0, 1);     glVertex3f(-x_size,  y_size,  z_size);
     glEnd();
     
-    glBindTexture(GL_TEXTURE_2D, box[4]);
+    glBindTexture(GL_TEXTURE_2D, box[3]);
     glBegin(GL_QUADS);
     //right
     glTexCoord2f(0, 0);     glVertex3f( x_size, -y_size, -z_size);
