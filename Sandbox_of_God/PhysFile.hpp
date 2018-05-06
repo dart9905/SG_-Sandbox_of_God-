@@ -36,6 +36,26 @@ int GameOBJ:: collision (float Dx, float Dy, float Dz, map_t& map) {
 
 
 int GameOBJ:: update (float time, map_t& map) {
+    return 0;
+}
+
+
+
+int GameOBJ:: move (float time, map_t& map) {
+    
+    if (_dz || _dx) {
+        _move_time += _move_time_check;
+        if (_move_time > 50)
+            _move_time_check = - 20 * _speed / _h;
+        
+        if (_move_time < -50)
+            _move_time_check = 20 * _speed / _h;
+        
+    } else {
+        _move_time = 0;
+        _move_time_check = 20 * _speed / _h;
+    }
+    
     if (!_onGround)
         _dy -= 1.5 * time;
     _onGround = false;
@@ -52,12 +72,6 @@ int GameOBJ:: update (float time, map_t& map) {
     
     _dz = 0;
     _dx = 0;
-    return 0;
-}
-
-
-
-int GameOBJ:: move () {
     return 0;
 }
 
@@ -91,28 +105,12 @@ int Avatar:: collision (float Dx, float Dy, float Dz, map_t& map) {
 
 
 int Avatar:: update (float time, map_t& map) {
-    if (!_onGround)
-        _dy -= 1.5 * time;
-    _onGround = false;
-    
-    _x += _dx * time;
-    collision(_dx, 0, 0, map);
-    
-    _y += _dy * time;
-    collision(0, _dy, 0, map);
-    
-    _z += _dz * time;
-    collision(0, 0, _dz, map);
-    
-    
-    _dz = 0;
-    _dx = 0;
     return 0;
 }
 
 
 
-int Avatar:: move () {
+int Avatar:: move (float time, map_t& map) {
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space)) {
         if ((_onGround_two) && (!_onGround) && (_onGround_two_can)) {
             _onGround_two = false;
@@ -128,22 +126,52 @@ int Avatar:: move () {
         _onGround_two_can = true;
     
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
-        _dx = -sin (angleX / 180 * PI) * _speed;
-        _dz = -cos (angleX / 180 * PI) * _speed;
+        _dx = -sin (_angleX / 180 * PI) * _speed;
+        _dz = -cos (_angleX / 180 * PI) * _speed;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
-        _dx =  sin (angleX / 180 * PI) * _speed;
-        _dz =  cos (angleX / 180 * PI) * _speed;
+        _dx =  sin (_angleX / 180 * PI) * _speed;
+        _dz =  cos (_angleX / 180 * PI) * _speed;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::D)) {
-        _dx =  sin ((angleX + 90) / 180 * PI) * _speed;
-        _dz =  cos ((angleX + 90) / 180 * PI) * _speed;
+        _dx =  sin ((_angleX + 90) / 180 * PI) * _speed;
+        _dz =  cos ((_angleX + 90) / 180 * PI) * _speed;
     }
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::A)) {
-        _dx =  sin ((angleX - 90) / 180 * PI) * _speed;
-        _dz =  cos ((angleX - 90) / 180 * PI) * _speed;
+        _dx =  sin ((_angleX - 90) / 180 * PI) * _speed;
+        _dz =  cos ((_angleX - 90) / 180 * PI) * _speed;
+    }
+    if (_dz || _dx) {
+        _move_time += _move_time_check;
+        if (_move_time > 50)
+            _move_time_check = - 20 * _speed / _h;
+        
+        if (_move_time < -50)
+            _move_time_check = 20 * _speed / _h;
+        
+    } else {
+        _move_time = 0;
+        _move_time_check = 20 * _speed / _h;
     }
     
+    if (!_onGround)
+        _dy -= 1.5 * time;
+    _onGround = false;
+    
+    _x += _dx * time;
+    collision(_dx, 0, 0, map);
+    
+    _y += _dy * time;
+    collision(0, _dy, 0, map);
+    
+    _z += _dz * time;
+    collision(0, 0, _dz, map);
+    
+    
+    
+    
+    _dz = 0;
+    _dx = 0;
     return 0;
     
 }

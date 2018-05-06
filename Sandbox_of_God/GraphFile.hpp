@@ -16,6 +16,7 @@
 
 
 GLuint LoadTexture(sf::String name);
+GLuint LoadTextureSKYBOX(sf::String name, int i);
 
 
 
@@ -24,28 +25,21 @@ GLuint LoadTexture(sf::String name);
 
 
 int MakeTextures (GLuint** arrayBox) {
-    /*
-    box_GRASS [0] = LoadTexture(resourcePath() + "resources/textures/blocks/mycelium_top.png");//"resources/grassBox/top.jpg");
-    for (int i = 1; i < 5; i ++) {
-        box_GRASS [i] = LoadTexture(resourcePath() + "resources/textures/blocks/mycelium_side.png");//"resources/grassBox/side.jpg");
-    }
-    box_GRASS [5] = LoadTexture(resourcePath() + "resources/grassBox/bottom.jpg");
-    */
     for (int i = 0; i < 6; i ++) {
         arrayBox [GRASS] [i] = LoadTexture(resourcePath() + "resources/textures/blocks/end_stone.png");
     }
     
     for (int i = 0; i < 6; i ++) {
-        arrayBox [EARTH] [i] = LoadTexture(resourcePath() + "resources/textures/blocks/end_stone.png");//"resources/grassBox/bottom.jpg");
+        arrayBox [EARTH] [i] = LoadTexture(resourcePath() + "resources/textures/blocks/end_stone.png");
     }
     
     
     
     for (int i = 0; i < 6; i ++) {
-        arrayBox [STONE] [i] = LoadTexture(resourcePath() + "resources/textures/blocks/enchanting_table_bottom.png");//"resources/grassBox/Stone_Block.png");
+        arrayBox [STONE] [i] = LoadTexture(resourcePath() + "resources/textures/blocks/enchanting_table_bottom.png");
     }
     for (int i = 0; i < 6; i ++) {
-        arrayBox [4] [i] = LoadTexture(resourcePath() + "resources/textures/blocks/quartz_block_chiseled.png");//"resources/grassBox/Stone_Block.png");
+        arrayBox [4] [i] = LoadTexture(resourcePath() + "resources/textures/blocks/quartz_block_chiseled.png");
     }
     
     
@@ -58,13 +52,10 @@ int MakeTextures (GLuint** arrayBox) {
     skybox [5] = LoadTexture(resourcePath() + "resources/skybox/skybox_bottom.bmp");
     //*/
     /*
-     arrayBox [SKY] [0] = LoadTexture(resourcePath() + "resources/skybox4/skybox_front.bmp");
-     arrayBox [SKY] [1] = LoadTexture(resourcePath() + "resources/skybox4/skybox_top.jpg");
-     arrayBox [SKY] [2] = LoadTexture(resourcePath() + "resources/skybox4/skybox_bottom.jpg");
-     arrayBox [SKY] [3] = LoadTexture(resourcePath() + "resources/skybox4/skybox_right.jpg");
-     arrayBox [SKY] [4] = LoadTexture(resourcePath() + "resources/skybox4/skybox_left.jpg");
-     arrayBox [SKY] [5] = LoadTexture(resourcePath() + "resources/skybox4/skybox_back.jpg");
-     //*/
+    for (int i = 0; i < 6; i++) {
+        arrayBox [SKY]  [i] = LoadTextureSKYBOX(resourcePath() + "resources/skybox2/map.jpg", i);
+    }
+    //*/
     //*
     arrayBox [SKY]  [0] = LoadTexture(resourcePath() + "resources/skybox2/skybox_top.png");
     arrayBox [SKY]  [1] = LoadTexture(resourcePath() + "resources/skybox2/skybox_right.png");
@@ -81,6 +72,55 @@ int MakeTextures (GLuint** arrayBox) {
     gluPerspective(90.f, 1.f, 1.f, 2000.f);
     glEnable(GL_TEXTURE_2D);
 
+}
+
+
+
+GLuint LoadTextureSKYBOX(sf::String name, int i)
+{
+    sf::Image image;
+    if (!image.loadFromFile(name))
+        return EXIT_FAILURE;
+    
+    int x1 = 0, y1 = 0, x2 = image.getSize().x / 4, y2 = x2;
+    if (i == 0) {
+        x1 = x2;
+        y1 = 0;
+    }
+    
+    if (i == 5) {
+        x1 = x2;
+        y1 = x2 * 2;
+    }
+    
+    if ((i > 0) && (i < 5)) {
+        x1 = (i - 1) * x2;
+        y1 = x2;
+    }
+    x2 += x1;
+    y2 += y1;
+    sf::Rect<int> rect_end (x1, y1, x2, y2);
+    //*/
+    sf::Image image_end;
+    image_end.copy(image, 0, 0, rect_end, true);
+    
+    image_end.flipVertically();
+    
+    GLuint texture=0;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    
+    gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, image_end.getSize().x, image_end.getSize().y, GL_RGBA, GL_UNSIGNED_BYTE, image_end.getPixelsPtr());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    
+    return texture;
 }
 
 
@@ -232,74 +272,115 @@ int GameOBJ::draw () {
     
     
     //body
-    glTranslatef( _x,  _y + 4,  _z);
-    createRectangle (_skin, _w, 24, _d * 2);
+    glTranslatef( _x,  _y + _h * 4 / 32,  _z);
+    createRectangle (_skin, _w, _h * 24 / 32, _d * 2);
+    
     {
         //head
-        glTranslatef( 0, 20, 0);
-        createBox (_skin, 16);
-        glTranslatef( 0, -20, 0);
+        glTranslatef( 0, _h * 20 / 32, 0);
+        createBox (_skin, _h * 16 / 32);
+        glTranslatef( 0, -_h * 20 / 32, 0);
     }
     {
         //legs right
-        glTranslatef( -4,  -24, 0);
-        createRectangle (_skin, _w / 2 , 24, _d * 2);
-        glTranslatef( +4, +24, 0);
+        glTranslatef( -_w * 4 / 16,  -_h * 12 / 32, 0);
+        glRotatef(+_move_time, 1, 0, 0);
+        glTranslatef( 0,  -_h * 12 / 32, 0);
+        
+        createRectangle (_skin, _w / 2 , _h * 24 / 32, _d * 2);
+        
+        glTranslatef( 0, +_h * 12 / 32, 0);
+        glRotatef(-_move_time, 1, 0, 0);
+        glTranslatef( +_w * 4 / 16, +_h * 12 / 32, 0);
     }
     {
         //legs left
-        glTranslatef( +4,  -24, 0);
-        createRectangle (_skin, _w / 2 , 24, _d * 2);
-        glTranslatef( -4, +24, 0);
+        glTranslatef( +_w * 4 / 16,  -_h * 12 / 32, 0);
+        glRotatef(-_move_time, 1, 0, 0);
+        glTranslatef( 0,  -_h * 12 / 32, 0);
+        
+        createRectangle (_skin, _w / 2 , _h * 24 / 32, _d * 2);
+        
+        glTranslatef( -_w * 4 / 16, +_h * 12 / 32, 0);
+        glRotatef(+_move_time, 1, 0, 0);
+        glTranslatef( 0, +_h * 12 / 32, 0);
     }
     {
         //arm right
-        glTranslatef( -12, 0, 0);
-        createRectangle (_skin, _w / 2 , 24, _d * 2);
-        glTranslatef( +12, 0, 0);
+        glTranslatef( -_w * 12 / 16, _h * 12 / 32, 0);
+        glRotatef(-_move_time, 1, 0, 0);
+        glTranslatef( 0, -_h * 12 / 32, 0);
+        createRectangle (_skin, _w / 2 , _h * 24 / 32, _d * 2);
+        glTranslatef( 0, _h * 12 / 32, 0);
+        glRotatef(_move_time, 1, 0, 0);
+        glTranslatef( +_w * 12 / 16, -_h * 12 / 32, 0);
     }
     {
         //arm left
-        glTranslatef( +12, 0, 0);
-        createRectangle (_skin, _w / 2 , 24, _d * 2);
-        glTranslatef( -12, 0, 0);
+        glTranslatef( +_w * 12 / 16, _h * 12 / 32, 0);
+        glRotatef(+_move_time, 1, 0, 0);
+        glTranslatef( 0, -_h * 12 / 32, 0);
+        createRectangle (_skin, _w / 2 , _h * 24 / 32, _d * 2);
+        glTranslatef( 0, _h * 12 / 32, 0);
+        glRotatef(-_move_time, 1, 0, 0);
+        glTranslatef( -_w * 12 / 16, -_h * 12 / 32, 0);
     }
-    glTranslatef( -_x,  -_y - 4,  -_z);
+    glRotatef(-_angleX, 0, 1, 0);
+    glTranslatef( -_x,  -_y - _h * 4 / 32,  -_z);
     return 0;
 }
 
 
 int Avatar::draw () {
-    
     //body
     glTranslatef( _x,  _y + 4,  _z);
-    glRotatef(+angleX, 0, 1, 0);
+    glRotatef(+_angleX, 0, 1, 0);
     createRectangle (_skin, _w, 24, _d * 2);
     {
         //legs right
-        glTranslatef( -4,  -24, 0);
+        glTranslatef( -4,  -12, 0);
+        glRotatef(+_move_time, 1, 0, 0);
+        glTranslatef( 0,  -12, 0);
+        
         createRectangle (_skin, _w / 2 , 24, _d * 2);
-        glTranslatef( +4, +24, 0);
+        
+        glTranslatef( 0, +12, 0);
+        glRotatef(-_move_time, 1, 0, 0);
+        glTranslatef( +4, +12, 0);
     }
     {
         //legs left
-        glTranslatef( +4,  -24, 0);
+        glTranslatef( +4,  -12, 0);
+        glRotatef(-_move_time, 1, 0, 0);
+        glTranslatef( 0,  -12, 0);
+        
         createRectangle (_skin, _w / 2 , 24, _d * 2);
-        glTranslatef( -4, +24, 0);
+        
+        glTranslatef( -4, +12, 0);
+        glRotatef(+_move_time, 1, 0, 0);
+        glTranslatef( 0, +12, 0);
     }
     {
         //arm right
-        glTranslatef( -12, 0, 0);
+        glTranslatef( -12, 12, 0);
+        glRotatef(-_move_time, 1, 0, 0);
+        glTranslatef( 0, -12, 0);
         createRectangle (_skin, _w / 2 , 24, _d * 2);
-        glTranslatef( +12, 0, 0);
+        glTranslatef( 0, 12, 0);
+        glRotatef(_move_time, 1, 0, 0);
+        glTranslatef( +12, -12, 0);
     }
     {
         //arm left
-        glTranslatef( +12, 0, 0);
+        glTranslatef( +12, 12, 0);
+        glRotatef(+_move_time, 1, 0, 0);
+        glTranslatef( 0, -12, 0);
         createRectangle (_skin, _w / 2 , 24, _d * 2);
-        glTranslatef( -12, 0, 0);
+        glTranslatef( 0, 12, 0);
+        glRotatef(-_move_time, 1, 0, 0);
+        glTranslatef( -12, -12, 0);
     }
-    glRotatef(-angleX, 0, 1, 0);
+    glRotatef(-_angleX, 0, 1, 0);
     glTranslatef( -_x,  -_y - 4,  -_z);
     
     

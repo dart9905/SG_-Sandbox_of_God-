@@ -7,26 +7,26 @@
 // ==================================================================================
 // ==================================================================================
 // ==================================================================================
-int mouse_t:: update (float* angleX, float* angleY, Avatar& God, map_t& map) {
-    angle (angleX, angleY);
-    tap (angleX, angleY, God, map);
+int mouse_t:: update (Avatar& God, map_t& map) {
+    angle (God);
+    tap (God, map);
     return 0;
 }
 
-int mouse_t:: angle (float* angleX, float* angleY) {
+int mouse_t:: angle (Avatar& God) {
     _xwindow = _window->getPosition().x + _windowsize.x / 2;
     _ywindow = _window->getPosition().y + _windowsize.y / 2;
     
     _pos = sf::Mouse::getPosition(*_window);
     
-    *angleX += (_xwindow - _pos.x - _window->getPosition().x) / 4;
-    *angleY += (_ywindow - _pos.y - _window->getPosition().y) / 4;
+    God._angleX += (_xwindow - _pos.x - _window->getPosition().x) / 4;
+    God._angleY += (_ywindow - _pos.y - _window->getPosition().y) / 4;
     
-    if (*angleY < -89.0)
-        *angleY = -89.0;
+    if (God._angleY < -89.0)
+        God._angleY = -89.0;
     
-    if (*angleY > 89.0)
-        *angleY = 89.0;
+    if (God._angleY > 89.0)
+        God._angleY = 89.0;
     _pos.x = _xwindow;
     _pos.y = _ywindow;
     sf::Mouse::setPosition(_pos);
@@ -34,7 +34,7 @@ int mouse_t:: angle (float* angleX, float* angleY) {
 }
 
 
-int mouse_t:: tap (float* angleX, float* angleY, const Avatar& God, map_t& map) {
+int mouse_t:: tap (Avatar& God, map_t& map) {
     if (_Left || _Right) {
         float Godx = God._x;
         float Gody = God._y + God._h / 2;
@@ -48,11 +48,11 @@ int mouse_t:: tap (float* angleX, float* angleY, const Avatar& God, map_t& map) 
             dist++;
             
             
-            Godx += -sin (*angleX / 180 * PI);
+            Godx += -sin (God._angleX / 180 * PI);
             X = Godx / size;
-            Gody +=  tan (*angleY / 180 * PI);
+            Gody +=  tan (God._angleY / 180 * PI);
             Y = Gody / size;
-            Godz += -cos (*angleX / 180 * PI);
+            Godz += -cos (God._angleX / 180 * PI);
             Z = Godz / size;
             
             

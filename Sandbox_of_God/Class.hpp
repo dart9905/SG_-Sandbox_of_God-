@@ -65,24 +65,31 @@ public:
         _dx = 0;
         _dy = 0;
         _dz = 0;
-        _w = 16;
-        _h = 32;
-        _d = 4;
+        _w = 16;//80
+        _h = 32;//160
+        _d = 4;//20
+        _angleX = 0;
+        _angleY = 0;
         _speed = 17;
         _onGround = false;
+        _move_time = 0;
+        _move_time_check = 10;
     }
     virtual ~GameOBJ () {}
-    float _x, _y, _z;
-    float _dx, _dy, _dz;
-    float _w, _h, _d;
-    bool _onGround;
+    float _x, _y, _z;                   //coordinates
+    float _dx, _dy, _dz;                //move
+    float _w, _h, _d;                   //amount
+    float _angleX, _angleY;             //turn
+    int _move_time;
+    int _move_time_check;
+    float _onGround;
     float _speed;
     
     virtual int collision (float Dx, float Dy, float Dz, map_t& map);
     
     virtual int update (float time, map_t& map);
     virtual int draw ();
-    virtual int move ();
+    virtual int move (float time, map_t& map);
     
     GLuint* _skin;
     
@@ -102,6 +109,10 @@ public:
     Avatar (float x0, float y0, float z0, GLuint* skin0): GameOBJ (x0, y0, z0, skin0) {
         _onGround_two = false;
         _onGround_two_can = false;
+        
+        _w = 16;
+        _h = 32;
+        _d = 4;
     }
     ~Avatar () {}
     
@@ -110,7 +121,7 @@ public:
     
     int update (float time, map_t& map);
     int collision (float Dx, float Dy, float Dz, map_t& map);
-    int move ();
+    int move (float time, map_t& map);
     int draw ();
 };
 
@@ -192,7 +203,7 @@ public:
     int updata (float time, map_t& map) {
         for (int i = 0; i < _size; i++) {
             _data [i]->draw();
-            _data [i]->move();
+            _data [i]->move(time, map);
             if (_data [i]->update(time, map)) {
                 _Manager_Delete->Add(_data [i]);
                 _data [i] = _data [_capasity];
@@ -236,11 +247,11 @@ public:
     
     ~mouse_t () {}
     
-    int update (float* angleX, float* angleY, Avatar& God, map_t& map);
+    int update (Avatar& God, map_t& map);
     
-    int angle (float* angleX, float* angleY);
+    int angle (Avatar& God);
     
-    int tap (float* angleX, float* angleY, const Avatar& God, map_t& map);
+    int tap (Avatar& God, map_t& map);
     
     
     
