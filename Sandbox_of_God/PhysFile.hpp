@@ -42,7 +42,7 @@ int GameOBJ:: update (float time, map_t& map) {
 
 
 int GameOBJ:: move (float time, map_t& map) {
-    _dz = 5;
+    _dz = -5;
     if (_dz || _dx) {
         _move_time += _move_time_check;
         if (_move_time > 50)

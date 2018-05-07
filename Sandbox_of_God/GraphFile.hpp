@@ -24,7 +24,7 @@ GLuint LoadTextureSKYBOX(sf::String name, int i);
 
 
 
-int MakeTextures (GLuint** arrayBox) {
+int MakeTextures (SkinBox_t* arrayBox) {
     for (int i = 0; i < 6; i ++) {
         arrayBox [GRASS] [i] = LoadTexture(resourcePath() + "resources/minecraft/textures/blocks/end_stone.png");
     }
@@ -37,9 +37,6 @@ int MakeTextures (GLuint** arrayBox) {
     
     for (int i = 0; i < 6; i ++) {
         arrayBox [STONE] [i] = LoadTexture(resourcePath() + "resources/minecraft/textures/blocks/enchanting_table_bottom.png");
-    }
-    for (int i = 0; i < 6; i ++) {
-        arrayBox [4] [i] = LoadTexture(resourcePath() + "resources/minecraft/textures/blocks/quartz_block_chiseled.png");
     }
     
     
@@ -144,13 +141,13 @@ GLuint LoadTexture(sf::String name)
 
 
 
-void createRectangle(GLuint box[],float x_size, float y_size, float z_size)
+void createRectangle(SkinBox_t& box,float x_size, float y_size, float z_size)
 {
     x_size = x_size / 2;
     y_size = y_size / 2;
     z_size = z_size / 2;
     
-    glBindTexture(GL_TEXTURE_2D, box[0]);
+    glBindTexture(GL_TEXTURE_2D, box [0]);
     glBegin(GL_QUADS);
     //top
     glTexCoord2f(0, 0);     glVertex3f(-x_size, y_size, -z_size);
@@ -158,7 +155,7 @@ void createRectangle(GLuint box[],float x_size, float y_size, float z_size)
     glTexCoord2f(1, 1);     glVertex3f( x_size, y_size,  z_size);
     glTexCoord2f(0, 1);     glVertex3f(-x_size, y_size,  z_size);
     glEnd();
-    glBindTexture(GL_TEXTURE_2D, box[2]);
+    glBindTexture(GL_TEXTURE_2D, box [2]);
     glBegin(GL_QUADS);
     //front
     glTexCoord2f(0, 0);     glVertex3f(-x_size, -y_size, -z_size);
@@ -167,7 +164,7 @@ void createRectangle(GLuint box[],float x_size, float y_size, float z_size)
     glTexCoord2f(0, 1);     glVertex3f(-x_size,  y_size, -z_size);
     glEnd();
     
-    glBindTexture(GL_TEXTURE_2D, box[4]);
+    glBindTexture(GL_TEXTURE_2D, box [4]);
     glBegin(GL_QUADS);
     //back
     glTexCoord2f(0, 0);     glVertex3f( x_size, -y_size, z_size);
@@ -176,7 +173,7 @@ void createRectangle(GLuint box[],float x_size, float y_size, float z_size)
     glTexCoord2f(0, 1);     glVertex3f( x_size,  y_size, z_size);
     glEnd();
     
-    glBindTexture(GL_TEXTURE_2D, box[1]);
+    glBindTexture(GL_TEXTURE_2D, box [1]);
     glBegin(GL_QUADS);
     //left
     glTexCoord2f(0, 0);     glVertex3f(-x_size, -y_size,  z_size);
@@ -185,7 +182,7 @@ void createRectangle(GLuint box[],float x_size, float y_size, float z_size)
     glTexCoord2f(0, 1);     glVertex3f(-x_size,  y_size,  z_size);
     glEnd();
     
-    glBindTexture(GL_TEXTURE_2D, box[3]);
+    glBindTexture(GL_TEXTURE_2D, box [3]);
     glBegin(GL_QUADS);
     //right
     glTexCoord2f(0, 0);     glVertex3f( x_size, -y_size, -z_size);
@@ -194,7 +191,7 @@ void createRectangle(GLuint box[],float x_size, float y_size, float z_size)
     glTexCoord2f(0, 1);     glVertex3f( x_size,  y_size, -z_size);
     glEnd();
     
-    glBindTexture(GL_TEXTURE_2D, box[5]);
+    glBindTexture(GL_TEXTURE_2D, box [5]);
     glBegin(GL_QUADS);
     //bottom
     glTexCoord2f(0, 0);     glVertex3f(-x_size, -y_size,  z_size);
@@ -207,14 +204,14 @@ void createRectangle(GLuint box[],float x_size, float y_size, float z_size)
 
 
 
-void createBox(GLuint box[],float _size)
+void createBox(SkinBox_t& box,float _size)
 {
     createRectangle(box, _size, _size, _size);
 }
 
 
 
-int DrawMAP (Avatar& God, map_t& map, GLuint** arrayBox) {
+int DrawMAP (Avatar& God, map_t& map, SkinBox_t* arrayBox) {
     int R = 20;
     
     int Xmin_place = God._x / size - R;
@@ -260,63 +257,79 @@ int DrawMAP (Avatar& God, map_t& map, GLuint** arrayBox) {
     return 0;
 }
 
+int MobDrawHeadMan (SkinBox_t& skin, int w, int h, int d, int angle) {
+    //head
+    glTranslatef( 0, h * 20 / 32, 0);
+    createBox (skin, h * 16 / 32);
+    glTranslatef( 0, -h * 20 / 32, 0);
+    return 0;
+}
+
+int MobDrawLegsRightMan (SkinBox_t& skin, int w, int h, int d, int angle) {
+    //legs right
+    glTranslatef( -w * 4 / 16,  -h * 12 / 32, 0);
+    glRotatef(+angle, 1, 0, 0);
+    glTranslatef( 0,  -h * 12 / 32, 0);
+    
+    createRectangle (skin, w / 2 , h * 24 / 32, d * 2);
+    
+    glTranslatef( 0, +h * 12 / 32, 0);
+    glRotatef(-angle, 1, 0, 0);
+    glTranslatef( +w * 4 / 16, +h * 12 / 32, 0);
+    return 0;
+}
+
+int MobDrawLegsLeftMan (SkinBox_t& skin, int w, int h, int d, int angle) {
+    //legs left
+    glTranslatef( +w * 4 / 16,  -h * 12 / 32, 0);
+    glRotatef(-angle, 1, 0, 0);
+    glTranslatef( 0,  -h * 12 / 32, 0);
+    
+    createRectangle (skin, w / 2 , h * 24 / 32, d * 2);
+    
+    glTranslatef( -w * 4 / 16, +h * 12 / 32, 0);
+    glRotatef(+angle, 1, 0, 0);
+    glTranslatef( 0, +h * 12 / 32, 0);
+    return 0;
+}
+
+int MobDrawArmRightMan (SkinBox_t& skin, int w, int h, int d, int angle) {
+    //arm right
+    glTranslatef( -w * 12 / 16, h * 12 / 32, 0);
+    glRotatef(-angle, 1, 0, 0);
+    glTranslatef( 0, -h * 12 / 32, 0);
+    createRectangle (skin, w / 2 , h * 24 / 32, d * 2);
+    glTranslatef( 0, h * 12 / 32, 0);
+    glRotatef(angle, 1, 0, 0);
+    glTranslatef( +w * 12 / 16, -h * 12 / 32, 0);
+    return 0;
+}
+
+int MobDrawArmLeftMan (SkinBox_t& skin, int w, int h, int d, int angle) {
+    //arm left
+    glTranslatef( +w * 12 / 16, h * 12 / 32, 0);
+    glRotatef(+angle, 1, 0, 0);
+    glTranslatef( 0, -h * 12 / 32, 0);
+    createRectangle (skin, w / 2 , h * 24 / 32, d * 2);
+    glTranslatef( 0, h * 12 / 32, 0);
+    glRotatef(-angle, 1, 0, 0);
+    glTranslatef( -w * 12 / 16, -h * 12 / 32, 0);
+    return 0;
+}
+
 int GameOBJ::draw () {
     
     
     //body
     glTranslatef( _x,  _y + _h * 4 / 32,  _z);
-    createRectangle (_skin, _w, _h * 24 / 32, _d * 2);
+    createRectangle (_skin->_Body, _w,  _h * 24 / 32, _d * 2);
     
-    {
-        //head
-        glTranslatef( 0, _h * 20 / 32, 0);
-        createBox (_skin, _h * 16 / 32);
-        glTranslatef( 0, -_h * 20 / 32, 0);
-    }
-    {
-        //legs right
-        glTranslatef( -_w * 4 / 16,  -_h * 12 / 32, 0);
-        glRotatef(+_move_time, 1, 0, 0);
-        glTranslatef( 0,  -_h * 12 / 32, 0);
-        
-        createRectangle (_skin, _w / 2 , _h * 24 / 32, _d * 2);
-        
-        glTranslatef( 0, +_h * 12 / 32, 0);
-        glRotatef(-_move_time, 1, 0, 0);
-        glTranslatef( +_w * 4 / 16, +_h * 12 / 32, 0);
-    }
-    {
-        //legs left
-        glTranslatef( +_w * 4 / 16,  -_h * 12 / 32, 0);
-        glRotatef(-_move_time, 1, 0, 0);
-        glTranslatef( 0,  -_h * 12 / 32, 0);
-        
-        createRectangle (_skin, _w / 2 , _h * 24 / 32, _d * 2);
-        
-        glTranslatef( -_w * 4 / 16, +_h * 12 / 32, 0);
-        glRotatef(+_move_time, 1, 0, 0);
-        glTranslatef( 0, +_h * 12 / 32, 0);
-    }
-    {
-        //arm right
-        glTranslatef( -_w * 12 / 16, _h * 12 / 32, 0);
-        glRotatef(-_move_time, 1, 0, 0);
-        glTranslatef( 0, -_h * 12 / 32, 0);
-        createRectangle (_skin, _w / 2 , _h * 24 / 32, _d * 2);
-        glTranslatef( 0, _h * 12 / 32, 0);
-        glRotatef(_move_time, 1, 0, 0);
-        glTranslatef( +_w * 12 / 16, -_h * 12 / 32, 0);
-    }
-    {
-        //arm left
-        glTranslatef( +_w * 12 / 16, _h * 12 / 32, 0);
-        glRotatef(+_move_time, 1, 0, 0);
-        glTranslatef( 0, -_h * 12 / 32, 0);
-        createRectangle (_skin, _w / 2 , _h * 24 / 32, _d * 2);
-        glTranslatef( 0, _h * 12 / 32, 0);
-        glRotatef(-_move_time, 1, 0, 0);
-        glTranslatef( -_w * 12 / 16, -_h * 12 / 32, 0);
-    }
+    MobDrawHeadMan (_skin->_Head, _w, _h, _d, _move_time);
+    MobDrawLegsRightMan (_skin->_LegsRight, _w, _h, _d, _move_time);
+    MobDrawLegsLeftMan (_skin->_LegsLeft, _w, _h, _d, _move_time);
+    MobDrawArmRightMan (_skin->_ArmRight, _w, _h, _d, _move_time);
+    MobDrawArmLeftMan (_skin->_ArmLeft, _w, _h, _d, _move_time);
+    
     glRotatef(-_angleX, 0, 1, 0);
     glTranslatef( -_x,  -_y - _h * 4 / 32,  -_z);
     return 0;
@@ -327,56 +340,196 @@ int Avatar::draw () {
     //body
     glTranslatef( _x,  _y + 4,  _z);
     glRotatef(+_angleX, 0, 1, 0);
-    createRectangle (_skin, _w, 24, _d * 2);
-    {
-        //legs right
-        glTranslatef( -4,  -12, 0);
-        glRotatef(+_move_time, 1, 0, 0);
-        glTranslatef( 0,  -12, 0);
-        
-        createRectangle (_skin, _w / 2 , 24, _d * 2);
-        
-        glTranslatef( 0, +12, 0);
-        glRotatef(-_move_time, 1, 0, 0);
-        glTranslatef( +4, +12, 0);
-    }
-    {
-        //legs left
-        glTranslatef( +4,  -12, 0);
-        glRotatef(-_move_time, 1, 0, 0);
-        glTranslatef( 0,  -12, 0);
-        
-        createRectangle (_skin, _w / 2 , 24, _d * 2);
-        
-        glTranslatef( -4, +12, 0);
-        glRotatef(+_move_time, 1, 0, 0);
-        glTranslatef( 0, +12, 0);
-    }
-    {
-        //arm right
-        glTranslatef( -12, 12, 0);
-        glRotatef(-_move_time, 1, 0, 0);
-        glTranslatef( 0, -12, 0);
-        createRectangle (_skin, _w / 2 , 24, _d * 2);
-        glTranslatef( 0, 12, 0);
-        glRotatef(_move_time, 1, 0, 0);
-        glTranslatef( +12, -12, 0);
-    }
-    {
-        //arm left
-        glTranslatef( +12, 12, 0);
-        glRotatef(+_move_time, 1, 0, 0);
-        glTranslatef( 0, -12, 0);
-        createRectangle (_skin, _w / 2 , 24, _d * 2);
-        glTranslatef( 0, 12, 0);
-        glRotatef(-_move_time, 1, 0, 0);
-        glTranslatef( -12, -12, 0);
-    }
+    createRectangle (_skin->_Body, _w, 24, _d * 2);
+    MobDrawLegsRightMan (_skin->_LegsRight, _w, _h, _d, _move_time);
+    MobDrawLegsLeftMan (_skin->_LegsLeft, _w, _h, _d, _move_time);
+    MobDrawArmRightMan (_skin->_ArmRight, _w, _h, _d, _move_time);
+    MobDrawArmLeftMan (_skin->_ArmLeft, _w, _h, _d, _move_time);
+    
     glRotatef(-_angleX, 0, 1, 0);
     glTranslatef( -_x,  -_y - 4,  -_z);
     
     
     return 0;
+}
+
+SkinHuman_t::SkinHuman_t (sf::String name) {
+    sf::Image image;
+    if (!image.loadFromFile(name))
+        return EXIT_FAILURE;
+    
+    //Head
+    sf::Rect<int> rect_Head (0, 0, 4 * size_pix, size_pix * 2);
+    for (int i = 0; i < 6; i++)
+        _Head [i] = LoadTextureHead (i, image, rect_Head);
+    
+    //_Body
+    sf::Rect<int> rect_Body (size_pix * 2, size_pix * 2, size_pix * 5, size_pix * 4);
+    for (int i = 0; i < 6; i++)
+        _Body [i] = LoadTextureBody (i, image, rect_Body);
+    
+    //_ArmLeft
+    sf::Rect<int> rect_ArmLeft (size_pix * 5, size_pix * 2, 7 * size_pix, size_pix * 4);
+    for (int i = 0; i < 6; i++)
+        _ArmLeft [i] = LoadTextureArmAndLegs (i, image, rect_ArmLeft);
+    
+    //_ArmRight
+    sf::Rect<int> rect_ArmRight (size_pix * 4, size_pix * 6, 6 * size_pix, size_pix * 8);
+    for (int i = 0; i < 6; i++)
+        _ArmRight [i] = LoadTextureArmAndLegs (i, image, rect_ArmLeft);
+    
+    //_LegsLeft
+    sf::Rect<int> rect_LegsLeft (0, size_pix * 2, 2 * size_pix, size_pix * 4);
+    for (int i = 0; i < 6; i++)
+        _LegsLeft [i] = LoadTextureArmAndLegs (i, image, rect_LegsLeft);
+    
+    //_LegsRight
+    sf::Rect<int> rect_LegsRight (size_pix * 2, size_pix * 6, 4 * size_pix, size_pix * 8);
+    for (int i = 0; i < 6; i++)
+        _LegsRight [i] = LoadTextureArmAndLegs (i, image, rect_LegsLeft);
+    
+    
+    
+    
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
+    glClearDepth(1.f);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(90.f, 1.f, 1.f, 2000.f);
+    glEnable(GL_TEXTURE_2D);
+}
+
+GLuint SkinHuman_t::LoadText ( sf::Image& image, sf::Rect <int>& rect_end, int x, int y) {
+    
+    
+    sf::Image image_end;
+    image_end.create(x, y);//, sf::Color (0, 0, 0, 255));
+    image_end.copy(image, 0, 0, rect_end, true);
+    
+    
+    image_end.flipVertically();
+    
+    GLuint texture=0;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    
+    gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, image_end.getSize().x, image_end.getSize().y, GL_RGBA, GL_UNSIGNED_BYTE, image_end.getPixelsPtr());
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    
+    return texture;
+}
+
+
+GLuint SkinHuman_t::LoadTextureHead (int i, sf::Image& image, sf::Rect <int>& rect_end) {
+    
+    sf::Image image_end;
+    image_end.create(4 * size_pix, size_pix * 2);// sf::Color (0, 0, 0, 255);
+    image_end.copy(image, 0, 0, rect_end, true);
+    int x1 = 0, y1 = 0, x2 = 0, y2 = 0;
+    switch (i) {
+        case 0:
+            x1 = 8; y1 = 0; x2 = 16; y2 = 8;
+            break;
+        case 5:
+            x1 = 16; y1 = 0; x2 = 24; y2 = 8;
+            break;
+        case 1:
+            x1 = 0; y1 = 8; x2 = 8; y2 = 16;
+            break;
+        case 2:
+            x1 = 8; y1 = 8; x2 = 16; y2 = 16;
+            break;
+        case 3:
+            x1 = 16; y1 = 8; x2 = 24; y2 = 16;
+            break;
+        case 4:
+            x1 = 24; y1 = 8; x2 = 32; y2 = 16;
+            break;
+            
+        default:
+            break;
+    }
+    sf::Rect<int> rect_end1 (x1, y1, x2, y2);
+    
+    return LoadText(image_end, rect_end1, x2 - x1, y2 - y1);
+}
+
+GLuint SkinHuman_t::LoadTextureBody (int i, sf::Image& image, sf::Rect <int>& rect_end) {
+    
+    sf::Image image_end;
+    image_end.create(3 * size_pix, size_pix * 2);// sf::Color (0, 0, 0, 255);
+    image_end.copy(image, 0, 0, rect_end, true);
+    int x1 = 0, y1 = 0, x2 = 0, y2 = 0;
+    switch (i) {
+        case 0:
+            x1 = 4; y1 = 0; x2 = 12; y2 = 4;
+            break;
+        case 5:
+            x1 = 12; y1 = 0; x2 = 20; y2 = 4;
+            break;
+        case 1:
+            x1 = 0; y1 = 4; x2 = 4; y2 = 16;
+            break;
+        case 2:
+            x1 = 4; y1 = 4; x2 = 12; y2 = 16;
+            break;
+        case 3:
+            x1 = 12; y1 = 4; x2 = 16; y2 = 16;
+            break;
+        case 4:
+            x1 = 16; y1 = 4; x2 = 20; y2 = 16;
+            break;
+            
+        default:
+            break;
+    }
+    sf::Rect<int> rect_end1 (x1, y1, x2, y2);
+    
+    return LoadText(image_end, rect_end1, x2 - x1, y2 - y1);
+}
+
+
+
+GLuint SkinHuman_t::LoadTextureArmAndLegs (int i, sf::Image& image, sf::Rect <int>& rect_end) {
+    
+    sf::Image image_end;
+    image_end.create(2 * size_pix, size_pix * 2);// sf::Color (0, 0, 0, 255);
+    image_end.copy(image, 0, 0, rect_end, true);
+    int x1 = 0, y1 = 0, x2 = 0, y2 = 0;
+    switch (i) {
+        case 0:
+            x1 = 4; y1 = 0; x2 = 8; y2 = 4;
+            break;
+        case 5:
+            x1 = 8; y1 = 0; x2 = 12; y2 = 4;
+            break;
+        case 1:
+            x1 = 0; y1 = 4; x2 = 4; y2 = 16;
+            break;
+        case 2:
+            x1 = 4; y1 = 4; x2 = 8; y2 = 16;
+            break;
+        case 3:
+            x1 = 8; y1 = 4; x2 = 12; y2 = 16;
+            break;
+        case 4:
+            x1 = 12; y1 = 4; x2 = 16; y2 = 16;
+            break;
+            
+        default:
+            break;
+    }
+    sf::Rect<int> rect_end1 (x1, y1, x2, y2);
+    
+    return LoadText(image_end, rect_end1, x2 - x1, y2 - y1);
 }
 
 

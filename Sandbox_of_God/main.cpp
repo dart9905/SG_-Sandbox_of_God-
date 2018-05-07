@@ -91,32 +91,35 @@ int main(int, char const**)
     window.setIcon(icon.getSize().x, icon.getSize().y, icon.getPixelsPtr());
     
     
-    GLuint skybox  [6];
-    GLuint box_GRASS [6];
-    GLuint box_EARTH [6];
-    GLuint box_STONE [6];
-    GLuint box_skin [6];
-    GLuint* arrayBox [5] = {skybox, box_GRASS, box_EARTH, box_STONE, box_skin};
+    SkinBox_t skybox;
+    SkinBox_t box_GRASS;
+    SkinBox_t box_EARTH;
+    SkinBox_t box_STONE;
+    SkinBox_t arrayBox [4] = {skybox, box_GRASS, box_EARTH, box_STONE};
     
     MakeTextures (arrayBox);
-
+    SkinHuman_t skin_mob (resourcePath() + "resources/minecraft/textures/entity/steve.png");
+    SkinHuman_t skin_mob_tr (resourcePath() + "resources/minecraft/textures/entity/tr.png");
+    SkinHuman_t skin_mob_zom (resourcePath() + "resources/minecraft/textures/entity/zombie/husk.png");
     
     sf::Clock clock;
     
     Manager_Delete_t Manager_Delete (2);
     Manager_Lord_t Manager (1, &Manager_Delete);
-    Avatar God(map._x_size * size / 2, map._y_size, map._z_size * size / 2, box_skin);
-    Mob Dayn(map._x_size * size / 2, map._y_size, map._z_size * size / 2, box_skin);
+    Avatar God(map._x_size * size / 2, map._y_size * size, map._z_size * size / 2, &skin_mob);
+    Mob Dayn(map._x_size * size / 2, map._y_size * size, map._z_size * size / 2, &skin_mob_zom);
+    Dayn.setSizeInK(6);
     
     Manager.Add(&God);
     Manager.Add(&Dayn);
-    
-    for (int i = 0; i < 1; i++)
-        Manager.Add(new Mob (map._x_size * size / 2 + i * size * 2, map._y_size, map._z_size * size / 2, box_skin));
-    
+    //*
+    for (int i = 0; i < 10; i++)
+        for (int j = 0; j < 10; j++)
+        Manager.Add(new Mob (map._x_size * size / 2 + i * size * 2 - 10 * size, map._y_size * size, map._z_size * size / 2 + j * size * 2  + size * 6, &skin_mob_tr));
+    //*/
     mouse_t Mouse (0, 0, false, false, &window);
     
-    
+    float angleSky = 0;
     
     
     //
@@ -175,9 +178,13 @@ int main(int, char const**)
         
         DrawMAP(God, map, arrayBox);
         // Update the window
-        
+        angleSky += 0.01;
+        if (angleSky > 359)
+            angleSky = 0;
         glTranslatef( God._x,  God._y,  God._z);
-        createBox(skybox, 1500);
+        glRotatef(angleSky, 0, 1, 0);
+        createBox(arrayBox [SKY], 1500);
+        glRotatef(-angleSky, 0, 1, 0);
         glTranslatef(-God._x, -God._y, -God._z);
         
         Manager.updata(time, map);

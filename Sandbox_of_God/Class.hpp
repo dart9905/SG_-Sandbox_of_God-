@@ -37,6 +37,65 @@ public:
 };
 
 
+class SkinBox_t {
+    GLuint _error;
+public:
+    
+    GLuint _top;
+    GLuint _bottom;
+    GLuint _left;
+    GLuint _back;
+    GLuint _right;
+    GLuint _front;
+    
+    
+    GLuint& operator [] (int i) {
+        switch (i) {
+            case 0:
+                return _top;
+                break;
+            case 1:
+                return _bottom;
+                break;
+            case 2:
+                return _left;
+                break;
+            case 3:
+                return _front;
+                break;
+            case 4:
+                return _right;
+                break;
+            case 5:
+                return _back;
+                break;
+            default:
+                return _error;
+                break;
+        }
+    }
+};
+
+class SkinHuman_t {
+    int size_pix = 8;
+public:
+    SkinHuman_t (sf::String name);
+    
+    SkinBox_t _Head;
+    SkinBox_t _Body;
+    SkinBox_t _ArmLeft;
+    SkinBox_t _ArmRight;
+    SkinBox_t _LegsLeft;
+    SkinBox_t _LegsRight;
+    
+    
+    GLuint LoadTextureHead (int i, sf::Image& image, sf::Rect <int>& rect_end);
+    GLuint LoadTextureBody (int i, sf::Image& image, sf::Rect <int>& rect_end);
+    GLuint LoadTextureArmAndLegs (int i, sf::Image& image, sf::Rect <int>& rect_end);
+    
+    GLuint LoadText ( sf::Image& image, sf::Rect <int>& rect_end, int x, int y);
+    
+};
 // ==================================================================================
 //
 //                                     MAP_T
@@ -55,7 +114,7 @@ public:
 
 class GameOBJ {
 public:
-    GameOBJ (float x0, float y0, float z0, GLuint* skin0):
+    GameOBJ (float x0, float y0, float z0, SkinHuman_t* skin0):
     _x (x0),
     _y (y0),
     _z (z0),
@@ -96,7 +155,20 @@ public:
     virtual int draw ();
     virtual int move (float time, map_t& map);
     
-    GLuint* _skin;
+    int setSize (int w, int h, int d) {
+        _w = w;
+        _h = h;
+        _d = d;
+        return  0;
+    }
+    int setSizeInK (int k) {
+        _w *= k;
+        _h *= k;
+        _d *= k;
+        return 0;
+    }
+    
+    SkinHuman_t* _skin;
     
     
 };
@@ -104,14 +176,14 @@ public:
 
 class Mob: public GameOBJ {
 public:
-    Mob (float x0, float y0, float z0, GLuint* skin0): GameOBJ (x0, y0, z0, skin0) {}
+    Mob (float x0, float y0, float z0, SkinHuman_t* skin0): GameOBJ (x0, y0, z0, skin0) {}
     virtual ~Mob () {}
 };
 
 
 class Avatar: public GameOBJ {
 public:
-    Avatar (float x0, float y0, float z0, GLuint* skin0): GameOBJ (x0, y0, z0, skin0) {
+    Avatar (float x0, float y0, float z0, SkinHuman_t* skin0): GameOBJ (x0, y0, z0, skin0) {
         _onGround_two = false;
         _onGround_two_can = false;
         
