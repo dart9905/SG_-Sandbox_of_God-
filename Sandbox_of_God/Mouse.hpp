@@ -65,7 +65,7 @@ int mouse_t:: tap (Avatar& God, map_t& map) {
                     PathVisBox (X, Y, Z, map, true);
                     break;
                 } else {
-                    map [oldX] [oldY] [oldZ]._structure = EARTH;
+                    map [oldX] [oldY] [oldZ]._structure = WATER;
                     map [oldX] [oldY] [oldZ]._visibility = VISIBLE;
                     PathVisBox (oldX, oldY, oldZ, map, false);
                     break;

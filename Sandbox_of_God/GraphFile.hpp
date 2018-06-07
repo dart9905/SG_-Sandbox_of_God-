@@ -39,6 +39,14 @@ int MakeTextures (SkinBox_t* arrayBox) {
         arrayBox [STONE] [i] = LoadTexture(resourcePath() + "resources/minecraft/textures/blocks/enchanting_table_bottom.png");
     }
     
+    for (int i = 0; i < 6; i ++) {
+        arrayBox [WATER] [i] = LoadTexture(resourcePath() + "resources/minecraft/textures/blocks/water.png");
+    }
+    sf::Image image;
+    if (!image.loadFromFile(resourcePath() + "resources/minecraft/textures/blocks/water.png"))
+        return EXIT_FAILURE;
+    image.saveToFile("/Users/macbook/Desktop/map.png");
+    
     
     /*
     arrayBox [SKY] [0] = LoadTexture(resourcePath() + "resources/skybox/skybox_top.bmp");
@@ -52,13 +60,23 @@ int MakeTextures (SkinBox_t* arrayBox) {
     for (int i = 0; i < 6; i++) {
         arrayBox [SKY]  [i] = LoadTextureSKYBOX(resourcePath() + "resources/skybox2/map.jpg", i);
     }
+    glEnable(GL_TEXTURE_2D);
+    glShadeModel(GL_SMOOTH);
+    glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
     glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_TRUE);
     glClearDepth(1.f);
+    glDepthFunc(GL_LESS);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     gluPerspective(90.f, 1.f, 1.f, 2000.f);
-    glEnable(GL_TEXTURE_2D);
+    
+    
+    
+    glMatrixMode(GL_MODELVIEW);
+    glEnable(GL_BLEND);
+    
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 }
 
@@ -146,7 +164,8 @@ void createRectangle(SkinBox_t& box,float x_size, float y_size, float z_size)
     x_size = x_size / 2;
     y_size = y_size / 2;
     z_size = z_size / 2;
-    
+    glEnable(GL_ALPHA_TEST);
+    glAlphaFunc(GL_GREATER, 0.8f);
     glBindTexture(GL_TEXTURE_2D, box [0]);
     glBegin(GL_QUADS);
     //top
@@ -199,6 +218,7 @@ void createRectangle(SkinBox_t& box,float x_size, float y_size, float z_size)
     glTexCoord2f(1, 1);     glVertex3f( x_size, -y_size, -z_size);
     glTexCoord2f(0, 1);     glVertex3f(-x_size, -y_size, -z_size);
     glEnd();
+    glDisable(GL_ALPHA_TEST);
     
 }
 
@@ -248,7 +268,13 @@ int DrawMAP (Avatar& God, map_t& map, SkinBox_t* arrayBox) {
                         case STONE:
                             createBox(arrayBox [STONE], size);
                             break;
+                        case WATER:
                             
+                            //glColor4f(1.0f,1.0f,1.0f,0.85f);
+                            createBox(arrayBox [WATER], size);
+                            
+                            glColor4f(1.0f,1.0f,1.0f,1.0f);
+                            break;
                         default:
                             break;
                     }

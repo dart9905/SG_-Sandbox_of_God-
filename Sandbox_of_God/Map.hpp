@@ -118,6 +118,7 @@ int map_t::Load () {
         for (int y = 0; y < _y_size; y++)
             for (int z = 0; z < _z_size; z++)
             {
+                (*this)  [x] [y] [z]._solid = SOLID;
                 if (y < _y_size / 2 - _y_size / 100 * 5) {
                     (*this) [x] [y] [z]._visibility = NOTVISIBLE;
                     if (rand() % 100 <= 10) {

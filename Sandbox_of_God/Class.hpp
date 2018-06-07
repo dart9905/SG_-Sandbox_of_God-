@@ -13,7 +13,8 @@ enum structure_box_t {
     SKY         = 0,
     GRASS       = 1,
     EARTH       = 2,
-    STONE       = 3
+    STONE       = 3,
+    WATER       = 4
 };
 
 enum visibility_box_t {
@@ -21,19 +22,28 @@ enum visibility_box_t {
     NOTVISIBLE  = 0
 };
 
+enum solid_box_t {
+    SOLID       = 0,
+    LIQUID      = 1,
+    FRIABLE     = 2
+};
+
 
 class box_t {
 public:
-    box_t (int structure_box = 0, int visibility_box = 0):
+    box_t (int structure_box = 0, int visibility_box = 0, int solid_box = 0):
     _structure(structure_box),
-    _visibility(visibility_box)
+    _visibility(visibility_box),
+    _solid(solid_box)
     {}
     ~box_t () {
         _structure = 0;
         _visibility = 0;
+        _solid = 0;
     }
     int _structure;
     int _visibility;
+    int _solid;
 };
 
 

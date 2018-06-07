@@ -47,7 +47,7 @@ const int window_height = 1200;
 //      =============================================
 
 
-box_t map_array_GLOBAL_VARIABLE [512] [512] [512] = {0, 0};
+box_t map_array_GLOBAL_VARIABLE [512] [512] [512] = {0, 0, 0};
 
 int main(int, char const**)
 {
@@ -96,7 +96,8 @@ int main(int, char const**)
     SkinBox_t box_GRASS;
     SkinBox_t box_EARTH;
     SkinBox_t box_STONE;
-    SkinBox_t arrayBox [4] = {skybox, box_GRASS, box_EARTH, box_STONE};
+    SkinBox_t box_WATER;
+    SkinBox_t arrayBox [5] = {skybox, box_GRASS, box_EARTH, box_STONE, box_WATER};
     MakeTextures (arrayBox);
     
     SkinHuman_t skin_mob_tr (resourcePath() + "resources/minecraft/textures/entity/tr.png");
@@ -107,7 +108,7 @@ int main(int, char const**)
     Manager_Delete_t Manager_Delete (1);
     Manager_Lord_t Manager (1, &Manager_Delete);
     
-    Avatar God(map._x_size * size / 2, map._y_size * size, map._z_size * size / 2, &skin_avatar);
+    Avatar God(map._x_size * size / 2, map._y_size * size * 0.7, map._z_size * size / 2, &skin_avatar);
     
     Manager.Add(&God);
     
