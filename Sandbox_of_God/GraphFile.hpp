@@ -212,7 +212,7 @@ void createBox(SkinBox_t& box,float _size)
 
 
 int DrawMAP (Avatar& God, map_t& map, SkinBox_t* arrayBox) {
-    int R = 20;
+    int R = 25;
     
     int Xmin_place = God._x / size - R;
     int Zmin_place = God._z / size - R;
@@ -357,7 +357,12 @@ SkinHuman_t::SkinHuman_t (sf::String name) {
     sf::Image image;
     if (!image.loadFromFile(name))
         return EXIT_FAILURE;
-    
+    if (image.getSize().x != 8 * 8 && image.getSize().y != 8 * 8) {
+        if (image.getSize().x > image.getSize().y) {
+            SetSize_pix(image.getSize().y / 8);
+        } else
+            SetSize_pix(image.getSize().x / 8);
+    }
     //Head
     sf::Rect<int> rect_Head (0, 0, 4 * size_pix, size_pix * 2);
     for (int i = 0; i < 6; i++)
@@ -436,22 +441,22 @@ GLuint SkinHuman_t::LoadTextureHead (int i, sf::Image& image, sf::Rect <int>& re
     int x1 = 0, y1 = 0, x2 = 0, y2 = 0;
     switch (i) {
         case 0:
-            x1 = 8; y1 = 0; x2 = 16; y2 = 8;
+            x1 = size_pix; y1 = 0; x2 = size_pix * 2; y2 = size_pix;
             break;
         case 5:
-            x1 = 16; y1 = 0; x2 = 24; y2 = 8;
+            x1 = size_pix * 2; y1 = 0; x2 = size_pix * 3; y2 = size_pix;
             break;
         case 1:
-            x1 = 0; y1 = 8; x2 = 8; y2 = 16;
+            x1 = 0; y1 = size_pix; x2 = size_pix; y2 = size_pix * 2;
             break;
         case 2:
-            x1 = 8; y1 = 8; x2 = 16; y2 = 16;
+            x1 = size_pix; y1 = size_pix; x2 = 2 * size_pix; y2 = 2 * size_pix;
             break;
         case 3:
-            x1 = 16; y1 = 8; x2 = 24; y2 = 16;
+            x1 = size_pix * 2; y1 = size_pix; x2 = 3 * size_pix; y2 = 2 * size_pix;
             break;
         case 4:
-            x1 = 24; y1 = 8; x2 = 32; y2 = 16;
+            x1 = 3 * size_pix; y1 = size_pix; x2 = size_pix * 4; y2 = size_pix * 2;
             break;
             
         default:
@@ -470,22 +475,22 @@ GLuint SkinHuman_t::LoadTextureBody (int i, sf::Image& image, sf::Rect <int>& re
     int x1 = 0, y1 = 0, x2 = 0, y2 = 0;
     switch (i) {
         case 0:
-            x1 = 4; y1 = 0; x2 = 12; y2 = 4;
+            x1 = size_pix / 2; y1 = 0; x2 = (size_pix * 3) / 2; y2 = size_pix / 2;
             break;
         case 5:
-            x1 = 12; y1 = 0; x2 = 20; y2 = 4;
+            x1 = (size_pix * 3) / 2; y1 = 0; x2 = (size_pix * 5) / 2; y2 = size_pix / 2;
             break;
         case 1:
-            x1 = 0; y1 = 4; x2 = 4; y2 = 16;
+            x1 = 0; y1 = size_pix / 2; x2 = size_pix / 2; y2 = size_pix * 2;
             break;
         case 2:
-            x1 = 4; y1 = 4; x2 = 12; y2 = 16;
+            x1 = size_pix / 2; y1 = size_pix / 2; x2 = (size_pix * 3) / 2; y2 = size_pix * 2;
             break;
         case 3:
-            x1 = 12; y1 = 4; x2 = 16; y2 = 16;
+            x1 = (size_pix * 3) / 2; y1 = size_pix / 2; x2 = size_pix * 2; y2 = size_pix * 2;
             break;
         case 4:
-            x1 = 16; y1 = 4; x2 = 20; y2 = 16;
+            x1 = size_pix * 2; y1 = size_pix / 2; x2 = (size_pix * 5) / 2; y2 = size_pix * 2;
             break;
             
         default:
@@ -506,22 +511,22 @@ GLuint SkinHuman_t::LoadTextureArmAndLegs (int i, sf::Image& image, sf::Rect <in
     int x1 = 0, y1 = 0, x2 = 0, y2 = 0;
     switch (i) {
         case 0:
-            x1 = 4; y1 = 0; x2 = 8; y2 = 4;
+            x1 = size_pix / 2; y1 = 0; x2 = size_pix; y2 = size_pix / 2;
             break;
         case 5:
-            x1 = 8; y1 = 0; x2 = 12; y2 = 4;
+            x1 = size_pix; y1 = 0; x2 = (size_pix * 3) / 2; y2 = size_pix / 2;
             break;
         case 1:
-            x1 = 0; y1 = 4; x2 = 4; y2 = 16;
+            x1 = 0; y1 = size_pix / 2; x2 = size_pix / 2; y2 = size_pix * 2;
             break;
         case 2:
-            x1 = 4; y1 = 4; x2 = 8; y2 = 16;
+            x1 = size_pix / 2; y1 = size_pix / 2; x2 = size_pix; y2 = size_pix * 2;
             break;
         case 3:
-            x1 = 8; y1 = 4; x2 = 12; y2 = 16;
+            x1 = size_pix; y1 = size_pix / 2; x2 = (size_pix * 3) / 2; y2 = size_pix * 2;
             break;
         case 4:
-            x1 = 12; y1 = 4; x2 = 16; y2 = 16;
+            x1 = (size_pix * 3) / 2; y1 = size_pix / 2; x2 = size_pix * 2; y2 = size_pix * 2;
             break;
             
         default:

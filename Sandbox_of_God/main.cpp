@@ -65,13 +65,14 @@ int main(int, char const**)
     //              Create the main window
     //
     sf::ContextSettings settings;
-    settings.depthBits = 24;
+    settings.depthBits = 32;
     settings.stencilBits = 8;
     settings.antialiasingLevel = 4;
     settings.majorVersion = 2;
     settings.minorVersion = 1;
     sf::RenderWindow window(sf::VideoMode(window_width, window_height), "Sandbox of God", sf::Style::Default, settings);
     window.setVerticalSyncEnabled(true);
+    
     
     sf::Texture cursor_texture;
     cursor_texture.loadFromFile(resourcePath() + "resources/cursor.png");
@@ -96,32 +97,35 @@ int main(int, char const**)
     SkinBox_t box_EARTH;
     SkinBox_t box_STONE;
     SkinBox_t arrayBox [4] = {skybox, box_GRASS, box_EARTH, box_STONE};
-    
     MakeTextures (arrayBox);
-    SkinHuman_t skin_mob (resourcePath() + "resources/minecraft/textures/entity/steve.png");
+    
     SkinHuman_t skin_mob_tr (resourcePath() + "resources/minecraft/textures/entity/tr.png");
     SkinHuman_t skin_mob_zom (resourcePath() + "resources/minecraft/textures/entity/zombie/husk.png");
+    SkinHuman_t skin_avatar (resourcePath() + "resources/minecraft/textures/entity/avatar.png");
     
-    sf::Clock clock;
+    SkinHuman_t skin_Big_steve (resourcePath() + "resources/minecraft/textures/entity/BigSteve.png");
+    SkinHuman_t skin_Elina (resourcePath() + "resources/minecraft/textures/entity/Elina.png");
     
-    Manager_Delete_t Manager_Delete (2);
+    
+    Manager_Delete_t Manager_Delete (1);
     Manager_Lord_t Manager (1, &Manager_Delete);
-    Avatar God(map._x_size * size / 2, map._y_size * size, map._z_size * size / 2, &skin_mob);
-    Mob Dayn(map._x_size * size / 2, map._y_size * size, map._z_size * size / 2, &skin_mob_zom);
-    Dayn.setSizeInK(6);
+    
+    Avatar God(map._x_size * size / 2, map._y_size * size, map._z_size * size / 2, &skin_avatar);
     
     Manager.Add(&God);
-    Manager.Add(&Dayn);
-    //*
-    for (int i = 0; i < 10; i++)
-        for (int j = 0; j < 10; j++)
+    
+    Manager.Add(new Mob (map._x_size * size / 2 - 10 * size, map._y_size * size, map._z_size * size / 2 + size * 6, &skin_Elina));
+    /*
+    for (int i = 0; i < 11; i++)
+        for (int j = 0; j < 11; j++)
         Manager.Add(new Mob (map._x_size * size / 2 + i * size * 2 - 10 * size, map._y_size * size, map._z_size * size / 2 + j * size * 2  + size * 6, &skin_mob_tr));
+    
     //*/
     mouse_t Mouse (0, 0, false, false, &window);
     
     float angleSky = 0;
     
-    
+    sf::Clock clock;
     //
     //              Start the game loop
     //
@@ -183,7 +187,7 @@ int main(int, char const**)
             angleSky = 0;
         glTranslatef( God._x,  God._y,  God._z);
         glRotatef(angleSky, 0, 1, 0);
-        createBox(arrayBox [SKY], 1500);
+        createBox(arrayBox [SKY], 2000);
         glRotatef(-angleSky, 0, 1, 0);
         glTranslatef(-God._x, -God._y, -God._z);
         

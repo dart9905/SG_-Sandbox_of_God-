@@ -76,6 +76,7 @@ public:
     }
 };
 
+
 class SkinHuman_t {
     int size_pix = 8;
 public:
@@ -94,6 +95,21 @@ public:
     GLuint LoadTextureArmAndLegs (int i, sf::Image& image, sf::Rect <int>& rect_end);
     
     GLuint LoadText ( sf::Image& image, sf::Rect <int>& rect_end, int x, int y);
+    
+    int SetSize_pix (int size) {
+        
+        if (size % 2 != 0)
+            size--;
+        
+        if (size < 2)
+            size = 2;
+        
+        size_pix = size;
+        return 0;
+    }
+    int GetSize_pix () {
+        return size_pix;
+    }
     
 };
 // ==================================================================================
@@ -156,13 +172,17 @@ public:
     virtual int move (float time, map_t& map);
     
     int setSize (int w, int h, int d) {
+        if (_h > 320)
+            return 0;
         _w = w;
         _h = h;
         _d = d;
         return  0;
     }
     int setSizeInK (int k) {
-        _w *= k;
+        if (_h > 320)
+            return 0;
+        _w *= k;//_w = _w * k;
         _h *= k;
         _d *= k;
         return 0;

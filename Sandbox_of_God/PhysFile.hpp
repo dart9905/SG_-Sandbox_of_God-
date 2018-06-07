@@ -42,7 +42,7 @@ int GameOBJ:: update (float time, map_t& map) {
 
 
 int GameOBJ:: move (float time, map_t& map) {
-    _dz = -5;
+    //_dz = -5;
     if (_dz || _dx) {
         _move_time += _move_time_check;
         if (_move_time > 50)
@@ -93,6 +93,8 @@ int Avatar:: collision (float Dx, float Dy, float Dz, map_t& map) {
                         _onGround = true;
                         _onGround_two = false;
                         _dy = 0;
+                        
+                        _speed = 17;
                     }
                     if (Dz > 0)
                         _z = Z * size - _d;
@@ -116,6 +118,7 @@ int Avatar:: move (float time, map_t& map) {
         if ((_onGround_two) && (!_onGround) && (_onGround_two_can)) {
             _onGround_two = false;
             _dy = 25;
+            _speed = 50;
         }
         if ((!_onGround_two) && (_onGround)) {
             _onGround = false;
