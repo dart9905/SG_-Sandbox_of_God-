@@ -103,9 +103,6 @@ int main(int, char const**)
     SkinHuman_t skin_mob_zom (resourcePath() + "resources/minecraft/textures/entity/zombie/husk.png");
     SkinHuman_t skin_avatar (resourcePath() + "resources/minecraft/textures/entity/avatar.png");
     
-    SkinHuman_t skin_Big_steve (resourcePath() + "resources/minecraft/textures/entity/BigSteve.png");
-    SkinHuman_t skin_Elina (resourcePath() + "resources/minecraft/textures/entity/Elina.png");
-    
     
     Manager_Delete_t Manager_Delete (1);
     Manager_Lord_t Manager (1, &Manager_Delete);
@@ -114,7 +111,6 @@ int main(int, char const**)
     
     Manager.Add(&God);
     
-    Manager.Add(new Mob (map._x_size * size / 2 - 10 * size, map._y_size * size, map._z_size * size / 2 + size * 6, &skin_Elina));
     /*
     for (int i = 0; i < 11; i++)
         for (int j = 0; j < 11; j++)
@@ -193,9 +189,11 @@ int main(int, char const**)
         
         Manager.updata(time, map);
         Manager_Delete.updata();
+        
         window.pushGLStates();
         window.draw(cursor);
         window.popGLStates();
+        
         window.display();
         
     }
