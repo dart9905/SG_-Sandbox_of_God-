@@ -42,10 +42,6 @@ int MakeTextures (SkinBox_t* arrayBox) {
     for (int i = 0; i < 6; i ++) {
         arrayBox [WATER] [i] = LoadTexture(resourcePath() + "resources/minecraft/textures/blocks/water.png");
     }
-    sf::Image image;
-    if (!image.loadFromFile(resourcePath() + "resources/minecraft/textures/blocks/water.png"))
-        return EXIT_FAILURE;
-    image.saveToFile("/Users/macbook/Desktop/map.png");
     
     
     /*
@@ -60,6 +56,7 @@ int MakeTextures (SkinBox_t* arrayBox) {
     for (int i = 0; i < 6; i++) {
         arrayBox [SKY]  [i] = LoadTextureSKYBOX(resourcePath() + "resources/skybox2/map.jpg", i);
     }
+    
     glEnable(GL_TEXTURE_2D);
     glShadeModel(GL_SMOOTH);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
@@ -71,6 +68,7 @@ int MakeTextures (SkinBox_t* arrayBox) {
     glLoadIdentity();
     gluPerspective(90.f, 1.f, 1.f, 2000.f);
     
+    glTexEnvi (GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     
     
     glMatrixMode(GL_MODELVIEW);
@@ -269,8 +267,9 @@ int DrawMAP (Avatar& God, map_t& map, SkinBox_t* arrayBox) {
                             createBox(arrayBox [STONE], size);
                             break;
                         case WATER:
-                            
                             //glColor4f(1.0f,1.0f,1.0f,0.85f);
+                            glAlphaFunc (GL_GREATER, 0.5f);
+                            glEnable (GL_ALPHA_TEST);
                             createBox(arrayBox [WATER], size);
                             
                             glColor4f(1.0f,1.0f,1.0f,1.0f);

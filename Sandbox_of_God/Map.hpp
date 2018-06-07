@@ -90,6 +90,7 @@ public:
     _z_size (map_z),
     _data (map_array)
     {
+        _R_rand = 0;
         _map_yz.set_z(_z_size);
     };
     
@@ -108,9 +109,24 @@ public:
     int _x_size;
     int _y_size;
     int _z_size;
+    int _R_rand;
 };
 
 
+//*
+int map_t::Load () {
+    _R_rand = RAND_MAX / _y_size;
+    (*this) [0]         [_y_size / 4 + rand() / _R_rand] [0]._structure        = STONE;
+    (*this) [_x_size]   [_y_size / 4 + rand() / _R_rand] [0]._structure        = STONE;
+    (*this) [0]         [_y_size / 4 + rand() / _R_rand] [_z_size]._structure  = STONE;
+    (*this) [_x_size]   [_y_size / 4 + rand() / _R_rand] [_z_size]._structure  = STONE;
+    
+    
+    
+    return 0;
+}
+ //*/
+/*
 int map_t::Load () {
     
     
@@ -146,7 +162,7 @@ int map_t::Load () {
             }
     return 0;
 }
-
+//*/
 // =================================================================================
 // =================================================================================
 // =================================================================================
