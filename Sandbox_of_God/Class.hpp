@@ -37,6 +37,7 @@ public:
     _solid(solid_box)
     {
         _h = 0;
+        
     }
     ~box_t () {
         _structure = 0;
@@ -47,6 +48,8 @@ public:
     int _structure;
     int _visibility;
     int _solid;
+    
+    int _box_vis [6] = {0};
     
     double _h;
 };

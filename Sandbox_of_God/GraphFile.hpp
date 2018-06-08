@@ -27,18 +27,20 @@ GLuint LoadTextureSKYBOX(sf::String name, int i);
 
 
 int MakeTextures (SkinBox_t* arrayBox) {
+    arrayBox [GRASS] [0] = LoadTexture(resourcePath() + "resources/minecraft/textures/blocks/grass_n.png");
+    for (int i = 1; i < 5; i ++) {
+        arrayBox [GRASS] [i] = LoadTexture(resourcePath() + "resources/minecraft/textures/blocks/grass_side.png");
+    }
+    arrayBox [GRASS] [5] = LoadTexture(resourcePath() + "resources/minecraft/textures/blocks/dirt.png");
+    
     for (int i = 0; i < 6; i ++) {
-        arrayBox [GRASS] [i] = LoadTexture(resourcePath() + "resources/minecraft/textures/blocks/end_stone.png");
+        arrayBox [EARTH] [i] = LoadTexture(resourcePath() + "resources/minecraft/textures/blocks/dirt.png");
     }
     
-    for (int i = 0; i < 6; i ++) {
-        arrayBox [EARTH] [i] = LoadTexture(resourcePath() + "resources/minecraft/textures/blocks/end_stone.png");
-    }
-    
     
     
     for (int i = 0; i < 6; i ++) {
-        arrayBox [STONE] [i] = LoadTexture(resourcePath() + "resources/minecraft/textures/blocks/enchanting_table_bottom.png");
+        arrayBox [STONE] [i] = LoadTexture(resourcePath() + "resources/minecraft/textures/blocks/stone.png");
     }
     
     for (int i = 0; i < 6; i ++) {
@@ -56,7 +58,7 @@ int MakeTextures (SkinBox_t* arrayBox) {
     //*/
     //*
     for (int i = 0; i < 6; i++) {
-        arrayBox [SKY]  [i] = LoadTextureSKYBOX(resourcePath() + "resources/skybox2/map.jpg", i);
+        arrayBox [SKY]  [i] = LoadTextureSKYBOX(resourcePath() + "resources/skybox/ckybox.png", i);
     }
     
     glEnable(GL_TEXTURE_2D);

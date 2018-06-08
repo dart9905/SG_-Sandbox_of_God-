@@ -338,7 +338,7 @@ int map_t::Load_F () {
                 
                 if ((y >= max) && (y < max + _h_grass)) {
                     
-                    if (rand() % 100 <= 10) {
+                    if (rand() % 100 <= 5) {
                         (*this)  [x] [y] [z]._structure = STONE;
                     } else
                         (*this)  [x] [y] [z]._structure = EARTH;
@@ -346,7 +346,7 @@ int map_t::Load_F () {
                 
                 if (y == max + _h_grass) {
                     //*
-                    if (rand() % 100 <= 10) {
+                    if (rand() % 100 < 0) {
                         (*this)  [x] [y] [z]._structure = STONE;
                     } else
                         (*this)  [x] [y] [z]._structure = GRASS;
