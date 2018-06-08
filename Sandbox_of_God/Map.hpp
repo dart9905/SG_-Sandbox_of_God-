@@ -166,7 +166,11 @@ int map_t::Load () {
     
     
     for (int i = _x_size; i > 2; i = i / 2) {
-        _R_rand = (_y_size * _k_rand / 100 * (i) / _x_size) + 1;
+        if (i < 17) {
+            _R_rand = 1;
+        } else {
+            _R_rand = (_y_size * _k_rand / 100 * (i) / _x_size) + 1;
+        }
         for (int x0 = i / 2 - 1; x0 < _x_size; x0 += i) {
             for (int z0 = i / 2 - 1; z0 < _z_size; z0 += i) {
                 cell.x = x0;
@@ -213,16 +217,6 @@ int map_t::Load () {
         }
     }
     Load_F ();
-    /*
-    FILE* file = fopen("/Users/macbook/Desktop/text.txt", "w");
-    for (int i = 0; i < _x_size; i++) {
-        for (int j = 0, h = (*this) [i] [0] [j]._h; j < _z_size; j++, h = (*this) [i] [0] [j]._h) {
-            fprintf(file, "%i  ", h);
-        }
-        fprintf(file, "\n");
-    }
-    fclose(file);
-    //*/
     return 0;
 }
 
@@ -235,10 +229,10 @@ int map_t::RecCell1 (cell cell, int h) {
     int a4 = (*this) [cell.x + h / 2]           [0]     [cell.z + h / 2]._h;
     int y = (a1 + a2 + a3 + a4) / 4 + rand() % _R_rand * _R2_rand;
     
-    (*this) [cell.x]        [0] [cell.z]._h         = y;
-    (*this) [cell.x + 1]    [0] [cell.z]._h         = y;
-    (*this) [cell.x]        [0] [cell.z + 1]._h     = y;
-    (*this) [cell.x + 1]    [0] [cell.z + 1]._h     = y;
+    (*this) [cell.x]        [0] [cell.z]._h         = y + rand() % 3 - 1;
+    (*this) [cell.x + 1]    [0] [cell.z]._h         = y + rand() % 3 - 1;
+    (*this) [cell.x]        [0] [cell.z + 1]._h     = y + rand() % 3 - 1;
+    (*this) [cell.x + 1]    [0] [cell.z + 1]._h     = y + rand() % 3 - 1;
     
     return 0;
 }
@@ -263,8 +257,8 @@ int map_t::RecCell2 (cell cell, int h) {
             y = (a1 + a2 + a3 + a4) / 4 + rand() % _R_rand * _R2_rand;
         }
         
-        (*this) [cell1.x]        [0] [cell1.z]._h         = y;
-        (*this) [cell1.x + 1]    [0] [cell1.z]._h         = y;
+        (*this) [cell1.x]        [0] [cell1.z]._h         = y;// + rand() % 2 - 1;
+        (*this) [cell1.x + 1]    [0] [cell1.z]._h         = y;// + rand() % 2 - 1;
     }
     
     {
@@ -281,8 +275,8 @@ int map_t::RecCell2 (cell cell, int h) {
             y = (a1 + a2 + a3 + a4) / 4 + rand() % _R_rand * _R2_rand;
         }
         
-        (*this) [cell1.x]        [0] [cell1.z]._h         = y;
-        (*this) [cell1.x + 1]    [0] [cell1.z]._h         = y;
+        (*this) [cell1.x]        [0] [cell1.z]._h         = y;// + rand() % 2 - 1;
+        (*this) [cell1.x + 1]    [0] [cell1.z]._h         = y;// + rand() % 2 - 1;
     }
     
     {
@@ -299,8 +293,8 @@ int map_t::RecCell2 (cell cell, int h) {
             y = (a1 + a2 + a3 + a4) / 4 + rand() % _R_rand * _R2_rand;
         }
         
-        (*this) [cell1.x]        [0] [cell1.z]._h         = y;
-        (*this) [cell1.x]        [0] [cell1.z + 1]._h     = y;
+        (*this) [cell1.x]        [0] [cell1.z]._h         = y;// + rand() % 2 - 1;
+        (*this) [cell1.x]        [0] [cell1.z + 1]._h     = y;// + rand() % 2 - 1;
     }
     
     {
@@ -317,8 +311,8 @@ int map_t::RecCell2 (cell cell, int h) {
             y = (a1 + a2 + a3 + a4) / 4 + rand() % _R_rand * _R2_rand;
         }
         
-        (*this) [cell1.x]        [0] [cell1.z]._h         = y;
-        (*this) [cell1.x]        [0] [cell1.z + 1]._h     = y;
+        (*this) [cell1.x]        [0] [cell1.z]._h         = y;// + rand() % 2 - 1;
+        (*this) [cell1.x]        [0] [cell1.z + 1]._h     = y;// + rand() % 2 - 1;
     }
     
     return 0;
@@ -358,28 +352,7 @@ int map_t::Load_F () {
                         (*this)  [x] [y] [z]._structure = GRASS;
                 }
             }
-    /*
-    FILE* file = fopen("/Users/macbook/Desktop/text2.txt", "w");
-    for (int i = 0; i < _x_size; i++) {
-        for (int j = 0, h = (*this) [i] [0] [j]._h; j < _z_size; j++, h = (*this) [i] [0] [j]._h) {
-            fprintf(file, "%i  ", h);
-        }
-        fprintf(file, "\n");
-    }
-    fclose(file);
-    file = fopen("/Users/macbook/Desktop/text1.txt", "w");
-    for (int y = 0; y < _y_size; y++) {
-        fprintf(file, "# %i\n", y);
-        for (int x = 0; x < _x_size; x++) {
-            for (int z = 0; z < _z_size; z++) {
-            fprintf(file, "%i  ", (*this)  [x] [y] [z]._structure);
-            }
-            fprintf(file, "\n");
-        }
-        fprintf(file, "\n\n");
-    }
-    fclose(file);
-    //*/
+    
     for (int x = 0; x < _x_size; x++)
         for (int y = 0; y < _y_size; y++)
             for (int z = 0; z < _z_size; z++)
