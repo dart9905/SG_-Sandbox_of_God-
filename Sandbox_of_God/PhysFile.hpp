@@ -35,14 +35,123 @@ int GameOBJ:: collision (float Dx, float Dy, float Dz, map_t& map) {
 }
 
 
+
 int GameOBJ:: update (float time, map_t& map) {
     return 0;
 }
 
+int Mob:: TurnRND () {
+    if (_angle == 0) {
+        _angle = rand () % 3000;
+        if (_angle > 40)
+            _angle = 0;
+        else
+            _angle = (_angle - 20);
+    }
+    return 0;
+}
 
+int Mob:: update (float time, map_t& map) {
+    switch (_task) {
+        case STAND:
+            _time_work--;
+            if (_time_work == 0)
+                _task = NOTHING;
+            TurnRND ();
+            break;
+            
+        case WALKING:
+            _time_work--;
+            if (_time_work == 0)
+                _task = NOTHING;
+            //TurnRND ();
+            break;
+            
+        case RUN:
+            _time_work--;
+            if (_time_work == 0)
+                _task = NOTHING;
+            break;
+            
+        case JUMP:
+            _task = NOTHING;
+            break;
+            
+        case HIT:
+            _task = NOTHING;
+            break;
+            
+        case CHASE:
+            _task = NOTHING;
+            break;
+            
+        case NOTHING:
+            _time_work = 0;
+            _task = rand() % 100;
+            if ((_task < 45) && (_time_work == 0)) {
+                _task = STAND;
+                _time_work = rand() % 500 + 200;
+            }
+            if ((_task >= 45) && (_task < 90) && (_time_work == 0)) {
+                _task = WALKING;
+                _time_work = rand() % 500+ 200;
+            }
+            if ((_task >= 90) && (_task <= 100) && (_time_work == 0)) {
+                _task = RUN;
+                _time_work = rand() % 100 + 100;
+            }
+            break;
+            
+        default:
+            _task = NOTHING;
+            break;
+    }
+    
+    
+    return 0;
+}
 
-int GameOBJ:: move (float time, map_t& map) {
-    //_dz = -5;
+bool GameOBJ:: place(int x, int y) {
+    if ((_x - x) * (_x - x) + (_y - y) * (_y - y) < 25 * 25 * size * size) {
+        return true;
+    }
+    return false;
+}
+
+int GameOBJ:: move(float time, map_t &map) {
+    return 0;
+}
+
+int Mob:: move (float time, map_t& map) {
+    if (_angle > 0) {
+        _angle--;
+        _angleX += _angle_speed;
+    }
+    if (_angle < 0) {
+        _angle++;
+        _angleX -= _angle_speed;
+    }
+    
+    switch (_task) {
+        case WALKING:
+            _dx = -sin (_angleX / 180 * PI) * _speed;
+            _dz = -cos (_angleX / 180 * PI) * _speed;
+            
+            break;
+            
+        case RUN:
+            _dx = -sin (_angleX / 180 * PI) * _speed * 1.5;
+            _dz = -cos (_angleX / 180 * PI) * _speed * 1.5;
+            break;
+            
+        case STAND:
+            _dx = 0;
+            _dz = 0;
+            break;
+        default:
+            break;
+    }
+    
     if (_dz || _dx) {
         _move_time += _move_time_check;
         if (_move_time > 50)

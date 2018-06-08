@@ -127,6 +127,9 @@ int main(int, char const**)
     //
     //              Start the game loop
     //
+    
+    
+    
     while (window.isOpen())
     {
         
@@ -178,7 +181,17 @@ int main(int, char const**)
         
         gluLookAt(God._x - God._d * 1.5 * sin (God._angleX / 180 * PI), God._y + God._h - 5, God._z - God._d * 1.5 * cos (God._angleX / 180 * PI), God._x - sin (God._angleX / 180 * PI) * (1 + God._d * 1.5),  God._y + God._h - 5 + tan (God._angleY / 180 * PI),  God._z - cos (God._angleX / 180 * PI) * (1 + God._d * 1.5), 0, 1, 0);
         
+        //
+        //
+        //          First
+        //
         DrawMAP(God, map, arrayBox);
+        //
+        //
+        //          End
+        //
+        //
+        
         // Update the window
         angleSky += 0.01;
         if (angleSky > 359)

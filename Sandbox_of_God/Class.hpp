@@ -188,6 +188,7 @@ public:
     virtual int update (float time, map_t& map);
     virtual int draw ();
     virtual int move (float time, map_t& map);
+    virtual bool place (int x, int y);
     
     int setSize (int w, int h, int d) {
         if (_h > 320)
@@ -216,6 +217,23 @@ class Mob: public GameOBJ {
 public:
     Mob (float x0, float y0, float z0, SkinHuman_t* skin0): GameOBJ (x0, y0, z0, skin0) {}
     virtual ~Mob () {}
+    int update (float time, map_t& map);
+    int move (float time, map_t& map);
+    int TurnRND ();
+    
+    enum MobTesk {
+        STAND       = 0,
+        WALKING     = 1,
+        RUN         = 2,
+        JUMP        = 3,
+        HIT         = 4,
+        NOTHING     = 5,
+        CHASE       = 6
+    };
+    int _task = NOTHING;
+    long int _time_work;
+    int _angle;
+    int _angle_speed = 10;
 };
 
 
@@ -317,12 +335,14 @@ public:
     
     int updata (float time, map_t& map) {
         for (int i = 0; i < _capasity; i++) {
-            _data [i]->draw();
-            _data [i]->move(time, map);
-            if (_data [i]->update(time, map)) {
-                _Manager_Delete->Add(_data [i]);
-                _data [i] = _data [_capasity];
-                i--;
+            if (_data [i]->place (_data [0]->_x,_data [0]->_y)) {
+                _data [i]->draw();
+                _data [i]->move(time, map);
+                if (_data [i]->update(time, map)) {
+                    _Manager_Delete->Add(_data [i]);
+                    _data [i] = _data [_capasity];
+                    i--;
+                }
             }
             
         }

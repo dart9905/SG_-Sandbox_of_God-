@@ -432,6 +432,7 @@ int GameOBJ::draw () {
     
     //body
     glTranslatef( _x,  _y + _h * 4 / 32,  _z);
+    glRotatef(+_angleX, 0, 1, 0);
     createRectangle (_skin->_Body, _w,  _h * 24 / 32, _d * 2);
     
     MobDrawHeadMan (_skin->_Head, _w, _h, _d, _move_time);
