@@ -111,6 +111,7 @@ int main(int, char const**)
     Avatar God(map._x_size * size / 2, map._y_size * size * 0.7, map._z_size * size / 2, &skin_avatar);
     
     Manager.Add(&God);
+    Manager.Add(new Mob(map._x_size * size / 2, map._y_size * size * 0.7, map._z_size * size / 2, &skin_avatar));
     
     /*
     for (int i = 0; i < 11; i++)

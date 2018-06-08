@@ -135,6 +135,7 @@ public:
     int RecCell1 (cell cell, int h);
     int RecCell2 (cell cell, int h);
     bool VisibilityCheck (int x_main, int y_main, int z_main);
+    int VisibilityCheckPro (int x_main, int y_main, int z_main);
     
     box_t* _data;
     box_t* _data_copy;
@@ -359,9 +360,10 @@ int map_t::Load_F () {
             {
                 max = (*this)  [x] [0] [z]._h;
                 if (y <= max + 10) {
-                    if (VisibilityCheck(x,y,z))
+                    if (VisibilityCheck(x,y,z)) {
                         (*this)  [x] [y] [z]._visibility = VISIBLE;
-                    else
+                        VisibilityCheckPro(x,y,z);
+                    } else
                         (*this) [x] [y] [z]._visibility = NOTVISIBLE;
                 }
             }
@@ -404,7 +406,63 @@ bool map_t::VisibilityCheck (int x_main, int y_main, int z_main) {
     }
     z--;
     
+    return false;
     
+}
+
+
+int map_t::VisibilityCheckPro (int x_main, int y_main, int z_main) {
+    int x = x_main;
+    int y = y_main;
+    int z = z_main;
+    
+    x--;
+    
+    if ((x > 0) && ((*this)  [x] [y] [z]._structure == SKY)) {
+        (*this)  [x_main] [y_main] [z_main]._box_vis[2] = 1;
+    } else
+        (*this)  [x_main] [y_main] [z_main]._box_vis[2] = 0;
+    
+    x += 2;
+    
+    if ((x < _x_size) && ((*this)  [x] [y] [z]._structure == SKY)) {
+        (*this)  [x_main] [y_main] [z_main]._box_vis[4] = 1;
+    } else
+        (*this)  [x_main] [y_main] [z_main]._box_vis[4] = 0;
+    
+    x--;
+    y--;
+    
+    if ((y > 1) && ((*this)  [x] [y] [z]._structure == SKY)) {
+        (*this)  [x_main] [y_main] [z_main]._box_vis [5] = 1;
+    } else
+        (*this)  [x_main] [y_main] [z_main]._box_vis[5] = 0;
+    
+    y += 2;
+    
+    if ((x < _y_size) && ((*this)  [x] [y] [z]._structure == SKY)) {
+        (*this)  [x_main] [y_main] [z_main]._box_vis [0] = 1;
+    } else
+        (*this)  [x_main] [y_main] [z_main]._box_vis[0] = 0;
+    
+    y--;
+    z--;
+    
+    if ((z > 0) && ((*this)  [x] [y] [z]._structure == SKY)) {
+        (*this)  [x_main] [y_main] [z_main]._box_vis[1] = 1;
+    } else
+        (*this)  [x_main] [y_main] [z_main]._box_vis[1] = 0;
+    
+    z += 2;
+    
+    if ((z < _z_size) && ((*this)  [x] [y] [z]._structure == SKY)) {
+        (*this)  [x_main] [y_main] [z_main]._box_vis[3] = 1;
+    } else
+        (*this)  [x_main] [y_main] [z_main]._box_vis[3] = 0;
+    
+    z--;
+    
+    return 0;
 }
 
 //*/

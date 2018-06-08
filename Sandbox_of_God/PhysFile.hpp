@@ -244,8 +244,10 @@ bool BesideVisBox (int x0, int y0, int z0, map_t& map) {
 bool PathVisBox(int x0, int y0, int z0, map_t& map, bool visibility)
 {
     int x = x0, y = y0, z = z0;
+    map.VisibilityCheckPro(x, y, z);
     //========================
     x--;
+    map.VisibilityCheckPro(x, y, z);
     if ((x >= 0) && CheckVis (map [x] [y] [z], visibility)) {
         if (visibility)
             map [x] [y] [z]._visibility = VISIBLE;
@@ -254,6 +256,7 @@ bool PathVisBox(int x0, int y0, int z0, map_t& map, bool visibility)
                 map [x] [y] [z]._visibility = NOTVISIBLE;
     }
     x += 2;
+    map.VisibilityCheckPro(x, y, z);
     if ((x < map._x_size) && CheckVis (map [x] [y] [z], visibility)) {
         if (visibility)
             map [x] [y] [z]._visibility = VISIBLE;
@@ -262,9 +265,11 @@ bool PathVisBox(int x0, int y0, int z0, map_t& map, bool visibility)
                 map [x] [y] [z]._visibility = NOTVISIBLE;
     }
     x--;
+    map.VisibilityCheckPro(x, y, z);
     //========================
     
     y--;
+    map.VisibilityCheckPro(x, y, z);
     if ((y >= 0) && CheckVis (map [x] [y] [z], visibility)) {
         if (visibility)
             map [x] [y] [z]._visibility = VISIBLE;
@@ -273,6 +278,7 @@ bool PathVisBox(int x0, int y0, int z0, map_t& map, bool visibility)
                 map [x] [y] [z]._visibility = NOTVISIBLE;
     }
     y += 2;
+    map.VisibilityCheckPro(x, y, z);
     if ((y < map._y_size) && CheckVis (map [x] [y] [z], visibility)) {
         if (visibility)
             map [x] [y] [z]._visibility = VISIBLE;
@@ -281,9 +287,11 @@ bool PathVisBox(int x0, int y0, int z0, map_t& map, bool visibility)
                 map [x] [y] [z]._visibility = NOTVISIBLE;
     }
     y--;
+    map.VisibilityCheckPro(x, y, z);
     //========================
     
     z--;
+    map.VisibilityCheckPro(x, y, z);
     if ((z >= 0) && CheckVis (map [x] [y] [z], visibility)) {
         if (visibility)
             map [x] [y] [z]._visibility = VISIBLE;
@@ -292,6 +300,7 @@ bool PathVisBox(int x0, int y0, int z0, map_t& map, bool visibility)
                 map [x] [y] [z]._visibility = NOTVISIBLE;
     }
     z += 2;
+    map.VisibilityCheckPro(x, y, z);
     if ((z < map._z_size) && CheckVis (map [x] [y] [z], visibility)) {
         if (visibility)
             map [x] [y] [z]._visibility = VISIBLE;

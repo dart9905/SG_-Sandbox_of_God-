@@ -178,7 +178,7 @@ void createRectangle(SkinBox_t& box,float x_size, float y_size, float z_size)
     glEnd();
     glBindTexture(GL_TEXTURE_2D, box [2]);
     glBegin(GL_QUADS);
-    //front
+    //front/* z+
     glTexCoord2f(0, 0);     glVertex3f(-x_size, -y_size, -z_size);
     glTexCoord2f(1, 0);     glVertex3f( x_size, -y_size, -z_size);
     glTexCoord2f(1, 1);     glVertex3f( x_size,  y_size, -z_size);
@@ -187,7 +187,7 @@ void createRectangle(SkinBox_t& box,float x_size, float y_size, float z_size)
     
     glBindTexture(GL_TEXTURE_2D, box [4]);
     glBegin(GL_QUADS);
-    //back
+    //back x-
     glTexCoord2f(0, 0);     glVertex3f( x_size, -y_size, z_size);
     glTexCoord2f(1, 0);     glVertex3f(-x_size, -y_size, z_size);
     glTexCoord2f(1, 1);     glVertex3f(-x_size,  y_size, z_size);
@@ -196,7 +196,7 @@ void createRectangle(SkinBox_t& box,float x_size, float y_size, float z_size)
     
     glBindTexture(GL_TEXTURE_2D, box [1]);
     glBegin(GL_QUADS);
-    //left
+    //left x-
     glTexCoord2f(0, 0);     glVertex3f(-x_size, -y_size,  z_size);
     glTexCoord2f(1, 0);     glVertex3f(-x_size, -y_size, -z_size);
     glTexCoord2f(1, 1);     glVertex3f(-x_size,  y_size, -z_size);
@@ -205,7 +205,7 @@ void createRectangle(SkinBox_t& box,float x_size, float y_size, float z_size)
     
     glBindTexture(GL_TEXTURE_2D, box [3]);
     glBegin(GL_QUADS);
-    //right
+    //right x+
     glTexCoord2f(0, 0);     glVertex3f( x_size, -y_size, -z_size);
     glTexCoord2f(1, 0);     glVertex3f( x_size, -y_size,  z_size);
     glTexCoord2f(1, 1);     glVertex3f( x_size,  y_size,  z_size);
@@ -224,11 +224,92 @@ void createRectangle(SkinBox_t& box,float x_size, float y_size, float z_size)
     
 }
 
+void createRectangle(SkinBox_t& box,float x_size, float y_size, float z_size, int* box_vis)
+{
+    x_size = x_size / 2;
+    y_size = y_size / 2;
+    z_size = z_size / 2;
+    glEnable(GL_ALPHA_TEST);
+    glAlphaFunc(GL_GREATER, 0.8f);
+    if (box_vis [0] == 1) {
+        glBindTexture(GL_TEXTURE_2D, box [0]);
+        glBegin(GL_QUADS);
+        //top
+        glTexCoord2f(0, 0);     glVertex3f(-x_size, y_size, -z_size);
+        glTexCoord2f(1, 0);     glVertex3f( x_size, y_size, -z_size);
+        glTexCoord2f(1, 1);     glVertex3f( x_size, y_size,  z_size);
+        glTexCoord2f(0, 1);     glVertex3f(-x_size, y_size,  z_size);
+        glEnd();
+    }
+    
+    if (box_vis [1] == 1) {
+        glBindTexture(GL_TEXTURE_2D, box [2]);
+        glBegin(GL_QUADS);
+        //front/* z+
+        glTexCoord2f(0, 0);     glVertex3f(-x_size, -y_size, -z_size);
+        glTexCoord2f(1, 0);     glVertex3f( x_size, -y_size, -z_size);
+        glTexCoord2f(1, 1);     glVertex3f( x_size,  y_size, -z_size);
+        glTexCoord2f(0, 1);     glVertex3f(-x_size,  y_size, -z_size);
+        glEnd();
+    }
+    
+    
+    if (box_vis [3] == 1) {
+        glBindTexture(GL_TEXTURE_2D, box [4]);
+        glBegin(GL_QUADS);
+        //back x-
+        glTexCoord2f(0, 0);     glVertex3f( x_size, -y_size, z_size);
+        glTexCoord2f(1, 0);     glVertex3f(-x_size, -y_size, z_size);
+        glTexCoord2f(1, 1);     glVertex3f(-x_size,  y_size, z_size);
+        glTexCoord2f(0, 1);     glVertex3f( x_size,  y_size, z_size);
+        glEnd();
+    }
+    
+    if (box_vis [2] == 1) {
+        glBindTexture(GL_TEXTURE_2D, box [1]);
+        glBegin(GL_QUADS);
+        //left x-
+        glTexCoord2f(0, 0);     glVertex3f(-x_size, -y_size,  z_size);
+        glTexCoord2f(1, 0);     glVertex3f(-x_size, -y_size, -z_size);
+        glTexCoord2f(1, 1);     glVertex3f(-x_size,  y_size, -z_size);
+        glTexCoord2f(0, 1);     glVertex3f(-x_size,  y_size,  z_size);
+        glEnd();
+    }
+    
+    if (box_vis [4] == 1) {
+        glBindTexture(GL_TEXTURE_2D, box [3]);
+        glBegin(GL_QUADS);
+        //right x+
+        glTexCoord2f(0, 0);     glVertex3f( x_size, -y_size, -z_size);
+        glTexCoord2f(1, 0);     glVertex3f( x_size, -y_size,  z_size);
+        glTexCoord2f(1, 1);     glVertex3f( x_size,  y_size,  z_size);
+        glTexCoord2f(0, 1);     glVertex3f( x_size,  y_size, -z_size);
+        glEnd();
+    }
+    if (box_vis [5] == 1) {
+        glBindTexture(GL_TEXTURE_2D, box [5]);
+        glBegin(GL_QUADS);
+        //bottom
+        glTexCoord2f(0, 0);     glVertex3f(-x_size, -y_size,  z_size);
+        glTexCoord2f(1, 0);     glVertex3f( x_size, -y_size,  z_size);
+        glTexCoord2f(1, 1);     glVertex3f( x_size, -y_size, -z_size);
+        glTexCoord2f(0, 1);     glVertex3f(-x_size, -y_size, -z_size);
+        glEnd();
+    }
+    glDisable(GL_ALPHA_TEST);
+    
+}
+
 
 
 void createBox(SkinBox_t& box,float _size)
 {
     createRectangle(box, _size, _size, _size);
+}
+
+void createBox(SkinBox_t& box,float _size, int* box_vis)
+{
+    createRectangle(box, _size, _size, _size, box_vis);
 }
 
 
@@ -260,15 +341,15 @@ int DrawMAP (Avatar& God, map_t& map, SkinBox_t* arrayBox) {
                             break;
                             
                         case GRASS:
-                            createBox (arrayBox [GRASS], size);
+                            createBox (arrayBox [GRASS], size, map [x] [y] [z]._box_vis);
                             break;
                             
                         case EARTH:
-                            createBox(arrayBox [EARTH], size);
+                            createBox(arrayBox [EARTH], size, map [x] [y] [z]._box_vis);
                             break;
                             
                         case STONE:
-                            createBox(arrayBox [STONE], size);
+                            createBox(arrayBox [STONE], size, map [x] [y] [z]._box_vis);
                             break;
                         case WATER:
                             //glColor4f(1.0f,1.0f,1.0f,0.85f);
