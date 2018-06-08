@@ -158,8 +158,9 @@ int Avatar:: move (float time, map_t& map) {
         _move_time_check = 20 * _speed / _h;
     }
     
-    if (!_onGround)
+    if (!_onGround) {
         _dy -= 1.5 * time;
+    }
     _onGround = false;
     
     _x += _dx * time;

@@ -47,7 +47,7 @@ const int window_height = 1200;
 //      =============================================
 
 
-box_t map_array_GLOBAL_VARIABLE [512] [512] [512] = {0, 0, 0};
+box_t map_array_GLOBAL_VARIABLE [256] [256] [256] = {0, 0, 0, -1};
 
 int main(int, char const**)
 {
@@ -57,7 +57,7 @@ int main(int, char const**)
     //              LOAD MAP
     //
     
-    map_t map (512, 512, 512, &(map_array_GLOBAL_VARIABLE [0] [0] [0]));
+    map_t map (256, 256, 256, &(map_array_GLOBAL_VARIABLE [0] [0] [0]));
     map.Load();
     
     

@@ -35,15 +35,20 @@ public:
     _structure(structure_box),
     _visibility(visibility_box),
     _solid(solid_box)
-    {}
+    {
+        _h = 0;
+    }
     ~box_t () {
         _structure = 0;
         _visibility = 0;
         _solid = 0;
+        _h = 0;
     }
     int _structure;
     int _visibility;
     int _solid;
+    
+    double _h;
 };
 
 

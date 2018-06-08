@@ -24,6 +24,8 @@ GLuint LoadTextureSKYBOX(sf::String name, int i);
 
 
 
+
+
 int MakeTextures (SkinBox_t* arrayBox) {
     for (int i = 0; i < 6; i ++) {
         arrayBox [GRASS] [i] = LoadTexture(resourcePath() + "resources/minecraft/textures/blocks/end_stone.png");
@@ -561,6 +563,8 @@ GLuint SkinHuman_t::LoadTextureArmAndLegs (int i, sf::Image& image, sf::Rect <in
     
     return LoadText(image_end, rect_end1, x2 - x1, y2 - y1);
 }
+
+
 
 
 
