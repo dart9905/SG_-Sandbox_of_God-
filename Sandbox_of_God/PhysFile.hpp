@@ -9,27 +9,62 @@
 // ==================================================================================
 bool check(int x, int y, int z, map_t& map);
 
+int GameOBJ::collision(float Dx, float Dy, float Dz, map_t &map) {
+    return 0;
+}
 
-int GameOBJ:: collision (float Dx, float Dy, float Dz, map_t& map) {
+int GameOBJ::attack () {
+    return _damage;
+}
+
+bool GameOBJ::hitting(int damage) {
+    _health = _health - damage;
+    if (_health < 0)
+        return false;
+    return true;
+}
+
+int Mob::CollidedWall() {
+    if (_dy == 0 && _onGround) {
+        _dy = _jump_speed;
+        _onGround = false;
+        _y += _dy;
+    }
+    if (_dy < 0 && !_onGround) {
+        _task = NOTHING;
+        TurnRND();
+    }
+}
+
+int Mob:: collision (float Dx, float Dy, float Dz, map_t& map) {
     for (int X = (_x - _w) / size; X < (_x + _w)/ size; X++)
         for (int Y = (_y - _h) / size; Y < (_y + _h)/ size; Y++)
             for (int Z = (_z - _d) / size; Z < (_z + _d)/ size; Z++)
                 if (check(X, Y, Z, map)) {
-                    if (Dx > 0)
+                    if (Dx > 0) {
                         _x = X * size - _w;
-                    if (Dx < 0)
+                        CollidedWall();
+                    }
+                    if (Dx < 0) {
                         _x = X * size + size + _w;
-                    if (Dy > 0)
+                        CollidedWall();
+                    }
+                    if (Dy > 0) {
                         _y = Y * size - _h;
+                    }
                     if (Dy < 0) {
                         _y = Y * size + size + _h;
                         _onGround = true;
                         _dy = 0;
                     }
-                    if (Dz > 0)
+                    if (Dz > 0) {
                         _z = Z * size - _d;
-                    if (Dz < 0)
+                        CollidedWall();
+                    }
+                    if (Dz < 0) {
                         _z = Z * size + size + _d;
+                        CollidedWall();
+                    }
                 }
     return 0;
 }
@@ -37,7 +72,7 @@ int GameOBJ:: collision (float Dx, float Dy, float Dz, map_t& map) {
 
 
 int GameOBJ:: update (float time, map_t& map) {
-    return 0;
+    return _health;
 }
 
 int Mob:: TurnRND () {
@@ -52,6 +87,8 @@ int Mob:: TurnRND () {
 }
 
 int Mob:: update (float time, map_t& map) {
+    //_task = STAND;
+    //_angleX = 90;
     switch (_task) {
         case STAND:
             _time_work--;
@@ -64,7 +101,6 @@ int Mob:: update (float time, map_t& map) {
             _time_work--;
             if (_time_work == 0)
                 _task = NOTHING;
-            //TurnRND ();
             break;
             
         case RUN:
@@ -82,21 +118,23 @@ int Mob:: update (float time, map_t& map) {
             break;
             
         case CHASE:
+            _angle = 0;
+            _time_work = 0;
             _task = NOTHING;
             break;
             
         case NOTHING:
             _time_work = 0;
             _task = rand() % 100;
-            if ((_task < 45) && (_time_work == 0)) {
+            if ((_task < 20) && (_time_work == 0)) {
                 _task = STAND;
                 _time_work = rand() % 500 + 200;
             }
-            if ((_task >= 45) && (_task < 90) && (_time_work == 0)) {
+            if ((_task >= 20) && (_task < 80) && (_time_work == 0)) {
                 _task = WALKING;
                 _time_work = rand() % 500+ 200;
             }
-            if ((_task >= 90) && (_task <= 100) && (_time_work == 0)) {
+            if ((_task >= 80) && (_task <= 100) && (_time_work == 0)) {
                 _task = RUN;
                 _time_work = rand() % 100 + 100;
             }
@@ -105,14 +143,15 @@ int Mob:: update (float time, map_t& map) {
         default:
             _task = NOTHING;
             break;
+     
     }
     
-    
-    return 0;
+    //*/
+    return _health;
 }
 
-bool GameOBJ:: place(int x, int y) {
-    if ((_x - x) * (_x - x) + (_y - y) * (_y - y) < 25 * 25 * size * size) {
+bool GameOBJ:: place(int x, int z, int k) {
+    if ((_x - x) * (_x - x) + (_z - z) * (_z - z) < k * k) {
         return true;
     }
     return false;
@@ -123,6 +162,7 @@ int GameOBJ:: move(float time, map_t &map) {
 }
 
 int Mob:: move (float time, map_t& map) {
+    //*
     if (_angle > 0) {
         _angle--;
         _angleX += _angle_speed;
@@ -140,8 +180,13 @@ int Mob:: move (float time, map_t& map) {
             break;
             
         case RUN:
-            _dx = -sin (_angleX / 180 * PI) * _speed * 1.5;
-            _dz = -cos (_angleX / 180 * PI) * _speed * 1.5;
+            _dx = -sin (_angleX / 180 * PI) * _speed * 1.2;
+            _dz = -cos (_angleX / 180 * PI) * _speed * 1.2;
+            break;
+            
+        case CHASE:
+            _dx = -sin (_angleX / 180 * PI) * _speed * 1.2;
+            _dz = -cos (_angleX / 180 * PI) * _speed * 1.2;
             break;
             
         case STAND:
@@ -181,6 +226,7 @@ int Mob:: move (float time, map_t& map) {
     
     _dz = 0;
     _dx = 0;
+    //*/
     return 0;
 }
 
@@ -217,7 +263,7 @@ int Avatar:: collision (float Dx, float Dy, float Dz, map_t& map) {
 
 int Avatar:: update (float time, map_t& map) {
     
-    return 0;
+    return _health;
 }
 
 

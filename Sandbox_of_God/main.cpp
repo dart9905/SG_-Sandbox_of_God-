@@ -104,20 +104,31 @@ int main(int, char const**)
     SkinHuman_t skin_mob_zom (resourcePath() + "resources/minecraft/textures/entity/zombie/husk.png");
     SkinHuman_t skin_avatar (resourcePath() + "resources/minecraft/textures/entity/avatar.png");
     
+    SkinHuman_t skin_E (resourcePath() + "resources/minecraft/textures/entity/Elina.png");
     
-    Manager_Delete_t Manager_Delete (1);
-    Manager_Lord_t Manager (1, &Manager_Delete);
+    
+    Manager_Lord_t Manager (1);
     
     Avatar God(map._x_size * size / 2, map._y_size * size * 0.7, map._z_size * size / 2, &skin_avatar);
     
     Manager.Add(&God);
-    Manager.Add(new Mob(map._x_size * size / 2, map._y_size * size * 0.7, map._z_size * size / 2, &skin_avatar));
-    
+    //Manager.Add(new Mob (map._x_size * size / 2, map._y_size * size * 0.7, map._z_size * size / 2, &skin_mob_zom));
+    //*
+    for (int i = 1, x = 0, y = 0, z = 0; i < 120; i++) {
+        x = rand() % map._x_size;
+        z = rand() % map._z_size;
+        y = map [x] [0] [z]._h * size + size;
+        Manager.Add(new Mob (x * size, y, z * size, &skin_mob_zom));
+        //Manager._data [i]->setSizeInK(5);
+    }
+    Manager._data [1]->setSizeInK(5);
+    //*/
     /*
-    for (int i = 0; i < 11; i++)
-        for (int j = 0; j < 11; j++)
-        Manager.Add(new Mob (map._x_size * size / 2 + i * size * 2 - 10 * size, map._y_size * size, map._z_size * size / 2 + j * size * 2  + size * 6, &skin_mob_tr));
-    
+    for (int i = 0; i < 30; i++) {
+        for (int j = 0; j < 10; j++) {
+            Manager.Add(new Mob (i * size + map._y_size * size / 2, map._y_size * size, j * size  + map._y_size * size / 2, &skin_mob_tr));
+        }
+    }
     //*/
     mouse_t Mouse (0, 0, false, false, &window);
     
@@ -132,7 +143,10 @@ int main(int, char const**)
     
     while (window.isOpen())
     {
-        
+        if (Manager._data [0] -> _health < 0) {
+            //window.close();
+        }
+        //printf("%i\n", Manager._data [0] -> _health);
         // Clear the depth buffer
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
@@ -166,6 +180,12 @@ int main(int, char const**)
                 if (event.key.code == sf::Mouse::Left)
                     Mouse._Left = true;
             }
+        }
+        if ((sf::Keyboard::isKeyPressed(sf::Keyboard::P))) {
+            window.setMouseCursorVisible(true);
+            while (!sf::Keyboard::isKeyPressed(sf::Keyboard::S)) {
+            }
+            window.setMouseCursorVisible(false);
         }
         
     
@@ -203,7 +223,6 @@ int main(int, char const**)
         glTranslatef(-God._x, -God._y, -God._z);
         
         Manager.updata(time, map);
-        Manager_Delete.updata();
         
         window.pushGLStates();
         window.draw(cursor);
