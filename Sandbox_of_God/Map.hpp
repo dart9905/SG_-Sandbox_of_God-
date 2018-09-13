@@ -392,7 +392,7 @@ bool map_t::VisibilityCheck (int x_main, int y_main, int z_main) {
         return true;
     }
     y += 2;
-    if ((x < _y_size) && ((*this)  [x] [y] [z]._structure == SKY)) {
+    if ((y < _y_size) && ((*this)  [x] [y] [z]._structure == SKY)) {
         return true;
     }
     y--;
@@ -440,7 +440,7 @@ int map_t::VisibilityCheckPro (int x_main, int y_main, int z_main) {
     
     y += 2;
     
-    if ((x < _y_size) && ((*this)  [x] [y] [z]._structure == SKY)) {
+    if ((y < _y_size) && ((*this)  [x] [y] [z]._structure == SKY)) {
         (*this)  [x_main] [y_main] [z_main]._box_vis [0] = 1;
     } else
         (*this)  [x_main] [y_main] [z_main]._box_vis[0] = 0;

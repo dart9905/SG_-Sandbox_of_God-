@@ -14,7 +14,8 @@ enum structure_box_t {
     GRASS       = 1,
     EARTH       = 2,
     STONE       = 3,
-    WATER       = 4
+    WATER       = 4,
+    TREE        = 5
 };
 
 enum MobTesk_MOB_t {
@@ -246,6 +247,11 @@ public:
     Mob (float x0, float y0, float z0, SkinHuman_t* skin0): GameOBJ (x0, y0, z0, skin0) {
         _jump_speed = Jump_Val (_h);
         _friend_status = AGGRESSIVE;
+        _health = 500;
+    }
+    Mob (float x0, float y0, float z0, SkinHuman_t* skin0, int live): GameOBJ (x0, y0, z0, skin0) {
+        _jump_speed = Jump_Val (_h);
+        _friend_status = live;
         _health = 500;
     }
     virtual ~Mob () {}

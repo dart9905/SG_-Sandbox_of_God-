@@ -47,7 +47,7 @@ const int window_height = 1200;
 //      =============================================
 
 
-box_t map_array_GLOBAL_VARIABLE [256] [256] [256] = {0, 0, 0, -1};
+box_t map_array_GLOBAL_VARIABLE [128] [128] [128] = {0, 0, 0, -1};
 
 int main(int, char const**)
 {
@@ -57,7 +57,7 @@ int main(int, char const**)
     //              LOAD MAP
     //
     
-    map_t map (256, 256, 256, &(map_array_GLOBAL_VARIABLE [0] [0] [0]));
+    map_t map (128, 128, 128, &(map_array_GLOBAL_VARIABLE [0] [0] [0]));
     map.Load();
     
     
@@ -96,13 +96,16 @@ int main(int, char const**)
     SkinBox_t box_GRASS;
     SkinBox_t box_EARTH;
     SkinBox_t box_STONE;
+    SkinBox_t box_TREE;
     SkinBox_t box_WATER;
-    SkinBox_t arrayBox [5] = {skybox, box_GRASS, box_EARTH, box_STONE, box_WATER};
+    SkinBox_t arrayBox [6] = {skybox, box_GRASS, box_EARTH, box_STONE, box_WATER, box_TREE};
     MakeTextures (arrayBox);
     
     SkinHuman_t skin_mob_tr (resourcePath() + "resources/minecraft/textures/entity/tr.png");
     SkinHuman_t skin_mob_zom (resourcePath() + "resources/minecraft/textures/entity/zombie/husk.png");
     SkinHuman_t skin_avatar (resourcePath() + "resources/minecraft/textures/entity/avatar.png");
+    SkinHuman_t skin_alex (resourcePath() + "resources/minecraft/textures/entity/Eva.png");
+    SkinHuman_t skin_steve (resourcePath() + "resources/minecraft/textures/entity/steve.png");
     
     SkinHuman_t skin_E (resourcePath() + "resources/minecraft/textures/entity/Elina.png");
     
@@ -114,12 +117,23 @@ int main(int, char const**)
     Manager.Add(&God);
     //Manager.Add(new Mob (map._x_size * size / 2, map._y_size * size * 0.7, map._z_size * size / 2, &skin_mob_zom));
     //*
-    for (int i = 1, x = 0, y = 0, z = 0; i < 120; i++) {
+    for (int i = 1, x = 0, y = 0, z = 0; i < 60; i++) {
         x = rand() % map._x_size;
         z = rand() % map._z_size;
         y = map [x] [0] [z]._h * size + size;
         Manager.Add(new Mob (x * size, y, z * size, &skin_mob_zom));
-        //Manager._data [i]->setSizeInK(5);
+    }
+    for (int i = 1, x = 0, y = 0, z = 0; i < 30; i++) {
+        x = rand() % map._x_size;
+        z = rand() % map._z_size;
+        y = map [x] [0] [z]._h * size + size;
+        Manager.Add(new Mob (x * size, y, z * size, &skin_alex, FRIEND));
+    }
+    for (int i = 1, x = 0, y = 0, z = 0; i < 30; i++) {
+        x = rand() % map._x_size;
+        z = rand() % map._z_size;
+        y = map [x] [0] [z]._h * size + size;
+        Manager.Add(new Mob (x * size, y, z * size, &skin_steve, FRIEND));
     }
     Manager._data [1]->setSizeInK(5);
     //*/

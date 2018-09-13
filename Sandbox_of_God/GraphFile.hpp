@@ -47,6 +47,10 @@ int MakeTextures (SkinBox_t* arrayBox) {
         arrayBox [WATER] [i] = LoadTexture(resourcePath() + "resources/minecraft/textures/blocks/water.png");
     }
     
+    for (int i = 0; i < 6; i ++) {
+        arrayBox [TREE] [i] = LoadTexture(resourcePath() + "resources/minecraft/textures/blocks/planks_oak.png");
+    }
+    
     
     /*
     arrayBox [SKY] [0] = LoadTexture(resourcePath() + "resources/skybox/skybox_top.bmp");
@@ -350,6 +354,9 @@ int DrawMAP (Avatar& God, map_t& map, SkinBox_t* arrayBox) {
                             
                         case STONE:
                             createBox(arrayBox [STONE], size, map [x] [y] [z]._box_vis);
+                            break;
+                        case TREE:
+                            createBox(arrayBox [TREE], size, map [x] [y] [z]._box_vis);
                             break;
                         case WATER:
                             //glColor4f(1.0f,1.0f,1.0f,0.85f);
