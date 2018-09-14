@@ -124,6 +124,7 @@ int main(int, char const**)
     
     SkinBox_t box_WATER;
     for (int i = 0; i < 6; i ++) {
+        //box_WATER [i] = LoadTexture(resourcePath() + "1.png");
         box_WATER [i] = LoadTexture(resourcePath() + "water.png");
     }
     
@@ -145,7 +146,7 @@ int main(int, char const**)
     glEnable(GL_BLEND);
     
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+    
     
     // -- Mouse --
     sf::Vector2i pixelPos;
@@ -258,14 +259,13 @@ GLuint LoadTexture(sf::String name)
     glBindTexture(GL_TEXTURE_2D, texture);
     
     gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, image.getSize().x, image.getSize().y, GL_RGBA, GL_UNSIGNED_BYTE, image.getPixelsPtr());
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glGenerateMipmap(GL_TEXTURE_2D);
     
     return texture;
 }
@@ -287,7 +287,7 @@ void createRectangle(SkinBox_t& box,float x_size, float y_size, float z_size)
     y_size = y_size / 2;
     z_size = z_size / 2;
     glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.8f);
+    glAlphaFunc(GL_GREATER, 0.1f);
     glBindTexture(GL_TEXTURE_2D, box [0]);
     glBegin(GL_QUADS);
     //top

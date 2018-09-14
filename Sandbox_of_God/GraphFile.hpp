@@ -64,7 +64,7 @@ int MakeTextures (SkinBox_t* arrayBox) {
     for (int i = 0; i < 6; i++) {
         arrayBox [SKY]  [i] = LoadTextureSKYBOX(resourcePath() + "resources/skybox/ckybox.png", i);
     }
-    
+    //*
     glEnable(GL_TEXTURE_2D);
     glShadeModel(GL_SMOOTH);
     glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
@@ -83,7 +83,7 @@ int MakeTextures (SkinBox_t* arrayBox) {
     glEnable(GL_BLEND);
     
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
+    //*/
 }
 
 
@@ -124,14 +124,15 @@ GLuint LoadTextureSKYBOX(sf::String name, int i)
     glBindTexture(GL_TEXTURE_2D, texture);
     
     gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, image_end.getSize().x, image_end.getSize().y, GL_RGBA, GL_UNSIGNED_BYTE, image_end.getPixelsPtr());
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    
+    
     
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glGenerateMipmap(GL_TEXTURE_2D);
     
     return texture;
 }
@@ -151,15 +152,14 @@ GLuint LoadTexture(sf::String name)
         glBindTexture(GL_TEXTURE_2D, texture);
     
         gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, image.getSize().x, image.getSize().y, GL_RGBA, GL_UNSIGNED_BYTE, image.getPixelsPtr());
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);  
 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        
+        glGenerateMipmap(GL_TEXTURE_2D);
+    
 		return texture;
 }
 
@@ -171,7 +171,7 @@ void createRectangle(SkinBox_t& box,float x_size, float y_size, float z_size)
     y_size = y_size / 2;
     z_size = z_size / 2;
     glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.8f);
+    glAlphaFunc(GL_GREATER, 0.1f);
     glBindTexture(GL_TEXTURE_2D, box [0]);
     glBegin(GL_QUADS);
     //top
@@ -234,7 +234,7 @@ void createRectangle(SkinBox_t& box,float x_size, float y_size, float z_size, in
     y_size = y_size / 2;
     z_size = z_size / 2;
     glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.8f);
+    glAlphaFunc(GL_GREATER, 0.1f);
     if (box_vis [0] == 1) {
         glBindTexture(GL_TEXTURE_2D, box [0]);
         glBegin(GL_QUADS);
@@ -360,9 +360,11 @@ int DrawMAP (Avatar& God, map_t& map, SkinBox_t* arrayBox) {
                             break;
                         case WATER:
                             //glColor4f(1.0f,1.0f,1.0f,0.85f);
-                            glAlphaFunc (GL_GREATER, 0.5f);
-                            glEnable (GL_ALPHA_TEST);
-                            createBox(arrayBox [WATER], size);
+                            
+                            glEnable(GL_ALPHA_TEST);
+                            glAlphaFunc(GL_GREATER, 0.1f);
+                            createBox(arrayBox [WATER], size, map [x] [y] [z]._box_vis);
+                            glDisable(GL_ALPHA_TEST);
                             
                             glColor4f(1.0f,1.0f,1.0f,1.0f);
                             break;

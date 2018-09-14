@@ -116,7 +116,7 @@ int main(int, char const**)
     
     Manager.Add(&God);
     //Manager.Add(new Mob (map._x_size * size / 2, map._y_size * size * 0.7, map._z_size * size / 2, &skin_mob_zom));
-    //*
+    /*
     for (int i = 1, x = 0, y = 0, z = 0; i < 60; i++) {
         x = rand() % map._x_size;
         z = rand() % map._z_size;
